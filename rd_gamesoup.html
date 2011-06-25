@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Monorail cat</title>
+  <script type="text/javascript" src="vendor/jsGameSoup-v173/js/jsgamesoup.js"></script>
+  <style type="text/css">
+    #monorail-cat { border: 1px solid red; height: 400px; width: 600px;}
+  </style>
+  <script>
+	  function Dot(gs) {
+		    var x = gs.width * 0.5;
+		    var y = gs.height * 0.5;
+		    var r = gs.width * 0.1;
+		    
+		    console.log(x, y, r);
+	
+		    this.update = function() {
+		        x += gs.width * 0.01 * (Math.random() - 0.5);
+		        y += gs.height * 0.01 * (Math.random() - 0.5);
+		    }
+	
+		    this.draw = function(c) 
+		    {
+		        c.fillRect(x - r / 2, y - r / 2, r, r);
+		    }
+		}
+  
+	  function startGame() {
+		    var surface = document.getElementById("monorail-cat");
+		    var gs = new JSGameSoup(surface, 30);
+		    gs.addEntity(new Dot(gs));
+		    gs.launch();
+		}
+  </script>
+</head>
+
+<body onload="startGame()">
+
+<canvas id="monorail-cat" >
+  
+</canvas>
+
+</body>
+
+</html>
