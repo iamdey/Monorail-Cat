@@ -3,6 +3,8 @@
 <head>
   <title>Monorail cat</title>
   <script type="text/javascript" src="vendor/jsGameSoup-v173/js/jsgamesoup.js"></script>
+  <script type="text/javascript" src="vendor/jsGameSoup-v173/js/sprite.js"></script>
+  <script type="text/javascript" src="libs/entity.js"></script>
   <style type="text/css">
     #monorail-cat { border: 1px solid red; height: 400px; width: 600px;}
   </style>
@@ -11,25 +13,56 @@
 		    var x = gs.width * 0.5;
 		    var y = gs.height * 0.5;
 		    var r = gs.width * 0.1;
+			var p = new Sprite(["center", "bottom"], {default: [["arts/cat1-right.png", 0]]}, function() {
+				// once the sprite is loaded do some init
+				p.action("default");
+			});
+			var pos = [gs.width / 2, gs.height / 2];
 		    
 		    console.log(x, y, r);
 	
 		    this.update = function() {
 		        x += gs.width * 0.01 * (Math.random() - 0.5);
 		        y += gs.height * 0.01 * (Math.random() - 0.5);
+				p.update();
 		    }
 	
 		    this.draw = function(c) 
 		    {
-		        c.fillRect(x - r / 2, y - r / 2, r, r);
+		        //c.fillRect(x - r / 2, y - r / 2, r, r);
+				p.draw(c, pos);
 		    }
 		}
   
 	  function startGame() {
+		    console.log("Starting game...");
+			
 		    var surface = document.getElementById("monorail-cat");
 		    var gs = new JSGameSoup(surface, 30);
-		    gs.addEntity(new Dot(gs));
-		    gs.launch();
+			
+			console.log("Loading sprites...");
+			Sprite.preload([
+				"arts/cat1-down-1.png",
+				"arts/cat1-down-2.png",
+				"arts/cat1-left.png",
+				"arts/cat1-right.png",
+				"arts/cat1-up-1.png",
+				"arts/cat1-up-2.png",
+				"arts/cat2-down-1.png",
+				"arts/cat2-down-2.png",
+				"arts/cat2-left.png",
+				"arts/cat2-right.png",
+				"arts/cat2-up-1.png",
+				"arts/cat2-up-2.png"
+			],
+				function() {
+					console.log("Sprites loaded.");
+					gs.addEntity(new Cat(null, 0, 0, SOUTH));
+					gs.launch();
+				}
+			);
+			
+		    console.log("Game started.");
 		}
   </script>
 </head>
