@@ -15,6 +15,8 @@ function Game(gs) {
 	
 	gs.addEntity(new Player(gs, "player 1", this.keymap_player_1));
 	gs.addEntity(new Player(gs, "player 2", this.keymap_player_2));
+	gs.addEntity(new Cat(null, 0, 0, SOUTH));
+	
 }
 
 function startGame() {
