@@ -25,9 +25,15 @@ function Game(gs) {
 	tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
 	tilemap.draw(document.getElementById("tileMap"));
 	
+	gs.addEntity(new MapItem("6_0", map, 6, 0));
+	gs.addEntity(new MapItem("0_6", map, 0, 6));
+	gs.addEntity(new MapItem("1_1", map, 1, 1));
+	gs.addEntity(new MapItem("5_5", map, 5, 5));
+	gs.addEntity(new MapItem("4_3", map, 4, 3));
+//	gs.addEntity(new MapItem("0_6", map, 0, 6));
+	
 	gs.addEntity(new Player("player 1", this.keymap_player_1));
 	gs.addEntity(new Player("player 2", this.keymap_player_2));
 	gs.addEntity(new Cat(map, 0, 0, SOUTH));
-	gs.addEntity(new MapItem("6_0", map, 6, 0));
-	gs.addEntity(new MapItem("0_6", map, 0, 6));
+	
 }

@@ -19,7 +19,7 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	
 	// Sprite
 	var sprite = new Sprite(["center", "center"], 
-			{ stand: [["arts/wool_ball1.png", 0]] },
+			{ stand: [["arts/bonus1.png", 7], ["arts/bonus2.png", 5]] },
 			function() {
 				sprite.action("stand");
 			}
@@ -29,6 +29,13 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	this.draw = function(c) {
 //		console.log(parent.pos);
 		sprite.draw(c, parent.getAbsolutePos());
+	}
+	
+	/**
+	 * refresh the sprite
+	 */
+	this.update = function(c) {
+		sprite.update();
 	}
 }
 
