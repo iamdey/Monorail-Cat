@@ -17,6 +17,26 @@ function getOppositeDirection(direction) {
 	}
 }
 
+function getLeftDirection(direction) {
+	switch (direction) {
+		case NORTH:	return WEST;
+		case SOUTH: return EAST;
+		case WEST:	return SOUTH;
+		case EAST:	return NORTH;
+		default:	return 0;
+	}
+}
+
+function getRightDirection(direction) {
+	switch (direction) {
+		case NORTH:	return EAST;
+		case SOUTH: return WEST;
+		case WEST:	return NORTH;
+		case EAST:	return SOUTH;
+		default:	return 0;
+	}
+}
+
 function Entity(_map, startingXTile, startingYTile) {
 	var map = _map;
 	
@@ -73,9 +93,10 @@ function Entity(_map, startingXTile, startingYTile) {
 	}
 }
 
-function Cat(map, startingXTile, startingYTile, _direction) {
+function Cat(map, _player, startingXTile, startingYTile, _direction) {
 	var t = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
+	var player = _player;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
@@ -95,21 +116,55 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 	this.move = function(dx, dy) {
 		parent.move(dx, dy, function() {
 			var dirChanged = false;
+			var desiredDirection = 0;
+			var oppositeDirection = getOppositeDirection(direction);
 			
-			if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), EAST)) {
-				t.changeDirection(EAST);
-				dirChanged = true;
-			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), WEST)) {
-				t.changeDirection(WEST);
-				dirChanged = true;
-			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), SOUTH)) {
-				t.changeDirection(SOUTH);
-				dirChanged = true;
-			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), NORTH)) {
-				t.changeDirection(NORTH);
+			// Player choice
+			if(player.turn == LEFT) {
+				desiredDirection = WEST;
+			} else if(player.turn == RIGHT) {
+				desiredDirection = EAST;
+			} else if(player.turn == UP) {
+				desiredDirection = NORTH;
+			} else if(player.turn == DOWN) {
+				desiredDirection = SOUTH;
+			}
+			
+			/*if (player.turn == LEFT) {
+				console.log("User tries to go left");
+				desiredDirection = getLeftDirection(direction);
+			} else if(player.turn == RIGHT) {
+				console.log("User tries to go right");
+				desiredDirection = getRightDirection(direction);
+			}*/
+			
+			// Trying to turn
+			if (desiredDirection != 0 && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
+				console.log("User turns");
+				t.changeDirection(desiredDirection);
 				dirChanged = true;
 			}
 			
+			// Can't go straigth
+			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
+				console.log("Can't go straight!");
+				
+				// Try to go left
+				desiredDirection = getLeftDirection(direction);
+				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
+					console.log("Automatically go left");
+					t.changeDirection(desiredDirection);
+					dirChanged = true;
+				}
+				// Go right
+				else {
+					console.log("Automatically go right");
+					t.changeDirection(getRightDirection(direction));
+					dirChanged = true;
+				}
+			}
+			
+			// Turn successful
 			if(dirChanged) {
 				if(direction == NORTH) {
 					parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);

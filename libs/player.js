@@ -1,3 +1,7 @@
+var RIGHT = "right";
+var LEFT = "left";
+var UP = "up";
+var DOWN = "down";
 
 /**
  * class Player 
@@ -7,13 +11,6 @@
  * @author esion
  */
 function Player(player_id, keymap){
-	
-	/** 
-	 * const left / right
-	 */
-	var turn_right 	= "right";
-	var turn_left 	= "left";
-	
 	/**
 	 * the player current direction
 	 */
@@ -22,7 +19,6 @@ function Player(player_id, keymap){
 	 * the player current action
 	 */
 	this.action = null;
-	
 	
     /**
      * player representation
@@ -44,7 +40,6 @@ function Player(player_id, keymap){
 		this.propertySet(keyCode);
 	}
 	
-	
 	/**
 	 * Reset turn attrib
 	 */
@@ -62,7 +57,7 @@ function Player(player_id, keymap){
 				/**
 				 * setting turn property
 				 */
-				if(key == turn_left || key == turn_right){
+				if(key == LEFT || key == RIGHT || key == UP || key == DOWN){
 					if(!reset){
 						this.turn = key;
 					}else{
