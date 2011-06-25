@@ -8,7 +8,7 @@
 function TileMap(_canvas) {
 	var level;
 	var tiles;
-	var sprites = this.sprites = new Array();
+	var sprites = this.sprites;
 	var bits;
 	var ready;
 	var tilesize = TILE_SIZE;
@@ -44,34 +44,29 @@ function TileMap(_canvas) {
 			}
 		}
 	}
-
-	var N, S, W, E;
-	N = 1;
-	S = 2;
-	W = 3;
-	E = 4;
-
+	
 	this.bits = new Array();
-	this.bits[this.N] = new Array();
-	this.bits[this.N][this.S] = 10;
-	this.bits[this.N][this.W] = 9;
-	this.bits[this.N][this.E] = 11;
-	this.bits[this.S] = new Array();
-	this.bits[this.S][this.N] = 5;
-	this.bits[this.S][this.W] = 3;
-	this.bits[this.S][this.E] = 4;
-	this.bits[this.W] = new Array();
-	this.bits[this.W][this.N] = 2;
-	this.bits[this.W][this.S] = 0;
-	this.bits[this.W][this.E] = 1;
-	this.bits[this.E] = new Array();
-	this.bits[this.E][this.N] = 8;
-	this.bits[this.E][this.S] = 7;
-	this.bits[this.E][this.W] = 6;
+	this.bits[NORTH] = new Array();
+	this.bits[NORTH][SOUTH] = 10;
+	this.bits[NORTH][WEST] = 9;
+	this.bits[NORTH][EAST] = 11;
+	this.bits[SOUTH] = new Array();
+	this.bits[SOUTH][NORTH] = 5;
+	this.bits[SOUTH][WEST] = 3;
+	this.bits[SOUTH][EAST] = 4;
+	this.bits[WEST] = new Array();
+	this.bits[WEST][NORTH] = 2;
+	this.bits[WEST][SOUTH] = 0;
+	this.bits[WEST][EAST] = 1;
+	this.bits[EAST] = new Array();
+	this.bits[EAST][NORTH] = 8;
+	this.bits[EAST][SOUTH] = 7;
+	this.bits[EAST][WEST] = 6;
 
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
-		if(this.level[x][y] & (1 << this.bits(from, to)) != 0) {
+		console.log(x+";"+y+" from "+from+" to "+to)
+		if(this.level[x][y] & (1 << this.bits[from][to]) != 0) {
 			return true;
 		}
 		return false;
@@ -80,7 +75,10 @@ function TileMap(_canvas) {
 	// Appelée une fois la map chargée
 	// A surcharger dans le contexte appelant
 	this.onload = function() {
+		this.sprites = new Array();
+		
 		for(i=0; i< this.level.length; i++) {
+			this.sprites[i] = new Array();
 			for(j=0; j< this.level[0].length; j++) {
 				this.sprites[i][j] = new Sprite(["left", "top"], {
 					default: [["arts/"+this.tiles[this.level[j][i]]+".png", 0]]
@@ -112,11 +110,9 @@ function TileMap(_canvas) {
 		var lines = csv.split("\n");
 		var i,j, columns, ieff;
 		this.level = new Array();
-		this.sprites = new Array();
 		for(i=0, ieff=0; i< lines.length; i++) {
 			if(trim(lines[i]) != '') {
 				this.level[ieff] = new Array();
-				this.sprites[ieff] = new Array();
 				columns = lines[i].split(';');
 				for(j=0; j< columns.length; j++) {
 					this.level[ieff][j] = parseInt(columns[j]);
