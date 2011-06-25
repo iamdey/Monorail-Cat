@@ -65,7 +65,9 @@ function TileMap(_canvas) {
 
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
-		return ((this.level[x][y] & (1 << this.bits[from][to])) != 0);
+		/*console.log(x+";"+y+" from "+from+" to "+to+" ("+this.level[x][y]+" & "+
+		(1 << this.bits[from][to])+" = "+(this.level[x][y] & (1 << this.bits[from][to])) + ")")*/
+		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
 	}
 
 	// Appelée une fois la map chargée

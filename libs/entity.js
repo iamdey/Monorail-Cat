@@ -3,7 +3,7 @@ var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
 var TILE_SIZE = 79;
-var TILE_MIDDLE = (TILE_SIZE + 1) / 2;
+var TILE_MIDDLE = (TILE_SIZE - 1) / 2;
 var CAT_SPEED = TILE_SIZE * 2;
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
 	
@@ -34,22 +34,31 @@ function Entity(_map, startingXTile, startingYTile) {
 		pos[0] += dx;
 		pos[1] += dy;
 		
-		var movement = [Math.floor(pos[0] / TILE_SIZE), Math.floor(pos[1] / TILE_SIZE)]
+		var movement = [0, 0];
+		if (pos[0] > TILE_SIZE) {
+			movement[0] = 1;
+		} else if (pos[1] > TILE_SIZE) {
+			movement[1] = 1;
+		} else if (pos[0] < 0) {
+			movement[0] = -1;
+		} else if (pos[1] < 0) {
+			movement[1] = -1;
+		} 
+		
 		var changeOfTile = false;
 		
 		// Square change
-		if (movement[0] > 0 || movement[1] > 0) {
-			pos[0] %= TILE_SIZE;
-			pos[1] %= TILE_SIZE;
+		if (movement[0] != 0 || movement[1] != 0) {
+			pos[0] = (pos[0] + TILE_SIZE) % TILE_SIZE;
+			pos[1] = (pos[1] + TILE_SIZE) % TILE_SIZE;
 			
 			tile[0] += movement[0];
 			tile[1] += movement[1];
+			
 			changeOfTile = true;
 		}
 		
 		// Pass through middle
-		
-	//console.log(savex+";"+savey+" > "+pos[0]+";"+pos[1]);
 		if (!changeOfTile
 		&& (savex < TILE_MIDDLE && pos[0] >= TILE_MIDDLE
 		||	savex > TILE_MIDDLE && pos[0] <= TILE_MIDDLE
@@ -61,12 +70,6 @@ function Entity(_map, startingXTile, startingYTile) {
 	
 	this.getAbsolutePos = function() {
 		return [pos[1] + tile[1] * TILE_SIZE, pos[0] + tile[0] * TILE_SIZE];
-	}
-	
-	this.recenter = function() {
-		//TODO: Don't do it that way
-		//pos[0] = TILE_MIDDLE;
-		//pos[1] = TILE_MIDDLE;
 	}
 }
 
@@ -91,10 +94,14 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy) {
 		parent.move(dx, dy, function() {
-			parent.recenter();
-			
 			if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), EAST)) {
 				t.changeDirection(EAST);
+			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), WEST)) {
+				t.changeDirection(WEST);
+			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), SOUTH)) {
+				t.changeDirection(SOUTH);
+			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), NORTH)) {
+				t.changeDirection(NORTH);
 			}
 		});
 	}
