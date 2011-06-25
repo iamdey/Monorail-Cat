@@ -27,9 +27,9 @@ function Game(gs) {
 	
 	gs.addEntity(new MapItem("6_0", map, 6, 0));
 	gs.addEntity(new MapItem("0_6", map, 0, 6));
-	gs.addEntity(new MapItem("1_1", map, 1, 1));
-	gs.addEntity(new MapItem("5_5", map, 5, 5));
-	gs.addEntity(new MapItem("4_3", map, 4, 3));
+//	gs.addEntity(new MapItem("1_1", map, 1, 1));
+//	gs.addEntity(new MapItem("5_5", map, 5, 5));
+//	gs.addEntity(new MapItem("4_3", map, 5, 2));
 //	gs.addEntity(new MapItem("0_6", map, 0, 6));
 	
 	gs.addEntity(new Player("player 1", this.keymap_player_1));

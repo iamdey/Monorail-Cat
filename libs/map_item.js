@@ -19,7 +19,7 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	
 	// Sprite
 	var sprite = new Sprite(["center", "center"], 
-			{ stand: [["arts/bonus1.png", 7], ["arts/bonus2.png", 5]] },
+			{ stand: [["arts/bonus1.png", 7], ["arts/bonus2.png", 5], ["arts/bonus3.png", 5]] },
 			function() {
 				sprite.action("stand");
 			}
