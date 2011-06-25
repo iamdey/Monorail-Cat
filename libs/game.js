@@ -29,7 +29,6 @@ function Game(gs) {
 	gs.addEntity(new Player("player 2", this.keymap_player_2));
 	gs.addEntity(new Cat(map, 0, 0, SOUTH));
 	
-	gs.addEntity(new MapItem("test", map, 3, 2));
-	
-	
+	gs.addEntity(new MapItem("6_0", map, 6, 0));
+	gs.addEntity(new MapItem("0_6", map, 0, 6));
 }

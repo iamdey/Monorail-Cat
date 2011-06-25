@@ -6,12 +6,20 @@
  * 
  * @author esion
  */
-function MapItem(item, map, startingXTile, startingYTile){
-	var parent = new Entity(map, startingXTile, startingYTile);
+function MapItem(mapItemId, map, startingXTile, startingYTile){
+	var parent 	= new Entity(map, startingXTile, startingYTile);
+	
+	var ITEMS 	= ["woolball", "rainbow"]; 
+	
+	var rand_no = Math.floor((2-1)*Math.random()) + 1;
+	
+	this.item 	= ITEMS[rand_no];
+	
+	console.log(this.item);
 	
 	// Sprite
 	var sprite = new Sprite(["center", "center"], 
-			{ stand: [["arts/cat2-left.png", 0]]},
+			{ stand: [["arts/wool_ball1.png", 0]] },
 			function() {
 				sprite.action("stand");
 			}
@@ -22,4 +30,7 @@ function MapItem(item, map, startingXTile, startingYTile){
 //		console.log(parent.pos);
 		sprite.draw(c, parent.getAbsolutePos());
 	}
+	
 }
+
+
