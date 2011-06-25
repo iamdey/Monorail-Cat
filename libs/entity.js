@@ -3,8 +3,8 @@ var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
 var TILE_SIZE = 79;
-var TILE_MIDDLE = (TILE_SIZE - 1) / 2;
-var CAT_SPEED = TILE_SIZE * 2;
+var TILE_MIDDLE = TILE_SIZE / 2 + 1;
+var CAT_SPEED = TILE_SIZE * 4;
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
 	
 function getOppositeDirection(direction) {
@@ -94,14 +94,36 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy) {
 		parent.move(dx, dy, function() {
+			var dirChanged = false;
+			
 			if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), EAST)) {
 				t.changeDirection(EAST);
+				dirChanged = true;
 			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), WEST)) {
 				t.changeDirection(WEST);
+				dirChanged = true;
 			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), SOUTH)) {
 				t.changeDirection(SOUTH);
+				dirChanged = true;
 			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), NORTH)) {
 				t.changeDirection(NORTH);
+				dirChanged = true;
+			}
+			
+			if(dirChanged) {
+				if(direction == NORTH) {
+					parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);
+					parent.pos[1] = TILE_MIDDLE;
+				} else if(direction == SOUTH) {
+					parent.pos[0] += Math.abs(TILE_MIDDLE - parent.pos[1]);
+					parent.pos[1] = TILE_MIDDLE;
+				} else if(direction == WEST) {
+					parent.pos[0] = TILE_MIDDLE;
+					parent.pos[1] -= Math.abs(TILE_MIDDLE - parent.pos[0]);
+				} else {
+					parent.pos[0] = TILE_MIDDLE;
+					parent.pos[1] += Math.abs(TILE_MIDDLE - parent.pos[0]);
+				}
 			}
 		});
 	}

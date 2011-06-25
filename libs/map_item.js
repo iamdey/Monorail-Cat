@@ -30,7 +30,6 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 //		console.log(parent.pos);
 		sprite.draw(c, parent.getAbsolutePos());
 	}
-	
 }
 
 

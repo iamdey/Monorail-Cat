@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Monorail cat</title>
-		
+
 		<script type="text/javascript" src="vendor/jsGameSoup-v173/js/jsgamesoup.js"></script>
 		<script type="text/javascript" src="vendor/jsGameSoup-v173/js/sprite.js"></script>
 		<script type="text/javascript" src="libs/game.js"></script>
@@ -12,15 +12,10 @@
 		<script type="text/javascript" src="libs/common.js"></script>
 		<script type="text/javascript" src="libs/map.js"></script>
 		<script type="text/javascript" src="libs/tilemap.js"></script>
-		
-		
-		<style>
-			/* temporary */
-			#monorail-cat { border: 1px solid red }
-		</style>
 	</head>
 
 	<body onload="startGame()">
-		<canvas id="monorail-cat" height="553" width="554"></canvas>
+		<canvas id="tileMap" height="553" width="553" style="position:absolute; top:10px; left:10px; z-index:-1;"></canvas>
+		<canvas id="monorail-cat" height="553" width="553" style="position:absolute; top:5px; left:5px; z-index:0;"></canvas>
 	</body>
 </html>
