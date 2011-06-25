@@ -13,13 +13,15 @@ function Game(gs) {
 		down: 83,	// s
 		left: 81, 	// q
 		right: 68, 	// d
-		action1: 32
+		action1: 32	// space
 	};
 
 	this.keymap_player_2 = {
+		up: 38,		// up
+		down: 40,	// down
 		left: 37, 	// left
 		right: 39, 	// right
-		action1: 13
+		action1: 13	// enter
 	};
 
 	var tilemap = new TileMap(document.getElementById("tileMap"));
@@ -37,7 +39,8 @@ tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;14
 	
 	gs.addEntity(players[0]);
 	gs.addEntity(players[1]);
-	gs.addEntity(new Cat(map, players[0], 0, 0, SOUTH));
+	gs.addEntity(new Cat(map, players[0], RED, 0, 0, SOUTH));
+	gs.addEntity(new Cat(map, players[1], BLUE, 6, 6, NORTH));
 
 	gs.addEntity(new MapItem("test", map, 3, 2));
 }

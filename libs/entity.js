@@ -6,6 +6,8 @@ var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
 var CAT_SPEED = TILE_SIZE * 4;
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
+var RED = 1
+var BLUE = 2
 	
 function getOppositeDirection(direction) {
 	switch (direction) {
@@ -93,7 +95,7 @@ function Entity(_map, startingXTile, startingYTile) {
 	}
 }
 
-function Cat(map, _player, startingXTile, startingYTile, _direction) {
+function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 	var t = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
 	var player = _player;
@@ -103,10 +105,10 @@ function Cat(map, _player, startingXTile, startingYTile, _direction) {
 	
 	// Sprite
 	var sprite = new Sprite(["center", "center"], {
-			left:	[["arts/cat1-left.png", 0]],
-			right:	[["arts/cat1-right.png", 0]],
-			up:		[["arts/cat1-up-1.png", 3],		["arts/cat1-up-2.png", 3]],
-			down:	[["arts/cat1-down-1.png", 3],	["arts/cat1-down-2.png", 3]]
+			left:	[["arts/cat"+color+"-left.png", 0]],
+			right:	[["arts/cat"+color+"-right.png", 0]],
+			up:		[["arts/cat"+color+"-up-1.png", 3],		["arts/cat"+color+"-up-2.png", 3]],
+			down:	[["arts/cat"+color+"-down-1.png", 3],	["arts/cat"+color+"-down-2.png", 3]]
 		}, function() {
 			t.changeDirection(direction);
 		}
@@ -130,35 +132,22 @@ function Cat(map, _player, startingXTile, startingYTile, _direction) {
 				desiredDirection = SOUTH;
 			}
 			
-			/*if (player.turn == LEFT) {
-				console.log("User tries to go left");
-				desiredDirection = getLeftDirection(direction);
-			} else if(player.turn == RIGHT) {
-				console.log("User tries to go right");
-				desiredDirection = getRightDirection(direction);
-			}*/
-			
 			// Trying to turn
 			if (desiredDirection != 0 && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-				console.log("User turns");
 				t.changeDirection(desiredDirection);
 				dirChanged = true;
 			}
 			
 			// Can't go straigth
 			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
-				console.log("Can't go straight!");
-				
 				// Try to go left
 				desiredDirection = getLeftDirection(direction);
 				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-					console.log("Automatically go left");
 					t.changeDirection(desiredDirection);
 					dirChanged = true;
 				}
 				// Go right
 				else {
-					console.log("Automatically go right");
 					t.changeDirection(getRightDirection(direction));
 					dirChanged = true;
 				}
