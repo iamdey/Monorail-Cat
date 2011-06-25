@@ -1,22 +1,21 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-  <title>Monorail cat</title>
-  <script src="vendor/jsGameSoup-v173/js/jsgamesoup.js" async></script>
-  <script src="libs/game.js" async></script>
-  <script src="libs/player.js" async></script>
-  <style>
-    /* temporary */
-    #monorail-cat { border: 1px solid red }
-  </style>
-</head>
+	<head>
+		<title>Monorail cat</title>
+		
+		<script src="vendor/jsGameSoup-v173/js/jsgamesoup.js"></script>
+		<script src="vendor/jsGameSoup-v173/js/sprite.js"></script>
+		<script src="libs/game.js"></script>
+		<script src="libs/player.js"></script>
+		<script src="libs/entity.js"></script>
+		
+		<style>
+			/* temporary */
+			#monorail-cat { border: 1px solid red }
+		</style>
+	</head>
 
-<body >
-
-<canvas id="monorail-cat" height="553" width="553" jsgs='startGame' >
-  
-</canvas>
-
-</body>
-
+	<body onload="startGame()">
+		<canvas id="monorail-cat" height="553" width="553"></canvas>
+	</body>
 </html>

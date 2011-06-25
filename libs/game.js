@@ -1,6 +1,7 @@
 function Game(gs) {
 	var c = gs.c;
 	gs.addEntity(new Player(gs));
+	gs.addEntity(new Cat(null, 0, 0, SOUTH));
 }
 
 function startGame() {
