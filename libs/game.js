@@ -1,6 +1,20 @@
 function Game(gs) {
-	var c = gs.c;
-	gs.addEntity(new Player(gs));
+	
+	this.keymap_player_1 = {
+		left: 81, 	// q
+		right: 68, 	// d
+		action1: 32
+	};
+	
+	this.keymap_player_2 = {
+			left: 37, 	// left
+			right: 39, 	// right
+			action1: 13
+		};
+	
+	
+	gs.addEntity(new Player(gs, "player 1", this.keymap_player_1));
+	gs.addEntity(new Player(gs, "player 2", this.keymap_player_2));
 }
 
 function startGame() {
