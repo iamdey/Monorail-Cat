@@ -6,7 +6,7 @@
  * 
  * @author esion
  */
-function Player(gs, player_id, keymap){
+function Player(player_id, keymap){
 	
 	/** 
 	 * const left / right
@@ -23,18 +23,12 @@ function Player(gs, player_id, keymap){
 	 */
 	this.action = null;
 	
-	/**
-	 * temporary display fake squared cat
-	 */
-	var x = gs.width * 0.5;
-    var y = gs.height * 0.5;
-    var r = gs.width * 0.1;
 	
     /**
      * player representation
      */
 	this.draw = function(c) {
-        c.fillRect(x / 2, y / 2, r, r);
+//        c.fillRect(x / 2, y / 2, r, r);
         
         if(this.turn)
         	console.log(player_id, "turn", this.turn);

@@ -21,7 +21,7 @@ function Entity(_map, startingXTile, startingYTile) {
 	var map = _map;
 	
 	// Position in pixels
-	var pos = this.pos = [(startingXTile + 0.5) * TILE_SIZE, (startingYTile + 0.5) * TILE_SIZE];
+	var pos = this.pos = [TILE_MIDDLE, TILE_MIDDLE];
 	
 	// Position in tiles
 	var tile = this.tile = [startingXTile, startingYTile];

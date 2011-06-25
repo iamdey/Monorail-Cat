@@ -25,11 +25,11 @@ function Game(gs) {
 	
 	var map = new Map(tilemap);
 	gs.addEntity(tilemap);
-	gs.addEntity(new Player(gs, "player 1", this.keymap_player_1));
-	gs.addEntity(new Player(gs, "player 2", this.keymap_player_2));
+	gs.addEntity(new Player("player 1", this.keymap_player_1));
+	gs.addEntity(new Player("player 2", this.keymap_player_2));
 	gs.addEntity(new Cat(map, 0, 0, SOUTH));
 	
-//	gs.addEntity(new MapItem("test", map, 0, 0));
+	gs.addEntity(new MapItem("test", map, 3, 2));
 	
 	
 }
