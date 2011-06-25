@@ -8,7 +8,7 @@
 function TileMap(_canvas) {
 	var level;
 	var tiles;
-	var sprites = this.sprites;
+	var images;
 	var bits;
 	var ready;
 	var tilesize = TILE_SIZE;
@@ -16,7 +16,7 @@ function TileMap(_canvas) {
 	var canvas = _canvas;
 
 	// matrice représentant le niveau
-	this.level;
+	this.level = new Array();
 
 	// association type de tuile => image à utiliser
 	this.tiles = new Array();
@@ -40,11 +40,11 @@ function TileMap(_canvas) {
 		var i, j;
 		for(i=0; i< this.level.length; i++) {
 			for(j=0; j< this.level[i].length; j++) {
-				this.sprites[i][j].draw(c, [i * TILE_SIZE, j * TILE_SIZE]);
+				c.getContext('2d').drawImage(this.images[i][j], j * TILE_SIZE, i * TILE_SIZE);
 			}
 		}
 	}
-	
+
 	this.bits = new Array();
 	this.bits[NORTH] = new Array();
 	this.bits[NORTH][SOUTH] = 10;
@@ -65,27 +65,7 @@ function TileMap(_canvas) {
 
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
-		console.log(x+";"+y+" from "+from+" to "+to)
-		if(this.level[x][y] & (1 << this.bits[from][to]) != 0) {
-			return true;
-		}
-		return false;
-	}
-
-	// Appelée une fois la map chargée
-	// A surcharger dans le contexte appelant
-	this.onload = function() {
-		this.sprites = new Array();
-		
-		for(i=0; i< this.level.length; i++) {
-			this.sprites[i] = new Array();
-			for(j=0; j< this.level[0].length; j++) {
-				this.sprites[i][j] = new Sprite(["left", "top"], {
-					default: [["arts/"+this.tiles[this.level[j][i]]+".png", 0]]
-				});
-				this.sprites[i][j].action("default");
-			}
-		}
+		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
 	}
 
 	this.load = function(mapId) {
@@ -117,11 +97,20 @@ function TileMap(_canvas) {
 				for(j=0; j< columns.length; j++) {
 					this.level[ieff][j] = parseInt(columns[j]);
 				}
-				
+
 				ieff ++;
 			}
 		}
+		
+		// Load images
+		this.images = new Array();
+		for(i=0; i< this.level.length; i++) {
+			this.images[i] = new Array();
+			for(j=0; j< this.level[i].length; j++) {
+				this.images[i][j] = new Image();
+				this.images[i][j].src = 'arts/'+this.tiles[this.level[i][j]]+'.png';
+			}
+		}
 		this.ready = true;
-		this.onload();
 	}
 }

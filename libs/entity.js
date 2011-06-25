@@ -3,8 +3,8 @@ var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
 var TILE_SIZE = 79;
-var TILE_MIDDLE = (TILE_SIZE + 1) / 2;
-var CAT_SPEED = TILE_SIZE * 2;
+var TILE_MIDDLE = TILE_SIZE / 2 + 1;
+var CAT_SPEED = TILE_SIZE * 4;
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
 	
 function getOppositeDirection(direction) {
@@ -34,22 +34,31 @@ function Entity(_map, startingXTile, startingYTile) {
 		pos[0] += dx;
 		pos[1] += dy;
 		
-		var movement = [Math.floor(pos[0] / TILE_SIZE), Math.floor(pos[1] / TILE_SIZE)]
+		var movement = [0, 0];
+		if (pos[0] > TILE_SIZE) {
+			movement[0] = 1;
+		} else if (pos[1] > TILE_SIZE) {
+			movement[1] = 1;
+		} else if (pos[0] < 0) {
+			movement[0] = -1;
+		} else if (pos[1] < 0) {
+			movement[1] = -1;
+		} 
+		
 		var changeOfTile = false;
 		
 		// Square change
-		if (movement[0] > 0 || movement[1] > 0) {
-			pos[0] %= TILE_SIZE;
-			pos[1] %= TILE_SIZE;
+		if (movement[0] != 0 || movement[1] != 0) {
+			pos[0] = (pos[0] + TILE_SIZE) % TILE_SIZE;
+			pos[1] = (pos[1] + TILE_SIZE) % TILE_SIZE;
 			
 			tile[0] += movement[0];
 			tile[1] += movement[1];
+			
 			changeOfTile = true;
 		}
 		
 		// Pass through middle
-		
-	//console.log(savex+";"+savey+" > "+pos[0]+";"+pos[1]);
 		if (!changeOfTile
 		&& (savex < TILE_MIDDLE && pos[0] >= TILE_MIDDLE
 		||	savex > TILE_MIDDLE && pos[0] <= TILE_MIDDLE
@@ -60,21 +69,15 @@ function Entity(_map, startingXTile, startingYTile) {
 	}
 	
 	this.getAbsolutePos = function() {
-		return [pos[0] + tile[0] * TILE_SIZE, pos[1] + tile[1] * TILE_SIZE];
-	}
-	
-	this.recenter = function() {
-		//TODO: Don't do it that way
-		pos[0] = TILE_MIDDLE;
-		pos[1] = TILE_MIDDLE;
+		return [pos[1] + tile[1] * TILE_SIZE, pos[0] + tile[0] * TILE_SIZE];
 	}
 }
 
 function Cat(map, startingXTile, startingYTile, _direction) {
 	var t = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
-	var sx = 0;			// X speed (-1 = West ; 1 = East)
-	var sy = 0;			// Y speed (-1 = North ; 1 = South)
+	var sx = 0;			// X speed (-1 = North ; 1 = South)
+	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
 	
 	// Sprite
@@ -91,10 +94,36 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy) {
 		parent.move(dx, dy, function() {
-			parent.recenter();
+			var dirChanged = false;
 			
-			if(map.isValidDirection(parent.tile[1], parent.tile[0], getOppositeDirection(direction), EAST)) {
+			if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), EAST)) {
 				t.changeDirection(EAST);
+				dirChanged = true;
+			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), WEST)) {
+				t.changeDirection(WEST);
+				dirChanged = true;
+			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), SOUTH)) {
+				t.changeDirection(SOUTH);
+				dirChanged = true;
+			} else if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), NORTH)) {
+				t.changeDirection(NORTH);
+				dirChanged = true;
+			}
+			
+			if(dirChanged) {
+				if(direction == NORTH) {
+					parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);
+					parent.pos[1] = TILE_MIDDLE;
+				} else if(direction == SOUTH) {
+					parent.pos[0] += Math.abs(TILE_MIDDLE - parent.pos[1]);
+					parent.pos[1] = TILE_MIDDLE;
+				} else if(direction == WEST) {
+					parent.pos[0] = TILE_MIDDLE;
+					parent.pos[1] -= Math.abs(TILE_MIDDLE - parent.pos[0]);
+				} else {
+					parent.pos[0] = TILE_MIDDLE;
+					parent.pos[1] += Math.abs(TILE_MIDDLE - parent.pos[0]);
+				}
 			}
 		});
 	}
@@ -103,11 +132,11 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 		direction = newDirection;
 		
 		switch (direction) {
-			case NORTH:	sx =  0;	sy = -1;	break;
-			case SOUTH:	sx =  0;	sy = +1;	break;
-			case WEST:	sx = -1;	sy =  0;	break;
-			case EAST:	sx = +1;	sy =  0;	break;
-			default:	sx = +1;	sy =  0;	break;
+			case NORTH:	sx = -1;	sy =  0;	break;
+			case SOUTH:	sx = +1;	sy =  0;	break;
+			case WEST:	sx =  0;	sy = -1;	break;
+			case EAST:	sx =  0;	sy = +1;	break;
+			default:	sx =  0;	sy =  0;	break;
 		}
 		
 		switch (direction) {
