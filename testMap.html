@@ -1,0 +1,28 @@
+<html>
+	<head>
+		<title>Test Matrice Niveau</title>
+		<style type="text/css">
+			p { margin:0; padding:0; }
+			img { margin:0; padding:0; border:none; }
+			img.rail { width:63px; height:63px; }
+		</style>
+		<script type="text/javascript" src="libs/common.js"></script>
+		<script type="text/javascript" src="libs/tilemap.js"></script>
+	</head>
+	<body>
+		<h1>Test Matrice Niveau</h1>
+		<p><input type="text" id="mapId" value="default" /> <input type="button" value="Charger" onclick="var map = new TileMap(); map.onload = function() { this.printMap(); }; map.load(e('mapId').value); return false;" /></p>
+		<canvas id="output" width="553" height="553" style="border: dashed 1px silver;"></canvas>
+		<script type="text/javascript">
+
+			var map = new TileMap();
+
+			map.onload = function() {
+				this.printMap(e('output'));
+			}
+
+			map.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
+
+		</script>
+	</body>
+</html>

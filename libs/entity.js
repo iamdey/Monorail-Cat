@@ -3,6 +3,7 @@ var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
 var TILE_SIZE = 79;
+var CAT_SPEED = TILE_SIZE * 2;
 
 function Entity(map, startingXTile, startingYTile) {
 	// Position in pixels
@@ -30,7 +31,6 @@ function Cat(map, startingXTile, startingYTile, direction) {
 			up:		[["arts/cat1-up-1.png", 3], ["arts/cat1-up-2.png", 3]],
 			down:	[["arts/cat1-down-1.png", 3], ["arts/cat1-down-2.png", 3]]
 		}, function() {
-			
 			switch (direction) {
 				case NORTH:	sprite.action("up");	break;
 				case SOUTH:	sprite.action("down");	break;
@@ -62,6 +62,10 @@ function Cat(map, startingXTile, startingYTile, direction) {
 	
 	// Updates the cat
 	this.update = function() {
+		var delta = CAT_SPEED / FRAMERATE;
+		parent.pos[0] += sx * delta;
+		parent.pos[1] += sy * delta;
+		
 		sprite.update();
 	}
 }
