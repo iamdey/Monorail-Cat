@@ -21,7 +21,7 @@ function Entity(_map, startingXTile, startingYTile) {
 	var map = _map;
 	
 	// Position in pixels
-	var pos = this.pos = [(startingXTile + 0.5) * TILE_SIZE, (startingYTile + 0.5) * TILE_SIZE];
+	var pos = this.pos = [TILE_MIDDLE, TILE_MIDDLE];
 	
 	// Position in tiles
 	var tile = this.tile = [startingXTile, startingYTile];
@@ -60,21 +60,21 @@ function Entity(_map, startingXTile, startingYTile) {
 	}
 	
 	this.getAbsolutePos = function() {
-		return [pos[0] + tile[0] * TILE_SIZE, pos[1] + tile[1] * TILE_SIZE];
+		return [pos[1] + tile[1] * TILE_SIZE, pos[0] + tile[0] * TILE_SIZE];
 	}
 	
 	this.recenter = function() {
 		//TODO: Don't do it that way
-		pos[0] = TILE_MIDDLE;
-		pos[1] = TILE_MIDDLE;
+		//pos[0] = TILE_MIDDLE;
+		//pos[1] = TILE_MIDDLE;
 	}
 }
 
 function Cat(map, startingXTile, startingYTile, _direction) {
 	var t = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
-	var sx = 0;			// X speed (-1 = West ; 1 = East)
-	var sy = 0;			// Y speed (-1 = North ; 1 = South)
+	var sx = 0;			// X speed (-1 = North ; 1 = South)
+	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
 	
 	// Sprite
@@ -93,7 +93,7 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 		parent.move(dx, dy, function() {
 			parent.recenter();
 			
-			if(map.isValidDirection(parent.tile[1], parent.tile[0], getOppositeDirection(direction), EAST)) {
+			if(map.isValidDirection(parent.tile[0], parent.tile[1], getOppositeDirection(direction), EAST)) {
 				t.changeDirection(EAST);
 			}
 		});
@@ -103,11 +103,11 @@ function Cat(map, startingXTile, startingYTile, _direction) {
 		direction = newDirection;
 		
 		switch (direction) {
-			case NORTH:	sx =  0;	sy = -1;	break;
-			case SOUTH:	sx =  0;	sy = +1;	break;
-			case WEST:	sx = -1;	sy =  0;	break;
-			case EAST:	sx = +1;	sy =  0;	break;
-			default:	sx = +1;	sy =  0;	break;
+			case NORTH:	sx = -1;	sy =  0;	break;
+			case SOUTH:	sx = +1;	sy =  0;	break;
+			case WEST:	sx =  0;	sy = -1;	break;
+			case EAST:	sx =  0;	sy = +1;	break;
+			default:	sx =  0;	sy =  0;	break;
 		}
 		
 		switch (direction) {

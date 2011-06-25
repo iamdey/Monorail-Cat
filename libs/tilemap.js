@@ -40,7 +40,7 @@ function TileMap(_canvas) {
 		var i, j;
 		for(i=0; i< this.level.length; i++) {
 			for(j=0; j< this.level[i].length; j++) {
-				this.sprites[i][j].draw(c, [i * TILE_SIZE, j * TILE_SIZE]);
+				this.sprites[i][j].draw(c, [j * TILE_SIZE, i * TILE_SIZE]);
 			}
 		}
 	}
@@ -65,11 +65,7 @@ function TileMap(_canvas) {
 
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
-		console.log(x+";"+y+" from "+from+" to "+to)
-		if(this.level[x][y] & (1 << this.bits[from][to]) != 0) {
-			return true;
-		}
-		return false;
+		return ((this.level[x][y] & (1 << this.bits[from][to])) != 0);
 	}
 
 	// Appelée une fois la map chargée
@@ -79,9 +75,9 @@ function TileMap(_canvas) {
 		
 		for(i=0; i< this.level.length; i++) {
 			this.sprites[i] = new Array();
-			for(j=0; j< this.level[0].length; j++) {
+			for(j=0; j< this.level[i].length; j++) {
 				this.sprites[i][j] = new Sprite(["left", "top"], {
-					default: [["arts/"+this.tiles[this.level[j][i]]+".png", 0]]
+					default: [["arts/"+this.tiles[this.level[i][j]]+".png", 0]]
 				});
 				this.sprites[i][j].action("default");
 			}
