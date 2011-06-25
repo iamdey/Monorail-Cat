@@ -20,10 +20,11 @@ function Game(gs) {
 		action1: 13
 	};
 	
-	var map = new TileMap(document.getElementById("monorail-cat"));
-	map.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
+	var tilemap = new TileMap(document.getElementById("monorail-cat"));
+	tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
 	
-	gs.addEntity(map);
+	var map = new Map(tilemap);
+	gs.addEntity(tilemap);
 	gs.addEntity(new Player(gs, "player 1", this.keymap_player_1));
 	gs.addEntity(new Player(gs, "player 2", this.keymap_player_2));
 	gs.addEntity(new Cat(map, 0, 0, SOUTH));
