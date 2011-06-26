@@ -21,13 +21,13 @@
 		<div id="gameBoard">
 			<div id="player1">
 				<p class="playerName" id="player1name">Player 1</p>
-				<p class="lives">Lives : <span id="player1lives">9</span></p>
 				<p><img class="bonusImage" src="arts/blank.png" id="player1bonus"></img></p>
+				<p class="lives" id="player1lives"></p>
 			</div>
 			<div id="player2">
 				<p class="playerName" id="player2name">Player 2</p>
-				<p class="lives">Lives : <span id="player2lives">9</span></p>
 				<p><img class="bonusImage" src="arts/blank.png" id="player2bonus"></img></p>
+				<p class="lives" id="player2lives"></p>
 			</div>
 			<div id="gameView">
 				<div id="header">
@@ -44,6 +44,8 @@
 		<div id="msg"></div>
 
 		<script type="text/javascript">
+			UI.setPlayerLives(1, 9);
+			UI.setPlayerLives(2, 5);
 			// bootscreen
 			UI.printMsg('<img src="arts/TEH REAL CAT.jpg"></img>', UI.HUGE, undefined, 'startGame();');
 		</script>
