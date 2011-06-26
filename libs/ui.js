@@ -40,8 +40,12 @@ function _UI() {
 	}
 
 	this.setPlayerBonus = function(player, bonusName) {
-		if((player == 1 || player == 2) && (this.bonusImages[bonusName] != undefined)) {
-			e('player'+player+'bonusImage').src = 'arts/'+this.bonusImages[bonusName];
+		if(player == 1 || player == 2) {
+			if(this.bonusImages[bonusName] != undefined) {
+				e('player'+player+'bonusImage').src = 'arts/'+this.bonusImages[bonusName];
+			} else {
+				e('player'+player+'bonusImage').src = 'arts/blank.png';
+			}
 		}
 	}
 
