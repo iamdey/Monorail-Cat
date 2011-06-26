@@ -49,9 +49,9 @@ p.lives img {
 }
 
 img.bonusImage {
+	background:url(arts/bg2.png) repeat;
 	width:79px;
 	margin:0.3em auto;
-	border:solid 1px red;
 }
 
 #msg {
@@ -70,4 +70,17 @@ img.bonusImage {
 	background:url(arts/bg.png) repeat;
 	font-family:fantasy;
 	display:none;
+}
+
+#otherMaps p {
+	width:795px;
+	margin:.3em auto;
+}
+
+.right {
+	float:right;
+}
+
+.startGameButton {
+	text-align:center;
 }

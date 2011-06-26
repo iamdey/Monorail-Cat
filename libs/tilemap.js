@@ -44,6 +44,7 @@ function TileMap(_canvas) {
 
 	// Affichage de la map
 	this.draw = function(c) {
+		c.getContext('2d').clearRect(0,0, c.width, c.height);
 		var i, j;
 		for(i=0; i< this.level.length; i++) {
 			for(j=0; j< this.level[i].length; j++) {
