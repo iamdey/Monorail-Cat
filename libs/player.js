@@ -64,7 +64,6 @@ function Player(player_id, keymap, cat){
 							this.setCatDirection(this.keys_stack[this.keys_stack.length - 1]);
 						}else{
 							this.setCatDirection(null);
-							
 						}
 					}
 				}
