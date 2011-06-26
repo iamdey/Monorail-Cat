@@ -7,7 +7,9 @@
 function _UI() {
 	// Map Bonus => Img
 	this.bonusImages = new Array();
-	this.bonusImages['woolBall'] = 'woolBall.png';
+	this.bonusImages['woolball'] = 'woolBall.png';
+	this.bonusImages['rainbow'] = 'rainbow_eo1.png';
+	this.bonusImages['water'] = 'water2.png';
 
 	// Last Timeout defined for msg
 	this.lastTimeout = null;
@@ -28,7 +30,10 @@ function _UI() {
 		if(player == 1 || player == 2) {
 			var lives = '';
 			for(var i = 0; i< nbLives; i++) {
-				lives += '<img src="arts/cat'+player+'-right.png"></img><br />';
+				if(player == 1)
+					lives += '<img src="arts/cat1-right.png"></img><br />';
+				else
+					lives += '<img src="arts/cat2-left.png"></img><br />';
 			}
 			e('player'+player+'lives').innerHTML = lives;
 		}

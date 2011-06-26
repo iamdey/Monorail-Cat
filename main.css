@@ -37,7 +37,7 @@
 }
 
 #header p {
-	font-size:300%;
+	font-size:250%;
 	text-align:center;
 }
 
@@ -47,7 +47,7 @@
 }
 
 p.playerName {
-	font-size:150%;
+	font-size:130%;
 	font-weight:bold;
 	margin:0.3em 0;
 }
