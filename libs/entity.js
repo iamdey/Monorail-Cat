@@ -156,8 +156,6 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		parent.move(dx, dy,
 		// Change Square callback function
 		function() {
-			self.desiredDirection = NONE;
-			
 			map.detectCollision(self);
 		},
 		// Middle passed callback function
@@ -165,8 +163,11 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
 			
+			console.log("Desired direction: "+self.desiredDirection);
+			
 			// Trying to turn
 			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
+				console.log("CAN GO!");
 				//FIXME: detected only when the cat wants to go down and the tile allows it, then this stop the cat
 //				console.log(self.desiredDirection);
 				self.changeDirection(self.desiredDirection);
@@ -176,9 +177,9 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			// Can't go straigth
 			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
 				// Try to go left
-				self.desiredDirection = getLeftDirection(direction);
-				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
-					self.changeDirection(self.desiredDirection);
+				var autoDirection = getLeftDirection(direction);
+				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, autoDirection)) {
+					self.changeDirection(autoDirection);
 					dirChanged = true;
 				}
 				// Go right

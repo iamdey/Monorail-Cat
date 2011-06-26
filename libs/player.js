@@ -55,8 +55,13 @@ function Player(player_id, keymap, cat){
 				 */
 				if(key == LEFT || key == RIGHT || key == UP || key == DOWN){
 					if(!reset){
-						cat.setDesiredDirection(key);
-					}else{
+						switch(key) {
+							case LEFT:	cat.setDesiredDirection(WEST);	break;
+							case RIGHT:	cat.setDesiredDirection(EAST);	break;
+							case UP:	cat.setDesiredDirection(NORTH);	break;
+							case DOWN:	cat.setDesiredDirection(SOUTH);	break;
+						}
+					} else{
 						cat.setDesiredDirection(NONE);
 					}
 				}
