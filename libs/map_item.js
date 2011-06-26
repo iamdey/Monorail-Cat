@@ -9,7 +9,19 @@
 function MapItem(mapItemId, map, startingXTile, startingYTile){
 	var parent 	= new Entity(map, startingXTile, startingYTile);
 	
-	var ITEMS 	= ["woolball", "rainbow"]; 
+	var ITEMS 	= ["woolball", "rainbow"];
+	
+	this.getId = function() {
+		return parent.getId();
+	}
+	
+	this.getTile = function() {
+		return parent.getTile();
+	}
+	
+	this.getStrength = function() {
+		return MAP_ITEM_STRENGTH;
+	}
 	
 	// Sprite
 	var sprite = new Sprite(["center", "center"], 

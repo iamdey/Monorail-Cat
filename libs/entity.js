@@ -1,14 +1,25 @@
+var NONE = 0;
 var NORTH = 1;
 var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
+
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
-var CAT_SPEED = TILE_SIZE * 4;
+var CAT_SPEED = TILE_SIZE * 2;
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
-var RED = 1
-var BLUE = 2
-	
+
+var RED = 1;
+var BLUE = 2;
+
+var MAP_ITEM_STRENGTH = 0;
+var CAT_STRENGTH = 1;
+var WOOLBALL_STRENGTH = 2;
+var WATER_STRENGTH = 2;
+var RAINBOW_CAT_STRENGTH = 42;
+
+var ctId = 0;
+
 function getOppositeDirection(direction) {
 	switch (direction) {
 		case NORTH:	return SOUTH;
@@ -40,6 +51,7 @@ function getRightDirection(direction) {
 }
 
 function Entity(_map, startingXTile, startingYTile) {
+	var id = ctId++;
 	var map = _map;
 	
 	// Position in pixels
@@ -48,8 +60,16 @@ function Entity(_map, startingXTile, startingYTile) {
 	// Position in tiles
 	var tile = this.tile = [startingXTile, startingYTile];
 	
+	this.getId = function() {
+		return id;
+	}
+	
+	this.getTile = function() {
+		return tile;
+	}
+	
 	// Moves the entity by dx ; dy (in pixels)
-	this.move = function(dx, dy, middleCallback) {
+	this.move = function(dx, dy, changeSquareCallback, middleCallback) {
 		var savex = pos[0];
 		var savey = pos[1];
 		
@@ -65,9 +85,7 @@ function Entity(_map, startingXTile, startingYTile) {
 			movement[0] = -1;
 		} else if (pos[1] < 0) {
 			movement[1] = -1;
-		} 
-		
-		var changeOfTile = false;
+		}
 		
 		// Square change
 		if (movement[0] != 0 || movement[1] != 0) {
@@ -77,15 +95,16 @@ function Entity(_map, startingXTile, startingYTile) {
 			tile[0] += movement[0];
 			tile[1] += movement[1];
 			
-			changeOfTile = true;
+			changeSquareCallback();
+			
+			//map.detectCollision(this);
 		}
-		
 		// Pass through middle
-		if (!changeOfTile
-		&& (savex < TILE_MIDDLE && pos[0] >= TILE_MIDDLE
+		else if (
+			savex < TILE_MIDDLE && pos[0] >= TILE_MIDDLE
 		||	savex > TILE_MIDDLE && pos[0] <= TILE_MIDDLE
 		||	savey < TILE_MIDDLE && pos[1] >= TILE_MIDDLE
-		||	savey > TILE_MIDDLE && pos[1] <= TILE_MIDDLE)) {
+		||	savey > TILE_MIDDLE && pos[1] <= TILE_MIDDLE) {
 			middleCallback();
 		}
 	}
@@ -96,12 +115,26 @@ function Entity(_map, startingXTile, startingYTile) {
 }
 
 function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
-	var t = this;
+	var self = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
 	var player = _player;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
+	var desiredDirection = NONE;
+	var strength = CAT_STRENGTH;
+	
+	this.getId = function() {
+		return parent.getId();
+	}
+	
+	this.getTile = function() {
+		return parent.getTile();
+	}
+	
+	this.getStrength = function() {
+		return strength;
+	}
 	
 	// Sprite
 	var sprite = new Sprite(["center", "center"], {
@@ -110,31 +143,25 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 			up:		[["arts/cat"+color+"-up-1.png", 3],		["arts/cat"+color+"-up-2.png", 3]],
 			down:	[["arts/cat"+color+"-down-1.png", 3],	["arts/cat"+color+"-down-2.png", 3]]
 		}, function() {
-			t.changeDirection(direction);
+			self.changeDirection(direction);
 		}
 	);
 	
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy) {
-		parent.move(dx, dy, function() {
+		parent.move(dx, dy,
+		// Change Square callback function
+		function() {
+			desiredDirection = NONE;
+		},
+		// Middle passed callback function
+		function() {
 			var dirChanged = false;
-			var desiredDirection = 0;
 			var oppositeDirection = getOppositeDirection(direction);
-			
-			// Player choice
-			if(player.turn == LEFT) {
-				desiredDirection = WEST;
-			} else if(player.turn == RIGHT) {
-				desiredDirection = EAST;
-			} else if(player.turn == UP) {
-				desiredDirection = NORTH;
-			} else if(player.turn == DOWN) {
-				desiredDirection = SOUTH;
-			}
 			
 			// Trying to turn
 			if (desiredDirection != 0 && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-				t.changeDirection(desiredDirection);
+				self.changeDirection(desiredDirection);
 				dirChanged = true;
 			}
 			
@@ -143,12 +170,12 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 				// Try to go left
 				desiredDirection = getLeftDirection(direction);
 				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-					t.changeDirection(desiredDirection);
+					self.changeDirection(desiredDirection);
 					dirChanged = true;
 				}
 				// Go right
 				else {
-					t.changeDirection(getRightDirection(direction));
+					self.changeDirection(getRightDirection(direction));
 					dirChanged = true;
 				}
 			}
@@ -170,6 +197,10 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 				}
 			}
 		});
+	}
+	
+	this.setDesiredDirection = function(direction) {
+		desiredDirection = direction;
 	}
 	
 	this.changeDirection = function(newDirection) {
