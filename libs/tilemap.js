@@ -80,17 +80,6 @@ function TileMap(_canvas) {
 	// Appelée une fois la map chargée
 	// A surcharger dans le contexte appelant
 	this.onload = function() {
-		this.sprites = new Array();
-
-		for(i=0; i< this.level.length; i++) {
-			this.sprites[i] = new Array();
-			for(j=0; j< this.level[i].length; j++) {
-				this.sprites[i][j] = new Sprite(["left", "top"], {
-					default: [["arts/"+this.tiles[this.level[i][j]]+".png", 0]]
-				});
-				this.sprites[i][j].action("default");
-			}
-		}
 	}
 
 	this.load = function(mapId) {
@@ -127,6 +116,6 @@ function TileMap(_canvas) {
 			}
 		}
 		this.ready = true;
-		//this.onload();
+		this.onload();
 	}
 }

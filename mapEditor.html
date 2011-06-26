@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<title>Map Editor</title>
+		<style type="text/css">
+			p { margin:0; padding:0; }
+			img { margin:0; padding:0; border:1px dashed #AAA; }
+			img.rail { width:63px; height:63px; }
+		</style>
+		<script type="text/javascript">
+			TILE_SIZE = 79;
+			NORTH = 1;
+			SOUTH = 2;
+			WEST = 3;
+			EAST = 4;
+		</script>
+		<script type="text/javascript" src="libs/common.js"></script>
+		<script type="text/javascript" src="libs/tilemap.js"></script>
+		<script type="text/javascript">
+			var map = new TileMap();
+			var tiles = map.tiles;
+			var selectedTool = 0;
+
+			function load(mapId) {
+				map.onload = function() {
+					drawEditor();
+				}
+				map.load(mapId);
+			}
+
+			function newmap() {
+				var w = parseInt(e('nmapw').value);
+				var h = parseInt(e('nmaph').value);
+				var i, j;
+				map.level = new Array();
+				for(i=0; i<h; i++) {
+					map.level[i] = new Array();
+					for(j=0; j<w; j++) {
+						map.level[i][j] = 0;
+					}
+				}
+				drawEditor();
+			}
+
+			function save(mapId) {
+				// génération du csv
+				var csv = '';
+				var i, j;
+				for(i=0; i<map.level.length; i++) {
+					for(j=0; j<map.level[i].length; j++) {
+						if(j!=0) {
+							csv += ';';
+						}
+						csv+= map.level[i][j];
+					}
+					csv+="\n";
+				}
+				// sauvegarde du csv
+				var xhr;
+				xhr = getXHR();
+				xhr.onreadystatechange  = function() {
+					if(xhr.readyState  == 4) {
+						if(xhr.status  == 200) {
+							if(xhr.responseText == "OK") {
+								alert('Saved.');
+							} else {
+								alert(xhr.responseText);
+							}
+						} else {
+							alert("Error save code " + xhr.status + " : " + xhr.statusText);
+						}
+					}
+				};
+				var params = "content="+csv;
+				xhr.open("POST", 'map.php?PUT='+mapId, true);
+				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				xhr.setRequestHeader("Content-length", params.length);
+				xhr.setRequestHeader("Connection", "close");
+				xhr.send(params);
+			}
+
+			function loadEditor() {
+				var tools = '<p></p><img class="rail" id="stimg" src="arts/blank.png" style="border:solid red 3px;"></img>';
+				for(var tid in tiles) {
+					tools += '<img class="rail" src="arts/'+tiles[tid]+'.png" onclick="selectedTool = parseInt('+tid+'); e(\'stimg\').src= \'arts/'+tiles[tid]+'.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
+				}
+				tools += '</p>';
+				e('blocks').innerHTML = tools;
+			}
+
+			function drawEditor() {
+				var editor = '';
+				var i, j;
+
+				for(i=0; i<map.level.length; i++) {
+					editor += '<p>';
+					for(j=0; j<map.level[i].length; j++) {
+						editor += '<img src="arts/'+tiles[map.level[i][j]]+'.png" onclick="updateBlock(parseInt('+i+'), parseInt('+j+'))"></img>';
+					}
+					editor += '</p>';
+				}
+
+				e('mapedit').innerHTML = editor;
+			}
+
+			function updateBlock(i,j) {
+				map.level[i][j] = selectedTool;
+				drawEditor();
+			}
+		</script>
+	</head>
+	<body>
+		<h1>Map Editor</h1>
+		<p>New map : W <input type="text" id="nmapw" value="7" style="width:3em;"/>
+		           | H <input type="text" id="nmaph"  value="7" style="width:3em;"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		               <input type="button" value="create new map" onclick="newmap(); return false;">
+		</p>
+		<p>Map Id : <input type="text" id="mapId" /> <input type="button" value="Load" onclick="load(e('mapId').value); return false;" /> <input type="button" value="Save" onclick="save(e('mapId').value); return false;" /></p>
+		<hr></hr>
+		<p id="blocks">
+		</p>
+		<hr></hr>
+		<div id="mapedit">
+		</div>
+		<script type="text/javascript">
+			loadEditor();
+		</script>
+	</body>
+</html>

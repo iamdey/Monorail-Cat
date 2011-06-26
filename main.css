@@ -6,10 +6,7 @@
 #gameBoard {
 	width:795px;
 	margin:0 auto;
-}
-
-#gameBoard > div {
-	border : solid 1px #888;
+	height:750px;
 }
 
 #player1 {
@@ -23,6 +20,8 @@
 }
 
 #player1, #player2 {
+	position:relative;
+	top:200px;
 	width:100px;
 	text-align:center;
 }
@@ -30,20 +29,12 @@
 #gameView {
 	width: 553px;
 	padding:0 120px;
+	height:750px;
 }
 
 #header {
 	margin:0;
-}
-
-#header p {
-	font-size:250%;
-	text-align:center;
-}
-
-#header p img {
-	vertical-align:middle;
-	border:none;
+	text-align: center;
 }
 
 p.playerName {
