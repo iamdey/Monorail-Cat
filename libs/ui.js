@@ -41,7 +41,7 @@ function _UI() {
 
 	this.setPlayerBonus = function(player, bonusName) {
 		if((player == 1 || player == 2) && (this.bonusImages[bonusName] != undefined)) {
-			e('player'+player+'bonusImage').src = 'arts/'+this.bonusImages[bonusName];
+			e('player'+player+'bonus').src = 'arts/'+this.bonusImages[bonusName];
 		}
 	}
 

@@ -219,8 +219,13 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		if(key == "action1") {
 			if(stackedItems.length > 0) {
 				var item = stackedItems.pop();
-				
 				console.log("Use item "+item);
+				
+				if(stackedItems.length > 0) {
+					UI.setPlayerBonus(playerId, stackedItems[stackedItems.length - 1]);
+				} else {
+					UI.setPlayerBonus(playerId, "");
+				}
 			}
 		}
 	}
@@ -260,6 +265,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			var item = mapItem.pickUpRandomizedLoot();
 			console.log("Pick up "+item);
 			stackedItems.push(item);
+			UI.setPlayerBonus(playerId, item);
 		}
 	}
 	
