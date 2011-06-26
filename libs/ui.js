@@ -7,7 +7,7 @@
 function _UI() {
 	// Map Bonus => Img
 	this.bonusImages = new Array();
-	this.bonusImages['woolball'] = 'woolBall.png';
+	this.bonusImages['woolball'] = 'wool_ball1.png';
 	this.bonusImages['rainbow'] = 'rainbow_eo1.png';
 	this.bonusImages['water'] = 'water2.png';
 
