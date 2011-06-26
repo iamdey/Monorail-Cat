@@ -171,7 +171,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
 			
-			if(debug && self.desiredDirection != 0)
+			if(DEBUG && self.desiredDirection != 0)
 				console.log("Desired direction: "+self.desiredDirection);
 			
 			// Trying to turn
