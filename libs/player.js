@@ -41,7 +41,7 @@ function Player(player_id, keymap){
 	}
 	
 	/**
-	 * Reset turn attrib
+	 * Reset turn attribute
 	 */
 	this.keyUp = function(keyCode) {
 		this.propertySet(keyCode, true);
