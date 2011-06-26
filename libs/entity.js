@@ -163,11 +163,13 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
 			
-			console.log("Desired direction: "+self.desiredDirection);
+			if(debug && self.desiredDirection != 0)
+				console.log("Desired direction: "+self.desiredDirection);
 			
 			// Trying to turn
 			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
-				console.log("CAN GO!");
+				if(debug)
+					console.log("CAN GO!");
 				//FIXME: detected only when the cat wants to go down and the tile allows it, then this stop the cat
 //				console.log(self.desiredDirection);
 				self.changeDirection(self.desiredDirection);

@@ -16,18 +16,10 @@ var DOWN = "down";
  */
 function Player(player_id, keymap, cat){
 	
-    /**
-     * player representation
-     */
-	this.draw = function(c) {
-//        c.fillRect(x / 2, y / 2, r, r);
-        
-        if(this.turn)
-        	console.log(player_id, "turn", this.turn);
-        
-        if(this.action)
-        	console.log(player_id, "action", this.action);
-    }
+	/**
+	 * list of pressed keys
+	 */
+	this.keys_stack = new Array();
 	
 	/**
 	 * capture keys
@@ -37,7 +29,7 @@ function Player(player_id, keymap, cat){
 	}
 	
 	/**
-	 * Reset turn attribute
+	 * Reset captured key
 	 */
 	this.keyUp = function(keyCode) {
 		this.catManipulation(keyCode, true);
@@ -47,22 +39,35 @@ function Player(player_id, keymap, cat){
 	 * property setter turn or action depends on given keymap
 	 */
 	this.catManipulation = function(keyCode, reset){
-		for(key in keymap)
-		{
+		for(key in keymap){
 			if(keymap[key] == keyCode){
+				
 				/**
 				 * setting turn property
 				 */
 				if(key == LEFT || key == RIGHT || key == UP || key == DOWN){
-					if(!reset){
-						switch(key) {
-							case LEFT:	cat.setDesiredDirection(WEST);	break;
-							case RIGHT:	cat.setDesiredDirection(EAST);	break;
-							case UP:	cat.setDesiredDirection(NORTH);	break;
-							case DOWN:	cat.setDesiredDirection(SOUTH);	break;
+					if(!reset) {
+						
+						this.keys_stack.push(key);
+						this.setCatDirection(key);
+						
+					} else {
+						
+						for(k in this.keys_stack){
+							if(this.keys_stack[k] == key){
+								this.keys_stack.splice(k, 1);
+							}
 						}
-					} else{
-						cat.setDesiredDirection(NONE);
+						
+						if(this.keys_stack.length > 0){
+							console.log(this.keys_stack[this.keys_stack.length - 1 ]);
+							
+							this.setCatDirection(this.keys_stack[this.keys_stack.length - 1]);
+							
+						}else{
+							this.setCatDirection(null);
+							
+						}
 					}
 				}
 				/**
@@ -79,5 +84,23 @@ function Player(player_id, keymap, cat){
 			}
 		}
 	}
+	
+	
+	/**
+	 * proxy method for cat manipulation
+	 * @param key - string direction
+	 */
+	this.setCatDirection = function(key){
+		switch(key) {
+			case LEFT:	cat.setDesiredDirection(WEST);	break;
+			case RIGHT:	cat.setDesiredDirection(EAST);	break;
+			case UP:	cat.setDesiredDirection(NORTH);	break;
+			case DOWN:	cat.setDesiredDirection(SOUTH);	break;
+			
+			default: 	cat.setDesiredDirection(NONE);	break;
+		}
+	}
+	
+	
 	
 }
