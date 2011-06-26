@@ -1,6 +1,12 @@
 var WOOLBALL = "woolball"
 var RAINBOW = "rainbow"
 var WATER = "water"
+var INVISIBLE_FRAMES = 30;
+
+var PROBA_WOOLBALL = 10
+var PROBA_WATER = PROBA_WOOLBALL + 10
+var PROBA_RAINBOW = PROBA_WATER + 2
+var PROBA_TOTAL = PROBA_RAINBOW;
 
 /**
  * class MapItem extends Entity p4wned by Map
@@ -11,8 +17,7 @@ var WATER = "water"
  */
 function MapItem(mapItemId, map, startingXTile, startingYTile){
 	var parent 	= new Entity(map, startingXTile, startingYTile);
-	
-	var ITEMS 	= [WOOLBALL, RAINBOW, WATER];
+	var invisibleCt = 0;
 	
 	this.getType = function() {
 		return MAP_ITEM;
@@ -37,12 +42,16 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	 * Traw teh itaim
 	 */
 	this.draw = function(c) {
-//		console.log(parent.pos);
-		sprite.draw(c, parent.getAbsolutePos());
+		if(invisibleCt == 0) {
+			sprite.draw(c, parent.getAbsolutePos());
+		} else {
+			invisibleCt--;
+		}
 	}
 	
 	this.die = function() {
-		// Doze noting, cant diez
+		// Doze noting, me cant diez
+		invisibleCt = INVISIBLE_FRAMES;
 	}
 	
 	/**
@@ -56,14 +65,25 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	 * define a random Item (cf. rand_no = 4)
 	 */
 	this.pickUpRandomizedLoot = function(){
-		var rand_no = Math.floor((3-1)*Math.random()) + 1;
-		return ITEMS[rand_no];
+		var rand_no = Math.floor(PROBA_TOTAL * Math.random());
+		
+		if (rand_no < PROBA_WOOLBALL) {
+			return WOOLBALL;
+		} else if (rand_no < PROBA_WATER) {
+			return WATER;
+		} else {
+			return RAINBOW;
+		}
 	}
 	
+	// do not delete this comment, even if it's useless.
 	/**
 	 * Hmm tired, move constructor at the end is better for kitten
 	 */
-	//this.item 	= this.defineRandomizedLoot();
 }
-
+/*
+function Water(map, startingXTile, startingYTile) {
+	var parent 	= new Entity(map, startingXTile, startingYTile);
+}
+*/
 

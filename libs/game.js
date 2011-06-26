@@ -51,19 +51,19 @@ function Game(gs) {
 	
 	var cats = [
 		new Cat(map, 1, RED, 0, 0, SOUTH),
-		//new Cat(map, 2, BLUE, 6, 6, NORTH)
+		new Cat(map, 2, BLUE, 6, 6, NORTH)
 	];
 	
 	var players = [
 		new Player("player 1", this.keymap_player_1, cats[0]),
-		//new Player("player 2", this.keymap_player_2, cats[1])
+		new Player("player 2", this.keymap_player_2, cats[1])
 	];
 	
 	gs.addEntity(players[0]);
-	//gs.addEntity(players[1]);
+	gs.addEntity(players[1]);
 	gs.addEntity(cats[0]);
-	//gs.addEntity(cats[1]);
+	gs.addEntity(cats[1]);
 	
 	map.addEntity(cats[0]);
-	//map.addEntity(cats[1]);
+	map.addEntity(cats[1]);
 }

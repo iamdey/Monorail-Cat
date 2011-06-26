@@ -47,8 +47,8 @@ function Map(_tilemap) {
 				} else {
 					// Both diez
 					console.log("Both diez");
-					otherStrength.die();
 					entity.die();
+					otherEntity.die();
 				}
 			}
 		}

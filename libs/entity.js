@@ -6,6 +6,7 @@ var EAST = 4;
 
 var NB_LIVES = 9;
 var MAX_ITEMS = 2;
+var RAINBOW_TIME = FRAMERATE * 4;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
@@ -20,6 +21,7 @@ var CAT_STRENGTH = 1;
 var WOOLBALL_STRENGTH = 2;
 var WATER_STRENGTH = 2;
 var RAINBOW_CAT_STRENGTH = 42;
+var RAINBOW_SPEED = 2;
 
 var CAT = 1;
 var MAP_ITEM = 2;
@@ -130,6 +132,10 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	
 	var strength = CAT_STRENGTH;
 	var nbLives = NB_LIVES;
+	var rainbowTimer = 0;
+	var speed = 1;
+	
+	UI.setPlayerLives(playerId, nbLives);
 	
 	this.getType = function() {
 		return CAT;
@@ -221,6 +227,13 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 				var item = stackedItems.pop();
 				console.log("Use item "+item);
 				
+				// NYAN NYAN NYAN
+				if (item == RAINBOW) {
+					rainbowTimer = RAINBOW_TIME;
+					strength = RAINBOW_CAT_STRENGTH;
+					speed = RAINBOW_SPEED;
+				}
+				
 				if(stackedItems.length > 0) {
 					UI.setPlayerBonus(playerId, stackedItems[stackedItems.length - 1]);
 				} else {
@@ -254,6 +267,8 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	this.die = function() {
 		UI.setPlayerLives(playerId, nbLives--);
 		
+		// TODO: Restart from elsewhere
+		
 		if(nbLives == 0) {
 			//TODO: Stop game
 		}
@@ -276,7 +291,15 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	
 	// Updates the cat
 	this.update = function() {
-		this.move(sx * DELTA_SPEED, sy * DELTA_SPEED);
+		this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
+		
+		if(rainbowTimer > 0) {
+			rainbowTimer--;
+			if(rainbowTimer == 0) {
+				speed = 1;
+				strength = CAT_STRENGTH;
+			}
+		}
 		
 		sprite.update();
 	}
