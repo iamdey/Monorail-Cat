@@ -26,7 +26,11 @@ function _UI() {
 
 	this.setPlayerLives = function(player, nbLives) {
 		if(player == 1 || player == 2) {
-			e('player'+player+'lives').innerHTML = name;
+			var lives = '';
+			for(var i = 0; i< nbLives; i++) {
+				lives += '<img src="arts/cat'+player+'-right.png"></img><br />';
+			}
+			e('player'+player+'lives').innerHTML = lives;
 		}
 	}
 
