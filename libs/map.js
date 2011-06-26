@@ -36,7 +36,6 @@ function Map(gs, _tilemap) {
 				
 				if(strength > otherStrength) {
 					// Killz collider
-					console.log("Killz other entity");
 					otherEntity.die();
 					
 					// Pick up item
@@ -45,11 +44,9 @@ function Map(gs, _tilemap) {
 					}
 				} else if(strength < otherStrength) {
 					// Cat diez 
-					console.log("Killz entity");
 					entity.die();
 				} else {
 					// Both diez
-					console.log("Both diez");
 					entity.die();
 					otherEntity.die();
 				}

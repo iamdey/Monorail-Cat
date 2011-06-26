@@ -10,8 +10,12 @@ var RAINBOW_TIME = FRAMERATE * 2;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
-var CAT_SPEED = TILE_SIZE * 2;
+var CAT_SPEED = TILE_SIZE * 3;
+var WOOLBALL_SPEED = TILE_SIZE * 5;
+var WOOLBALL_LIFE_TIME = FRAMERATE * 8;
+
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
+var DELTA_WOOLBALL_SPEED = Math.round(WOOLBALL_SPEED / FRAMERATE);
 
 var RED = 1;
 var BLUE = 2;
@@ -60,7 +64,7 @@ function getRightDirection(direction) {
 
 function Entity(_map, startingXTile, startingYTile) {
 	var id = ctId++;
-	var map = _map;
+	var map = this.map = _map;
 	
 	// Position in pixels
 	var pos = this.pos = [TILE_MIDDLE, TILE_MIDDLE];
@@ -226,15 +230,20 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		if(key == "action1") {
 			if(stackedItems.length > 0) {
 				var item = stackedItems.pop();
-				console.log("Use item "+item);
 				
 				// NYAN NYAN NYAN
 				if (item == RAINBOW) {
 					rainbowTimer = RAINBOW_TIME;
 					strength = RAINBOW_CAT_STRENGTH;
 					speed = RAINBOW_SPEED;
-				} else if (item == WATER) {
+				}
+				// PSSSSHHHH
+				else if (item == WATER) {
 					map.addEntity(new Water(map, parent.tile[0], parent.tile[1]));
+				}
+				// SHOO!
+				else if (item == WOOLBALL) {
+					map.addEntity(new Woolball(map, parent.tile[0], parent.tile[1], direction));
 				}
 				
 				if(stackedItems.length > 0) {
@@ -281,7 +290,6 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		// Tek teh itaim
 		if(stackedItems.length < MAX_ITEMS) {
 			var item = mapItem.pickUpRandomizedLoot();
-			console.log("Pick up "+item);
 			stackedItems.push(item);
 			UI.setPlayerBonus(playerId, item);
 		}
