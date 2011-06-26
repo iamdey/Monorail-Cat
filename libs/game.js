@@ -55,8 +55,8 @@ function Game(gs) {
 	];
 	
 	var cats = [
-		new Cat(map, players[0], RED, 0, 0, SOUTH),
-		new Cat(map, players[1], BLUE, 6, 6, NORTH)
+		new Cat(map, 1, RED, 0, 0, SOUTH),
+		new Cat(map, 2, BLUE, 6, 6, NORTH)
 	];
 	
 	gs.addEntity(players[0]);

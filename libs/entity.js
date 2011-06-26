@@ -4,6 +4,8 @@ var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
 
+var NB_LIVES = 9;
+
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
 var CAT_SPEED = TILE_SIZE * 2;
@@ -115,15 +117,16 @@ function Entity(_map, startingXTile, startingYTile) {
 	}
 }
 
-function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
+function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	var self = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
-	var player = _player;
+	var playerId = _playerId;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
 	var desiredDirection = NONE;
 	var strength = CAT_STRENGTH;
+	var nbLives = NB_LIVES;
 	
 	this.getType = function() {
 		return CAT;
@@ -227,12 +230,17 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 	
 	// Dumbledore diez
 	this.die = function() {
-		// TODO: Looz a lyfe
+		UI.setPlayerLives(playerId, nbLives--);
+		
+		if(nbLives == 0) {
+			//TODO: Stop game
+		}
 	}
 	
 	this.pickUp = function(mapItem) {
 		console.log("Pick up item");
 		// TODO: Tek teh itaim
+		// = mapItem.item;
 	}
 	
 	// Draws the cat
