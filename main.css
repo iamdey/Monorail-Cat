@@ -6,6 +6,7 @@
 #gameBoard {
 	width:795px;
 	margin:0 auto;
+	height:750px;
 }
 
 #gameBoard > div {
@@ -23,6 +24,8 @@
 }
 
 #player1, #player2 {
+	position:relative;
+	top:200px;
 	width:100px;
 	text-align:center;
 }
@@ -30,6 +33,7 @@
 #gameView {
 	width: 553px;
 	padding:0 120px;
+	height:750px;
 }
 
 #header {
