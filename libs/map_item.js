@@ -11,13 +11,12 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	
 	var ITEMS 	= ["woolball", "rainbow"];
 	
-	this.getId = function() {
-		return parent.getId();
+	this.getType = function() {
+		return MAP_ITEM;
 	}
 	
-	this.getTile = function() {
-		return parent.getTile();
-	}
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
 	
 	this.getStrength = function() {
 		return MAP_ITEM_STRENGTH;
@@ -37,6 +36,10 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	this.draw = function(c) {
 //		console.log(parent.pos);
 		sprite.draw(c, parent.getAbsolutePos());
+	}
+	
+	this.die = function() {
+		// Doze noting, cant diez
 	}
 	
 	/**

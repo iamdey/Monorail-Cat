@@ -18,6 +18,9 @@ var WOOLBALL_STRENGTH = 2;
 var WATER_STRENGTH = 2;
 var RAINBOW_CAT_STRENGTH = 42;
 
+var CAT = 1;
+var MAP_ITEM = 2;
+
 var ctId = 0;
 
 function getOppositeDirection(direction) {
@@ -96,8 +99,6 @@ function Entity(_map, startingXTile, startingYTile) {
 			tile[1] += movement[1];
 			
 			changeSquareCallback();
-			
-			//map.detectCollision(this);
 		}
 		// Pass through middle
 		else if (
@@ -124,13 +125,12 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 	var desiredDirection = NONE;
 	var strength = CAT_STRENGTH;
 	
-	this.getId = function() {
-		return parent.getId();
+	this.getType = function() {
+		return CAT;
 	}
 	
-	this.getTile = function() {
-		return parent.getTile();
-	}
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
 	
 	this.getStrength = function() {
 		return strength;
@@ -153,6 +153,8 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 		// Change Square callback function
 		function() {
 			desiredDirection = NONE;
+			
+			map.detectCollision(self);
 		},
 		// Middle passed callback function
 		function() {
@@ -221,6 +223,16 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 			case EAST:	sprite.action("right");	break;
 			default:	sprite.action("right");	break;
 		}
+	}
+	
+	// Dumbledore diez
+	this.die = function() {
+		// TODO: Looz a lyfe
+	}
+	
+	this.pickUp = function(mapItem) {
+		console.log("Pick up item");
+		// TODO: Tek teh itaim
 	}
 	
 	// Draws the cat

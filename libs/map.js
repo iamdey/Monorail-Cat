@@ -8,7 +8,6 @@ function Map(_tilemap) {
 	
 	this.addEntity = function(entity) {
 		entities.push(entity);
-		console.log("add "+entity.getId());
 	}
 	
 	this.removeEntity = function(entity) {
@@ -32,12 +31,15 @@ function Map(_tilemap) {
 				var strength = entity.getStrength();
 				var otherStrength = otherEntity.getStrength();
 				
-				console.log("Collision detected");
-				
 				if(strength > otherStrength) {
 					// Killz collider
 					console.log("Killz other entity");
 					otherEntity.die();
+					
+					// Pick up item
+					if (entity.getType() == CAT && otherEntity.getType() == MAP_ITEM) {
+						entity.pickUp(otherEntity);
+					}
 				} else if(strength < otherStrength) {
 					// Cat diez
 					console.log("Killz entity");

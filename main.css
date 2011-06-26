@@ -1,0 +1,62 @@
+* {
+	margin:0;
+	padding:0;
+}
+
+#gameBoard {
+	width:755px;
+	margin:0 auto;
+}
+
+#gameBoard > div {
+	border : solid 1px #888;
+}
+
+#player1 {
+	float:left;
+}
+
+#player2 {
+	float:right;
+}
+
+#player1, #player2 {
+	width:100px;
+	text-align:center;
+}
+
+#gameView {
+	width: 553px;
+	padding:0 100px;
+}
+
+#header {
+	margin:0;
+}
+
+#header p {
+	font-size:300%;
+	text-align:center;
+}
+
+#header p img {
+	vertical-align:middle;
+	border:none;
+}
+
+p.playerName {
+	font-size:150%;
+	font-weight:bold;
+	margin:0.3em 0;
+}
+
+p.lives > span {
+	font-size:150%;
+	font-weight:bold;
+}
+
+img.bonusImage {
+	width:79px;
+	margin:0.3em auto;
+	border:solid 1px red;
+}
