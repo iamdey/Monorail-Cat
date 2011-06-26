@@ -1,3 +1,6 @@
+var WOOLBALL = "woolball"
+var RAINBOW = "rainbow"
+var WATER = "water"
 
 /**
  * class MapItem extends Entity p4wned by Map
@@ -9,7 +12,7 @@
 function MapItem(mapItemId, map, startingXTile, startingYTile){
 	var parent 	= new Entity(map, startingXTile, startingYTile);
 	
-	var ITEMS 	= ["woolball", "rainbow"];
+	var ITEMS 	= [WOOLBALL, RAINBOW, WATER];
 	
 	this.getType = function() {
 		return MAP_ITEM;
@@ -52,15 +55,15 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	/**
 	 * define a random Item (cf. rand_no = 4)
 	 */
-	this.defineRandomizedLoot = function(){
-		var rand_no = Math.floor((2-1)*Math.random()) + 1;
-		this.item 	= ITEMS[rand_no];
+	this.pickUpRandomizedLoot = function(){
+		var rand_no = Math.floor((3-1)*Math.random()) + 1;
+		return ITEMS[rand_no];
 	}
 	
 	/**
 	 * Hmm tired, move constructor at the end is better for kitten
 	 */
-	this.item 	= this.defineRandomizedLoot();
+	//this.item 	= this.defineRandomizedLoot();
 }
 
 

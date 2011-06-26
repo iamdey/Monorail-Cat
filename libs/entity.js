@@ -5,6 +5,7 @@ var WEST = 3;
 var EAST = 4;
 
 var NB_LIVES = 9;
+var MAX_ITEMS = 2;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
@@ -125,6 +126,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
 	self.desiredDirection = NONE;
+	var stackedItems = new Array();
 	
 	var strength = CAT_STRENGTH;
 	var nbLives = NB_LIVES;
@@ -167,9 +169,6 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			
 			// Trying to turn
 			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
-				console.log("CAN GO!");
-				//FIXME: detected only when the cat wants to go down and the tile allows it, then this stop the cat
-//				console.log(self.desiredDirection);
 				self.changeDirection(self.desiredDirection);
 				dirChanged = true;
 			}
@@ -215,15 +214,15 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	/**
 	 * launch the latest action in stack
 	 */
-	this.doAction = function(key){
-//		//TODO: uncomment then debug
-//		size = self.stacked_items.length();
-//		
-//		if(size > 0){
-//			//TODO: create items classes then implement t3h launch method
-//			self.stacked_items[size - 1].launch(this);
-//			self.stacked_items.splice(size - 1, size);
-//		}
+	this.doAction = function(key) {
+		// Use item
+		if(key == "action1") {
+			if(stackedItems.length > 0) {
+				var item = stackedItems.pop();
+				
+				console.log("Use item "+item);
+			}
+		}
 	}
 	
 	this.changeDirection = function(newDirection) {
@@ -256,9 +255,12 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	}
 	
 	this.pickUp = function(mapItem) {
-		console.log("Pick up item");
-		// TODO: Tek teh itaim
-		// = mapItem.item;
+		// Tek teh itaim
+		if(stackedItems.length < MAX_ITEMS) {
+			var item = mapItem.pickUpRandomizedLoot();
+			console.log("Pick up "+item);
+			stackedItems.push(item);
+		}
 	}
 	
 	// Draws the cat
