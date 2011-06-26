@@ -3,8 +3,8 @@ var RAINBOW = "rainbow"
 var WATER = "water"
 var INVISIBLE_FRAMES = 30;
 
-var PROBA_WOOLBALL = 10
-var PROBA_WATER = PROBA_WOOLBALL + 10
+var PROBA_WOOLBALL = 5
+var PROBA_WATER = PROBA_WOOLBALL + 5
 var PROBA_RAINBOW = PROBA_WATER + 2
 var PROBA_TOTAL = PROBA_RAINBOW;
 
@@ -81,9 +81,80 @@ function MapItem(mapItemId, map, startingXTile, startingYTile){
 	 * Hmm tired, move constructor at the end is better for kitten
 	 */
 }
-/*
+
 function Water(map, startingXTile, startingYTile) {
 	var parent 	= new Entity(map, startingXTile, startingYTile);
+	
+	this.getType = function() {
+		return WATER;
+	}
+	
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
+	
+	this.getStrength = function() {
+		return WATER_STRENGTH;
+	}
+	
+	// Sprite
+	var sprite = new Sprite(["center", "center"], 
+			{ shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]] },
+			function() {
+				sprite.action("shpritz");
+			}
+	);
+	
+	// SHOO! 
+	this.die = function() {
+		map.removeEntity(this);
+	}
+	
+	this.update = function() {
+		sprite.update();
+	}
+	
+	this.draw = function(c) {
+		sprite.draw(c, parent.getAbsolutePos());
+	}
 }
-*/
+
+function Woolball(map, startingXTile, startingYTile, _direction) {
+	var parent = new Entity(map, startingXTile, startingYTile);
+	var direction = _direction;
+	
+	this.getType = function() {
+		return WOOLBALL;
+	}
+	
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
+	
+	this.getStrength = function() {
+		return WOOLBALL_STRENGTH;
+	}
+	
+	// Sprite
+	var sprite = new Sprite(["center", "center"], 
+			{ roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]] },
+			function() {
+				sprite.action("roooolllinnn");
+			}
+	);
+	
+	// SHOO! 
+	this.die = function() {
+		map.removeEntity(this);
+	}
+	
+	this.update = function() {
+		sprite.update();
+		
+		
+	}
+	
+	this.draw = function(c) {
+		sprite.draw(c, parent.getAbsolutePos());
+	}
+}
+
 

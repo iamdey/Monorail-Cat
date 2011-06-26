@@ -5,8 +5,8 @@ var WEST = 3;
 var EAST = 4;
 
 var NB_LIVES = 9;
-var MAX_ITEMS = 2;
-var RAINBOW_TIME = FRAMERATE * 4;
+var MAX_ITEMS = 1;
+var RAINBOW_TIME = FRAMERATE * 2;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
@@ -18,8 +18,8 @@ var BLUE = 2;
 
 var MAP_ITEM_STRENGTH = 0;
 var CAT_STRENGTH = 1;
-var WOOLBALL_STRENGTH = 2;
-var WATER_STRENGTH = 2;
+var WOOLBALL_STRENGTH = 1;
+var WATER_STRENGTH = 1;
 var RAINBOW_CAT_STRENGTH = 42;
 var RAINBOW_SPEED = 2;
 
@@ -233,6 +233,8 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 					rainbowTimer = RAINBOW_TIME;
 					strength = RAINBOW_CAT_STRENGTH;
 					speed = RAINBOW_SPEED;
+				} else if (item == WATER) {
+					map.addEntity(new Water(map, parent.tile[0], parent.tile[1]));
 				}
 				
 				if(stackedItems.length > 0) {

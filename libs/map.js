@@ -1,4 +1,4 @@
-function Map(_tilemap) {
+function Map(gs, _tilemap) {
 	var tilemap = _tilemap;
 	var entities = new Array();
 	
@@ -8,6 +8,7 @@ function Map(_tilemap) {
 	
 	this.addEntity = function(entity) {
 		entities.push(entity);
+		gs.addEntity(entity);
 	}
 	
 	this.removeEntity = function(entity) {
@@ -17,6 +18,8 @@ function Map(_tilemap) {
 				break;
 			}
 		}
+		
+		gs.delEntity(entity);
 	}
 	
 	this.detectCollision = function(entity) {
@@ -41,7 +44,7 @@ function Map(_tilemap) {
 						entity.pickUp(otherEntity);
 					}
 				} else if(strength < otherStrength) {
-					// Cat diez
+					// Cat diez 
 					console.log("Killz entity");
 					entity.die();
 				} else {

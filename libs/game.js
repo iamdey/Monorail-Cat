@@ -34,7 +34,7 @@ function Game(gs) {
 		action1: 13	// enter
 	};
 
-	var map = new Map(tilemap);
+	var map = new Map(gs, tilemap);
 	
 	var mapItems = [
 		new MapItem("6_0", map, 6, 0),
@@ -47,7 +47,6 @@ function Game(gs) {
 	
 	for (var i = 0; i < mapItems.length; i++) {
 		map.addEntity(mapItems[i]);
-		gs.addEntity(mapItems[i]);
 	}
 	
 	var cats = [
@@ -62,8 +61,6 @@ function Game(gs) {
 	
 	gs.addEntity(players[0]);
 	gs.addEntity(players[1]);
-	gs.addEntity(cats[0]);
-	gs.addEntity(cats[1]);
 	
 	map.addEntity(cats[0]);
 	map.addEntity(cats[1]);
