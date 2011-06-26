@@ -1,4 +1,5 @@
-var FRAMERATE = 30;
+var FRAMERATE 	= 30;
+var debug 		= false;
 
 tilemap = null;
 

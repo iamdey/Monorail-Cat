@@ -171,7 +171,8 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
 			
-			console.log("Desired direction: "+self.desiredDirection);
+			if(debug && self.desiredDirection != 0)
+				console.log("Desired direction: "+self.desiredDirection);
 			
 			// Trying to turn
 			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
