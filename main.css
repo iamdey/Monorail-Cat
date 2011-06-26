@@ -9,10 +9,6 @@
 	height:750px;
 }
 
-#gameBoard > div {
-	border : solid 1px #888;
-}
-
 #player1 {
 	float:left;
 	background:#CA6A40;
@@ -38,16 +34,7 @@
 
 #header {
 	margin:0;
-}
-
-#header p {
-	font-size:250%;
-	text-align:center;
-}
-
-#header p img {
-	vertical-align:middle;
-	border:none;
+	text-align: center;
 }
 
 p.playerName {
