@@ -172,7 +172,6 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		
 		for (var i = 0; i < 4 && !decided; i++) {
 			var randDir = directions[i];
-			console.log("Tries to go "+randDir);
 			
 			if (map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, randDir)) {
 				self.changeDirection(randDir);
@@ -183,7 +182,6 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		
 		// Turn successful
 		if(decided) {
-			console.log("Go "+randDir);
 			if(direction == NORTH) {
 				parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);
 				parent.pos[1] = TILE_MIDDLE;
@@ -198,7 +196,6 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 				parent.pos[1] += Math.abs(TILE_MIDDLE - parent.pos[0]);
 			}
 		} else {
-			console.log("Can't go anywhere");
 			self.die();
 		}
 	}
@@ -228,19 +225,18 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 	/**
 	 *	CONSTRUCTORZ
 	 */
-	console.log("LAUNCHED");
 	this.changeDirection(direction);
 	this.goRandomlySomewhere();
-	parent.move(sx * TILE_SIZE - 1, sy * TILE_SIZE - 1,
-		// Change Square callback function
-		function() {
-			parent.map.detectCollision(self);
-		},
-		// Middle passed callback function
-		function() {
-			self.goRandomlySomewhere();
+	
+	for (var i = 0; i < 2; i++) {
+		switch(direction) {
+			case SOUTH:	parent.tile[0]++;	break;
+			case NORTH:	parent.tile[0]--;	break;
+			case EAST:	parent.tile[1]++;	break;
+			case WEST:	parent.tile[1]--;	break;
 		}
-	);
+		this.goRandomlySomewhere();
+	}
 }
 
 Array.prototype.shuffle = function() {

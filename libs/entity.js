@@ -107,7 +107,9 @@ function Entity(_map, startingXTile, startingYTile) {
 			tile[0] += movement[0];
 			tile[1] += movement[1];
 			
-			changeSquareCallback();
+			if(changeSquareCallback) {
+				changeSquareCallback();
+			}
 		}
 		// Pass through middle
 		else if (
@@ -115,7 +117,9 @@ function Entity(_map, startingXTile, startingYTile) {
 		||	savex > TILE_MIDDLE && pos[0] <= TILE_MIDDLE
 		||	savey < TILE_MIDDLE && pos[1] >= TILE_MIDDLE
 		||	savey > TILE_MIDDLE && pos[1] <= TILE_MIDDLE) {
-			middleCallback();
+			if(middleCallback) {
+				middleCallback();
+			}
 		}
 	}
 	
