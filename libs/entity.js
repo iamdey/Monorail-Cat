@@ -124,7 +124,8 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
-	var desiredDirection = NONE;
+	self.desiredDirection = NONE;
+	
 	var strength = CAT_STRENGTH;
 	var nbLives = NB_LIVES;
 	
@@ -155,7 +156,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		parent.move(dx, dy,
 		// Change Square callback function
 		function() {
-			desiredDirection = NONE;
+			self.desiredDirection = NONE;
 			
 			map.detectCollision(self);
 		},
@@ -165,17 +166,19 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			var oppositeDirection = getOppositeDirection(direction);
 			
 			// Trying to turn
-			if (desiredDirection != 0 && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-				self.changeDirection(desiredDirection);
+			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
+				//FIXME: detected only when the cat wants to go down and the tile allows it, then this stop the cat
+//				console.log(self.desiredDirection);
+				self.changeDirection(self.desiredDirection);
 				dirChanged = true;
 			}
 			
 			// Can't go straigth
 			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
 				// Try to go left
-				desiredDirection = getLeftDirection(direction);
-				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-					self.changeDirection(desiredDirection);
+				self.desiredDirection = getLeftDirection(direction);
+				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
+					self.changeDirection(self.desiredDirection);
 					dirChanged = true;
 				}
 				// Go right
@@ -205,7 +208,21 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	}
 	
 	this.setDesiredDirection = function(direction) {
-		desiredDirection = direction;
+		self.desiredDirection = direction;
+	}
+	
+	/**
+	 * launch the latest action in stack
+	 */
+	this.doAction = function(key){
+//		//TODO: uncomment then debug
+//		size = self.stacked_items.length();
+//		
+//		if(size > 0){
+//			//TODO: create items classes then implement t3h launch method
+//			self.stacked_items[size - 1].launch(this);
+//			self.stacked_items.splice(size - 1, size);
+//		}
 	}
 	
 	this.changeDirection = function(newDirection) {
