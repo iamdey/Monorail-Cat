@@ -281,12 +281,12 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	
 	// Dumbledore diez
 	this.die = function() {
-		UI.setPlayerLives(playerId, nbLives--);
+		UI.setPlayerLives(playerId, --nbLives);
 		
 		// TODO: Restart from elsewhere
 		
 		if(nbLives == 0) {
-			//TODO: Stop game
+			parent.map.gameOver();
 		}
 	}
 	

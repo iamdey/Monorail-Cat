@@ -54,6 +54,14 @@ function Map(gs, _tilemap) {
 		}
 	}
 	
+	this.gameOver = function() {
+		for (var i = 0; i < entities.length; i++) {
+			gs.delEntity(entities[i]);
+		}
+		
+		entities = new Array();
+	}
+	
 	this.printEntities = function() {
 		var s = "[ ";
 		for (var i = 0; i < entities.length; i++) {
