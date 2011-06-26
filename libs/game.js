@@ -21,7 +21,7 @@ function startGame() {
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
     
-    game_sound.play("openning");
+//    game_sound.play("openning");
     
     gs.launch();
 }

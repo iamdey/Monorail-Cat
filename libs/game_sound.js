@@ -1,7 +1,7 @@
-soundManager.url = '../../vendor/soundmanager/swf/';
-soundManager.useHTML5Audio = true;
-soundManager.debugFlash = true;
-soundManager.debugMode = true;
+soundManager.url = '../vendor/soundmanager/swf/';
+soundManager.useHTML5Audio 	= true;
+soundManager.debugFlash 	= true;
+soundManager.debugMode 		= true;
 
 /**
  * GameSound manager
@@ -49,8 +49,8 @@ function GameSound() {
 	/**
 	 * constructor
 	 */
-	this.load("../sound/openning.mp3", "openning");
-	this.load("../sound/level1.mp3", "level");
+//	this.load("../sound/openning.mp3", "openning");
+//	this.load("../sound/level1.mp3", "level");
 //	this.load("../sound/openning.mp3", "openning");
 //	this.load("../sound/openning.mp3", "openning");
 //	this.load("../sound/openning.mp3", "openning");
