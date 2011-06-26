@@ -46,15 +46,17 @@ tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;14
 		gs.addEntity(mapItems[i]);
 	}
 	
-	var players = [
-		new Player("player 1", this.keymap_player_1),
-		new Player("player 2", this.keymap_player_2)
+	var cats = [
+		new Cat(map, RED, 0, 0, SOUTH),
+		new Cat(map, BLUE, 6, 6, NORTH)
 	];
 	
-	var cats = [
-		new Cat(map, players[0], RED, 0, 0, SOUTH),
-		new Cat(map, players[1], BLUE, 6, 6, NORTH)
+	var players = [
+		new Player("player 1", this.keymap_player_1, cats[0]),
+		new Player("player 2", this.keymap_player_2, cats[1])
 	];
+	
+	
 	
 	gs.addEntity(players[0]);
 	gs.addEntity(players[1]);
