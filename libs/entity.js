@@ -4,6 +4,8 @@ var SOUTH = 2;
 var WEST = 3;
 var EAST = 4;
 
+var NB_LIVES = 9;
+
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
 var CAT_SPEED = TILE_SIZE * 2;
@@ -17,6 +19,9 @@ var CAT_STRENGTH = 1;
 var WOOLBALL_STRENGTH = 2;
 var WATER_STRENGTH = 2;
 var RAINBOW_CAT_STRENGTH = 42;
+
+var CAT = 1;
+var MAP_ITEM = 2;
 
 var ctId = 0;
 
@@ -96,8 +101,6 @@ function Entity(_map, startingXTile, startingYTile) {
 			tile[1] += movement[1];
 			
 			changeSquareCallback();
-			
-			//map.detectCollision(this);
 		}
 		// Pass through middle
 		else if (
@@ -114,23 +117,24 @@ function Entity(_map, startingXTile, startingYTile) {
 	}
 }
 
-function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
+function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	var self = this;
 	var parent = new Entity(map, startingXTile, startingYTile);
-	var player = _player;
+	var playerId = _playerId;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var direction = _direction;
-	var desiredDirection = NONE;
+	self.desiredDirection = NONE;
+	
 	var strength = CAT_STRENGTH;
+	var nbLives = NB_LIVES;
 	
-	this.getId = function() {
-		return parent.getId();
+	this.getType = function() {
+		return CAT;
 	}
 	
-	this.getTile = function() {
-		return parent.getTile();
-	}
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
 	
 	this.getStrength = function() {
 		return strength;
@@ -152,25 +156,30 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 		parent.move(dx, dy,
 		// Change Square callback function
 		function() {
-			desiredDirection = NONE;
+			map.detectCollision(self);
 		},
 		// Middle passed callback function
 		function() {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
 			
+			console.log("Desired direction: "+self.desiredDirection);
+			
 			// Trying to turn
-			if (desiredDirection != 0 && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-				self.changeDirection(desiredDirection);
+			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
+				console.log("CAN GO!");
+				//FIXME: detected only when the cat wants to go down and the tile allows it, then this stop the cat
+//				console.log(self.desiredDirection);
+				self.changeDirection(self.desiredDirection);
 				dirChanged = true;
 			}
 			
 			// Can't go straigth
 			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
 				// Try to go left
-				desiredDirection = getLeftDirection(direction);
-				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, desiredDirection)) {
-					self.changeDirection(desiredDirection);
+				var autoDirection = getLeftDirection(direction);
+				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, autoDirection)) {
+					self.changeDirection(autoDirection);
 					dirChanged = true;
 				}
 				// Go right
@@ -200,7 +209,21 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 	}
 	
 	this.setDesiredDirection = function(direction) {
-		desiredDirection = direction;
+		self.desiredDirection = direction;
+	}
+	
+	/**
+	 * launch the latest action in stack
+	 */
+	this.doAction = function(key){
+//		//TODO: uncomment then debug
+//		size = self.stacked_items.length();
+//		
+//		if(size > 0){
+//			//TODO: create items classes then implement t3h launch method
+//			self.stacked_items[size - 1].launch(this);
+//			self.stacked_items.splice(size - 1, size);
+//		}
 	}
 	
 	this.changeDirection = function(newDirection) {
@@ -221,6 +244,21 @@ function Cat(map, _player, color, startingXTile, startingYTile, _direction) {
 			case EAST:	sprite.action("right");	break;
 			default:	sprite.action("right");	break;
 		}
+	}
+	
+	// Dumbledore diez
+	this.die = function() {
+		UI.setPlayerLives(playerId, nbLives--);
+		
+		if(nbLives == 0) {
+			//TODO: Stop game
+		}
+	}
+	
+	this.pickUp = function(mapItem) {
+		console.log("Pick up item");
+		// TODO: Tek teh itaim
+		// = mapItem.item;
 	}
 	
 	// Draws the cat

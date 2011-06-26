@@ -7,18 +7,14 @@ var DOWN = "down";
  * class Player 
  * 
  * keyboard bindings
+ * damned the cat must control the player !!! 
  * 
  * @author esion
+ * @param player_id string
+ * @param keymap json
+ * @param cat Cat
  */
-function Player(player_id, keymap){
-	/**
-	 * the player current direction
-	 */
-	this.turn 	= null;
-	/**
-	 * the player current action
-	 */
-	this.action = null;
+function Player(player_id, keymap, cat){
 	
     /**
      * player representation
@@ -37,20 +33,20 @@ function Player(player_id, keymap){
 	 * capture keys
 	 */
 	this.keyDown = function (keyCode) {
-		this.propertySet(keyCode);
+		this.catManipulation(keyCode);
 	}
 	
 	/**
 	 * Reset turn attribute
 	 */
 	this.keyUp = function(keyCode) {
-		this.propertySet(keyCode, true);
+		this.catManipulation(keyCode, true);
 	}
 	
 	/**
 	 * property setter turn or action depends on given keymap
 	 */
-	this.propertySet = function(keyCode, reset){
+	this.catManipulation = function(keyCode, reset){
 		for(key in keymap)
 		{
 			if(keymap[key] == keyCode){
@@ -59,9 +55,14 @@ function Player(player_id, keymap){
 				 */
 				if(key == LEFT || key == RIGHT || key == UP || key == DOWN){
 					if(!reset){
-						this.turn = key;
-					}else{
-						this.turn = null;
+						switch(key) {
+							case LEFT:	cat.setDesiredDirection(WEST);	break;
+							case RIGHT:	cat.setDesiredDirection(EAST);	break;
+							case UP:	cat.setDesiredDirection(NORTH);	break;
+							case DOWN:	cat.setDesiredDirection(SOUTH);	break;
+						}
+					} else{
+						cat.setDesiredDirection(NONE);
 					}
 				}
 				/**
@@ -69,9 +70,9 @@ function Player(player_id, keymap){
 				 */
 				else{
 					if(!reset){
-						this.action = key;
+						cat.doAction(key);
 					}else{
-						this.action = null;
+						cat.doAction(NONE);
 					}
 						
 				}

@@ -5,17 +5,49 @@
 
 		<script type="text/javascript" src="vendor/jsGameSoup-v173/js/jsgamesoup.js"></script>
 		<script type="text/javascript" src="vendor/jsGameSoup-v173/js/sprite.js"></script>
-		<script type="text/javascript" src="libs/game.js"></script>
-		<script type="text/javascript" src="libs/player.js"></script>
-		<script type="text/javascript" src="libs/entity.js"></script>
-		<script type="text/javascript" src="libs/map_item.js"></script>
 		<script type="text/javascript" src="libs/common.js"></script>
-		<script type="text/javascript" src="libs/map.js"></script>
+		<script type="text/javascript" src="libs/ui.js"></script>
 		<script type="text/javascript" src="libs/tilemap.js"></script>
+		<script type="text/javascript" src="libs/map.js"></script>
+		<script type="text/javascript" src="libs/player.js"></script>
+		<script type="text/javascript" src="libs/map_item.js"></script>
+		<script type="text/javascript" src="libs/game.js"></script>
+		<script type="text/javascript" src="libs/entity.js"></script>
+
+		<link rel="stylesheet" href="main.css" type="text/css" />
 	</head>
 
-	<body onload="startGame()">
-		<canvas id="tileMap" height="553" width="553" style="position:absolute; top:10px; left:10px; z-index:-1;"></canvas>
-		<canvas id="monorail-cat" height="553" width="553" style="position:absolute; top:5px; left:5px; z-index:0;"></canvas>
+	<body onload="loadMap()">
+		<div id="gameBoard">
+			<div id="player1">
+				<p class="playerName" id="player1name">Player 1</p>
+				<p><img class="bonusImage" src="arts/blank.png" id="player1bonus"></img></p>
+				<p class="lives" id="player1lives"></p>
+			</div>
+			<div id="player2">
+				<p class="playerName" id="player2name">Player 2</p>
+				<p><img class="bonusImage" src="arts/blank.png" id="player2bonus"></img></p>
+				<p class="lives" id="player2lives"></p>
+			</div>
+			<div id="gameView">
+				<div id="header">
+					<p>
+						<img src="arts/cat1-right.png"></img>
+						&nbsp;&nbsp; Monorail Cat &nbsp;&nbsp;
+						<img src="arts/cat2-left.png"></img>
+					</p>
+				</div>
+				<canvas id="tileMap" height="553" width="554" style="position:relative; top:10px; left:0px; z-index:-1;"></canvas>
+				<canvas id="monorail-cat" height="553" width="554" style="position:relative; top:-560px; left:-5px; z-index:0;"></canvas>
+			</div>
+		</div>
+		<div id="msg"></div>
+
+		<script type="text/javascript">
+			UI.setPlayerLives(1, 9);
+			UI.setPlayerLives(2, 5);
+			// bootscreen
+			UI.printMsg('<img src="arts/TEH REAL CAT.jpg"></img>', UI.HUGE, undefined, 'startGame();');
+		</script>
 	</body>
 </html>

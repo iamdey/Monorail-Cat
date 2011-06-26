@@ -32,6 +32,13 @@ function TileMap(_canvas) {
 	this.tiles[1581] = 'tb_o';
 	this.tiles[2886] = 'tb_n';
 
+	// chargement des images
+	this.images = new Array();
+	for(var tid in this.tiles) {
+		this.images[tid] = new Image();
+		this.images[tid].src = 'arts/'+this.tiles[tid]+'.png';
+	}
+
 	// de base, map non chargée
 	this.ready = false;
 
@@ -40,7 +47,7 @@ function TileMap(_canvas) {
 		var i, j;
 		for(i=0; i< this.level.length; i++) {
 			for(j=0; j< this.level[i].length; j++) {
-				c.getContext('2d').drawImage(this.images[i][j], j * TILE_SIZE, i * TILE_SIZE);
+				c.getContext('2d').drawImage(this.images[this.level[i][j]], j * TILE_SIZE, i * TILE_SIZE);
 			}
 		}
 	}
@@ -65,7 +72,25 @@ function TileMap(_canvas) {
 
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
+		/*console.log(x+";"+y+" from "+from+" to "+to+" ("+this.level[x][y]+" & "+
+		(1 << this.bits[from][to])+" = "+(this.level[x][y] & (1 << this.bits[from][to])) + ")")*/
 		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
+	}
+
+	// Appelée une fois la map chargée
+	// A surcharger dans le contexte appelant
+	this.onload = function() {
+		this.sprites = new Array();
+
+		for(i=0; i< this.level.length; i++) {
+			this.sprites[i] = new Array();
+			for(j=0; j< this.level[i].length; j++) {
+				this.sprites[i][j] = new Sprite(["left", "top"], {
+					default: [["arts/"+this.tiles[this.level[i][j]]+".png", 0]]
+				});
+				this.sprites[i][j].action("default");
+			}
+		}
 	}
 
 	this.load = function(mapId) {
@@ -101,16 +126,7 @@ function TileMap(_canvas) {
 				ieff ++;
 			}
 		}
-		
-		// Load images
-		this.images = new Array();
-		for(i=0; i< this.level.length; i++) {
-			this.images[i] = new Array();
-			for(j=0; j< this.level[i].length; j++) {
-				this.images[i][j] = new Image();
-				this.images[i][j].src = 'arts/'+this.tiles[this.level[i][j]]+'.png';
-			}
-		}
 		this.ready = true;
+		//this.onload();
 	}
 }
