@@ -11,7 +11,7 @@ tilemap = null;
 
 function loadMap(mapName) {
 	tilemap = new TileMap(document.getElementById("tileMap"));
-	if(debug) {
+	if(DEBUG) {
 		tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
 	} else {
 		tilemap.load(mapName);
@@ -23,9 +23,9 @@ function startGame() {
     var surface = document.getElementById("monorail-cat");
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
-    
+
 //    game_sound.play("openning");
-    
+
     gs.launch();
 }
 
