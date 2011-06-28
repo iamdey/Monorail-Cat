@@ -1,5 +1,11 @@
 var FRAMERATE 	= 30;
-var debug 		= false;
+var MUSIC 		= true;
+var DEBUG 		= true;
+
+/**
+ * Singleton for trollerz
+ */
+var game_sound = new GameSound();
 
 tilemap = null;
 
@@ -17,6 +23,9 @@ function startGame() {
     var surface = document.getElementById("monorail-cat");
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
+    
+//    game_sound.play("openning");
+    
     gs.launch();
 }
 

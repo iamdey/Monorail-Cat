@@ -47,18 +47,19 @@ function Player(player_id, keymap, cat){
 				 */
 				if(key == LEFT || key == RIGHT || key == UP || key == DOWN){
 					if(!reset) {
-						
+						//stack key and set direction
 						this.keys_stack.push(key);
 						this.setCatDirection(key);
 						
 					} else {
-						
+						//remove stacked key
 						for(k in this.keys_stack){
 							if(this.keys_stack[k] == key){
 								this.keys_stack.splice(k, 1);
 							}
 						}
 						
+						//set latest direction if t3h noob is holding a key, else set no direction
 						if(this.keys_stack.length > 0){
 							this.setCatDirection(this.keys_stack[this.keys_stack.length - 1]);
 						}else{
