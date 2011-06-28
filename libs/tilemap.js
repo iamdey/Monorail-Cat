@@ -31,6 +31,7 @@ function TileMap(_canvas) {
 	this.tiles[ 219] = 'tb_s';
 	this.tiles[1581] = 'tb_o';
 	this.tiles[2886] = 'tb_n';
+	this.tiles[4095] = 'qb';
 
 	// chargement des images
 	this.images = new Array();
