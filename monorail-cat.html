@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>Monorail cat</title>
+		<title>Monorail Cats : The GAME !</title>
 
 		<script type="text/javascript" src="vendor/jsGameSoup-v173/js/jsgamesoup.js"></script>
 		<script type="text/javascript" src="vendor/jsGameSoup-v173/js/sprite.js"></script>
@@ -17,7 +17,7 @@
 		<link rel="stylesheet" href="main.css" type="text/css" />
 	</head>
 
-	<body onload="loadMap()">
+	<body onload="loadMap('default')">
 		<div id="gameBoard">
 			<div id="player1">
 				<p class="playerName" id="player1name">Player 1</p>
@@ -39,13 +39,17 @@
 				<canvas id="monorail-cat" height="553" width="554" style="position:relative; top:-550px; left:-5px; z-index:2;"></canvas>
 			</div>
 		</div>
+		<div id="otherMaps">
+			<p class="startGameButton"><input type="button" value="CAN I PLAY TIHS GAME ?" onclick="startGame();"></p>
+			<p><span class="right"><a href="mapEditor.html">Éditeur de niveaux</a></span><input type="text" id="mapId" value="default" /> <input type="button" value="Charger ce niveau" onclick="loadMap(e('mapId').value)"></p>
+		</div>
 		<div id="msg"></div>
 
 		<script type="text/javascript">
 			UI.setPlayerLives(1, 9);
-			UI.setPlayerLives(2, 5);
+			UI.setPlayerLives(2, 9);
 			// bootscreen
-			UI.printMsg('<img src="arts/TEH REAL CAT.jpg"></img>', UI.HUGE, 750, 'startGame();');
+			//UI.printMsg('<img src="arts/TEH REAL CAT.jpg"></img>', UI.HUGE, 500);
 		</script>
 	</body>
 </html>
