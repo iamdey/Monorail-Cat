@@ -1,11 +1,8 @@
 var FRAMERATE 	= 30;
+var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= true;
-
-/**
- * Singleton for trollerz
- */
-var game_sound = new GameSound();
+var DEBUG 		= false;
+var game_sound 	= null; //set global snd manager
 
 tilemap = null;
 
@@ -17,12 +14,18 @@ function loadMap() {
 }
 
 function startGame() {
+	/**
+     * Singleton for trollerz
+     */
+    game_sound = new GameSound();
+    game_sound.playLoop("openning");
+	
     var surface = document.getElementById("monorail-cat");
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
     
-//    game_sound.play("openning");
-    
+    game_sound.stopAll();
+    game_sound.playLoop("level1");
     gs.launch();
 }
 
