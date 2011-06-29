@@ -31,6 +31,7 @@ function TileMap(_canvas) {
 	this.tiles[ 219] = 'tb_s';
 	this.tiles[1581] = 'tb_o';
 	this.tiles[2886] = 'tb_n';
+	this.tiles[4095] = 'qb';
 
 	// chargement des images
 	this.images = new Array();
@@ -44,6 +45,7 @@ function TileMap(_canvas) {
 
 	// Affichage de la map
 	this.draw = function(c) {
+		c.getContext('2d').clearRect(0,0, c.width, c.height);
 		var i, j;
 		for(i=0; i< this.level.length; i++) {
 			for(j=0; j< this.level[i].length; j++) {

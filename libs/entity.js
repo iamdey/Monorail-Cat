@@ -10,8 +10,8 @@ var RAINBOW_TIME = FRAMERATE * 2;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
-var CAT_SPEED = TILE_SIZE * 3;
-var WOOLBALL_SPEED = TILE_SIZE * 5;
+var CAT_SPEED = TILE_SIZE * 3.5;
+var WOOLBALL_SPEED = TILE_SIZE * 6;
 var WOOLBALL_LIFE_TIME = FRAMERATE * 8;
 
 var DELTA_SPEED = Math.round(CAT_SPEED / FRAMERATE);
@@ -38,7 +38,7 @@ function getOppositeDirection(direction) {
 		case SOUTH: return NORTH;
 		case WEST:	return EAST;
 		case EAST:	return WEST;
-		default:	return 0;
+		default:	return NONE;
 	}
 }
 
@@ -48,7 +48,7 @@ function getLeftDirection(direction) {
 		case SOUTH: return EAST;
 		case WEST:	return SOUTH;
 		case EAST:	return NORTH;
-		default:	return 0;
+		default:	return NONE;
 	}
 }
 
@@ -58,36 +58,46 @@ function getRightDirection(direction) {
 		case SOUTH: return WEST;
 		case WEST:	return NORTH;
 		case EAST:	return SOUTH;
-		default:	return 0;
+		default:	return NONE;
+	}
+}
+
+function translateDirection(direction) {
+	switch (direction) {
+		case NORTH:	return "NORTH";
+		case SOUTH: return "SOUTH";
+		case WEST:	return "WEST";
+		case EAST:	return "EAST";
+		default:	return "NONE ("+direction+")";
 	}
 }
 
 function Entity(_map, startingXTile, startingYTile) {
 	var id = ctId++;
 	var map = this.map = _map;
-	
-	// Position in pixels
+
+	// Position in pixels, relative to the tile
 	var pos = this.pos = [TILE_MIDDLE, TILE_MIDDLE];
-	
+
 	// Position in tiles
 	var tile = this.tile = [startingXTile, startingYTile];
-	
+
 	this.getId = function() {
 		return id;
 	}
-	
+
 	this.getTile = function() {
 		return tile;
 	}
-	
+
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy, changeSquareCallback, middleCallback) {
 		var savex = pos[0];
 		var savey = pos[1];
-		
+
 		pos[0] += dx;
 		pos[1] += dy;
-		
+
 		var movement = [0, 0];
 		if (pos[0] > TILE_SIZE) {
 			movement[0] = 1;
@@ -98,15 +108,15 @@ function Entity(_map, startingXTile, startingYTile) {
 		} else if (pos[1] < 0) {
 			movement[1] = -1;
 		}
-		
+
 		// Square change
 		if (movement[0] != 0 || movement[1] != 0) {
 			pos[0] = (pos[0] + TILE_SIZE) % TILE_SIZE;
 			pos[1] = (pos[1] + TILE_SIZE) % TILE_SIZE;
-			
+
 			tile[0] += movement[0];
 			tile[1] += movement[1];
-			
+
 			if(changeSquareCallback) {
 				changeSquareCallback();
 			}
@@ -122,7 +132,7 @@ function Entity(_map, startingXTile, startingYTile) {
 			}
 		}
 	}
-	
+
 	this.getAbsolutePos = function() {
 		return [pos[1] + tile[1] * TILE_SIZE, pos[0] + tile[0] * TILE_SIZE];
 	}
@@ -137,25 +147,25 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	var direction = _direction;
 	self.desiredDirection = NONE;
 	var stackedItems = new Array();
-	
+
 	var strength = CAT_STRENGTH;
 	var nbLives = NB_LIVES;
 	var rainbowTimer = 0;
 	var speed = 1;
-	
+
 	UI.setPlayerLives(playerId, nbLives);
-	
+
 	this.getType = function() {
 		return CAT;
 	}
-	
+
 	this.getId = parent.getId;
 	this.getTile = parent.getTile;
-	
+
 	this.getStrength = function() {
 		return strength;
 	}
-	
+
 	// Sprite
 	var sprite = new Sprite(["center", "center"], {
 			left:	[["arts/cat"+color+"-left.png", 0]],
@@ -166,7 +176,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			self.changeDirection(direction);
 		}
 	);
-	
+
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy) {
 		parent.move(dx, dy,
@@ -178,17 +188,20 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		function() {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
-			
+
 			if(DEBUG && self.desiredDirection != 0)
 				console.log("Desired direction: "+self.desiredDirection);
-			
+
 			// Trying to turn
 			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
 				self.changeDirection(self.desiredDirection);
 				dirChanged = true;
+				
+				// Reset desired direction
+				self.desiredDirection = NONE;
 			}
-			
-			// Can't go straigth
+
+			// Auto-direction: Can't go straigth
 			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
 				// Try to go left
 				var autoDirection = getLeftDirection(direction);
@@ -202,8 +215,8 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 					dirChanged = true;
 				}
 			}
-			
-			// Turn successful
+
+			// A change of direction occurred
 			if(dirChanged) {
 				if(direction == NORTH) {
 					parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);
@@ -221,11 +234,11 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			}
 		});
 	}
-	
+
 	this.setDesiredDirection = function(direction) {
 		self.desiredDirection = direction;
 	}
-	
+
 	/**
 	 * launch the latest action in stack
 	 */
@@ -234,7 +247,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		if(key == "action1") {
 			if(stackedItems.length > 0) {
 				var item = stackedItems.pop();
-				
+
 				// NYAN NYAN NYAN
 				if (item == RAINBOW) {
 					rainbowTimer = RAINBOW_TIME;
@@ -249,7 +262,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 				else if (item == WOOLBALL) {
 					map.addEntity(new Woolball(map, parent.tile[0], parent.tile[1], direction));
 				}
-				
+
 				if(stackedItems.length > 0) {
 					UI.setPlayerBonus(playerId, stackedItems[stackedItems.length - 1]);
 				} else {
@@ -258,10 +271,10 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			}
 		}
 	}
-	
+
 	this.changeDirection = function(newDirection) {
 		direction = newDirection;
-		
+
 		switch (direction) {
 			case NORTH:	sx = -1;	sy =  0;	break;
 			case SOUTH:	sx = +1;	sy =  0;	break;
@@ -269,27 +282,26 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			case EAST:	sx =  0;	sy = +1;	break;
 			default:	sx =  0;	sy =  0;	break;
 		}
-		
+
 		switch (direction) {
 			case NORTH:	sprite.action("up");	break;
 			case SOUTH:	sprite.action("down");	break;
 			case WEST:	sprite.action("left");	break;
 			case EAST:	sprite.action("right");	break;
-			default:	sprite.action("right");	break;
 		}
 	}
-	
+
 	// Dumbledore diez
 	this.die = function() {
 		UI.setPlayerLives(playerId, --nbLives);
-		
+
 		// TODO: Restart from elsewhere
-		
+
 		if(nbLives == 0) {
 			parent.map.gameOver();
 		}
 	}
-	
+
 	this.pickUp = function(mapItem) {
 		// Tek teh itaim
 		if(stackedItems.length < MAX_ITEMS) {
@@ -298,16 +310,16 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			UI.setPlayerBonus(playerId, item);
 		}
 	}
-	
+
 	// Draws the cat
 	this.draw = function(c) {
 		sprite.draw(c, parent.getAbsolutePos());
 	}
-	
+
 	// Updates the cat
 	this.update = function() {
 		this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
-		
+
 		if(rainbowTimer > 0) {
 			rainbowTimer--;
 			if(rainbowTimer == 0) {
@@ -315,7 +327,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 				strength = CAT_STRENGTH;
 			}
 		}
-		
+
 		sprite.update();
 	}
 }

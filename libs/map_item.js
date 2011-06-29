@@ -195,8 +195,6 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 				parent.pos[0] = TILE_MIDDLE;
 				parent.pos[1] += Math.abs(TILE_MIDDLE - parent.pos[0]);
 			}
-		} else {
-			self.die();
 		}
 	}
 	
@@ -225,18 +223,32 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 	/**
 	 *	CONSTRUCTORZ
 	 */
-	this.changeDirection(direction);
-	this.goRandomlySomewhere();
 	
+	// Set initial direction
+	this.changeDirection(direction);
+	
+	// Move two squares ahead
 	for (var i = 0; i < 2; i++) {
+		// Head to random direction from this new square
+		this.goRandomlySomewhere();
+		
+		// Move ahead
 		switch(direction) {
 			case SOUTH:	parent.tile[0]++;	break;
 			case NORTH:	parent.tile[0]--;	break;
 			case EAST:	parent.tile[1]++;	break;
 			case WEST:	parent.tile[1]--;	break;
 		}
-		this.goRandomlySomewhere();
 	}
+	
+	// Set ball on first pixel on this square
+	switch(direction) {
+		case SOUTH:	parent.pos[0] = 0;				break;
+		case NORTH:	parent.pos[0] = TILE_SIZE - 1;	break;
+		case EAST:	parent.pos[1] = 0;				break;
+		case WEST:	parent.pos[1] = TILE_SIZE - 1;	break;
+	}
+	
 }
 
 Array.prototype.shuffle = function() {

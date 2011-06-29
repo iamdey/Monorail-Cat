@@ -1,3 +1,7 @@
+body {
+	background:url(arts/backgroung.png) repeat;
+}
+
 * {
 	margin:0;
 	padding:0;
@@ -16,7 +20,7 @@
 
 #player2 {
 	float:right;
-	background:#638ABA;
+	background:#4B6D97;
 }
 
 #player1, #player2 {
@@ -49,9 +53,9 @@ p.lives img {
 }
 
 img.bonusImage {
+	background:url(arts/bg2.png) repeat;
 	width:79px;
 	margin:0.3em auto;
-	border:solid 1px red;
 }
 
 #msg {
@@ -70,4 +74,17 @@ img.bonusImage {
 	background:url(arts/bg.png) repeat;
 	font-family:fantasy;
 	display:none;
+}
+
+#otherMaps p {
+	width:795px;
+	margin:.3em auto;
+}
+
+.right {
+	float:right;
+}
+
+.startGameButton {
+	text-align:center;
 }
