@@ -9,7 +9,7 @@ function _UI() {
 	this.bonusImages = new Array();
 	this.bonusImages['woolball'] = 'wool_ball1.png';
 	this.bonusImages['rainbow'] = 'rainbow_eo1.png';
-	this.bonusImages['water'] = 'water2.png';
+	this.bonusImages['water'] = 'ice_pick.png';
 
 	// Last Timeout defined for msg
 	this.lastTimeout = null;

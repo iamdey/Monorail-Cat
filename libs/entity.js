@@ -38,7 +38,7 @@ function getOppositeDirection(direction) {
 		case SOUTH: return NORTH;
 		case WEST:	return EAST;
 		case EAST:	return WEST;
-		default:	return 0;
+		default:	return NONE;
 	}
 }
 
@@ -48,7 +48,7 @@ function getLeftDirection(direction) {
 		case SOUTH: return EAST;
 		case WEST:	return SOUTH;
 		case EAST:	return NORTH;
-		default:	return 0;
+		default:	return NONE;
 	}
 }
 
@@ -58,7 +58,17 @@ function getRightDirection(direction) {
 		case SOUTH: return WEST;
 		case WEST:	return NORTH;
 		case EAST:	return SOUTH;
-		default:	return 0;
+		default:	return NONE;
+	}
+}
+
+function translateDirection(direction) {
+	switch (direction) {
+		case NORTH:	return "NORTH";
+		case SOUTH: return "SOUTH";
+		case WEST:	return "WEST";
+		case EAST:	return "EAST";
+		default:	return "NONE ("+direction+")";
 	}
 }
 
@@ -66,7 +76,7 @@ function Entity(_map, startingXTile, startingYTile) {
 	var id = ctId++;
 	var map = this.map = _map;
 
-	// Position in pixels
+	// Position in pixels, relative to the tile
 	var pos = this.pos = [TILE_MIDDLE, TILE_MIDDLE];
 
 	// Position in tiles
@@ -186,9 +196,12 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
 				self.changeDirection(self.desiredDirection);
 				dirChanged = true;
+				
+				// Reset desired direction
+				self.desiredDirection = NONE;
 			}
 
-			// Can't go straigth
+			// Auto-direction: Can't go straigth
 			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
 				// Try to go left
 				var autoDirection = getLeftDirection(direction);
@@ -203,7 +216,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 				}
 			}
 
-			// Turn successful
+			// A change of direction occurred
 			if(dirChanged) {
 				if(direction == NORTH) {
 					parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);
@@ -275,7 +288,6 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			case SOUTH:	sprite.action("down");	break;
 			case WEST:	sprite.action("left");	break;
 			case EAST:	sprite.action("right");	break;
-			default:	sprite.action("right");	break;
 		}
 	}
 
