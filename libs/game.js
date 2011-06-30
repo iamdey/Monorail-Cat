@@ -1,8 +1,7 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= false;
-var game_sound 	= null; //set global snd manager
+var DEBUG 		= true;
 
 tilemap = null;
 
@@ -17,12 +16,6 @@ function loadMap(mapName) {
 }
 
 function startGame() {
-	/**
-     * Singleton for trollerz
-     */
-    game_sound = new GameSound();
-    game_sound.playLoop("openning");
-	
     var surface = document.getElementById("monorail-cat");
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
