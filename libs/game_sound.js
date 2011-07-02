@@ -28,22 +28,10 @@ function GameSound () {
 	}
 
 	this.playLoop = function(id) {
-		this.loaded_sounds[id].playLoop();
+		if(MUSIC){
+			this.loaded_sounds[id].playLoop();
+		}
 	}
-	
-//	this.playLoop = function(id, loops) {
-//		var s = soundManager.getSoundById(id);
-//		function loopfinished() {
-//			if (typeof loops != "undefined") {
-//				loops--;
-//				if (loops <= 0) {
-//					return;
-//				}
-//			}
-//			this.play({onfinish: loopfinished});
-//		};
-//		s.play({onfinish: loopfinished});
-//	}
 	
 	/**
 	 * Kill all sounds from the page
@@ -63,6 +51,9 @@ function GameSound () {
 	this.load("game_over", ["sound/game_over.ogg", "sound/game_over.mp3"]);
 	this.load("level1", ["sound/level1.ogg", "sound/level1.mp3"]);
 	this.load("meow01", ["sound/meow01.ogg", "sound/meow01.mp3"]);
+	this.load("meow03", ["sound/meow03.ogg", "sound/meow03.mp3"]);
+	this.load("geyser02", ["sound/geyser02.ogg", "sound/geyser02.mp3"]);
+	this.load("yahoo", ["sound/yahoo.ogg", "sound/yahoo.mp3"]);
 	
 	 
 	if ( GameSound.caller != GameSound.getInstance ) {  

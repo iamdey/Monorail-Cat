@@ -253,6 +253,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 					rainbowTimer = RAINBOW_TIME;
 					strength = RAINBOW_CAT_STRENGTH;
 					speed = RAINBOW_SPEED;
+					GameSound.getInstance().play("yahoo");
 				}
 				// PSSSSHHHH
 				else if (item == WATER) {

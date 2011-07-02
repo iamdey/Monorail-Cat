@@ -101,11 +101,14 @@ function Water(map, startingXTile, startingYTile) {
 			{ shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]] },
 			function() {
 				sprite.action("shpritz");
+				GameSound.getInstance().play("geyser02");
 			}
 	);
 	
 	// SHOO! 
 	this.die = function() {
+		//TODO: okay this should check what kind of instance is the thing that collide to this
+		GameSound.getInstance().play("meow03");
 		map.removeEntity(this);
 	}
 	
