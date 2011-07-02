@@ -6,7 +6,7 @@
  * 
  * @returns {Sound}
  */
-function GameSound() {
+function GameSound () {
 	/**
 	 * Stack sounds
 	 */
@@ -21,21 +21,10 @@ function GameSound() {
 		}
 	}
 	
-	this.play = function(id, duration) {
+	this.play = function(id) {
 		if(MUSIC){
 			this.loaded_sounds[id].play();
 		}
-		
-//		duration = duration || -1;
-//		if (duration <= 0) {
-//			soundManager.play(id);
-//		} else {
-//			var s = soundManager.getSoundById(id);
-//			s.onposition(duration, function(eventPosition) {
-//				this.stop();
-//			});
-//			s.play();
-//		}
 	}
 
 	this.playLoop = function(id) {
@@ -62,9 +51,7 @@ function GameSound() {
 	this.stopAll = function(){
 		doc_audio = document.getElementsByTagName("audio");
 		for(i = 0; i < doc_audio.length; i++){
-			console.log(doc_audio[i]);
 			doc_audio[i].pause();
-//			doc_audio[i].currentTime=0;
 		}
 	}
 	
@@ -73,17 +60,34 @@ function GameSound() {
 	 * path is relative to html file
 	 */
 	this.load("openning", ["sound/openning.ogg", "sound/openning.mp3"]);
-	this.load("game_over", ["sound/game_over-src.ogg", "sound/game_over.mp3"]);
+	this.load("game_over", ["sound/game_over.ogg", "sound/game_over.mp3"]);
 	this.load("level1", ["sound/level1.ogg", "sound/level1.mp3"]);
-//	this.load("openning", ["sound/openning.ogg", "sound/openning.mp3"]);
-//	this.load("openning", ["sound/openning.ogg", "sound/openning.mp3"]);
 	
+	 
+	if ( GameSound.caller != GameSound.getInstance ) {  
+		throw new Error("This object cannot be instanciated");  
+	}
 }
+
+/** 
+ * Singleton design pattern
+ */
+GameSound.instance = null;  
+GameSound.getInstance = function(){
+	if (this.instance == null) {  
+		this.instance = new GameSound();  
+	}  
+	  
+	return this.instance;  
+}
+/**
+ */
 
 function Sound(sound_id, a_url){
 	
-	this.element = null;
+	this.element = new Array();
 	element_prefix = "snd_";
+	var self = this; 
 	
 	this.load = function(sound_id, a_url){
 		
@@ -91,20 +95,27 @@ function Sound(sound_id, a_url){
 			throw new Error("A loaded sound already has the same name : " + sound_id);
 		}
 		
-		this.element = document.createElement("audio");
-		this.element.setAttribute("id", element_prefix + sound_id);
-		if(DEBUG){
-			this.element.setAttribute("controls", "controls");
+		//the basic html attribut loop won't work on FF
+		//Loop by setting time is very laggy
+		//define two audio element and switch at the end of the other
+		for(i=0;i<2; i++){
+			this.element[i] = document.createElement("audio");
+			this.element[i].setAttribute("id", element_prefix + sound_id + "_" + i);
+			for(k = 0; k < a_url.length; k++){
+				this.element[i].innerHTML += "<source src=\"" + a_url[k] + "\" />";
+			}
+			
+			//add the audio element to dom 
+			e(GAME_ID).appendChild(this.element[i]);
+			this.element[i].load();
+			
+			//define its neighbour id in order to play almost fluent loop
+			this.element[i].neighbourg = (i + 1) % 2;
+			
+			if(DEBUG){
+				this.element[i].setAttribute("controls", "controls");
+			}
 		}
-		
-		for(k = 0; k < a_url.length; k++){
-			this.element.innerHTML += "<source src=\"" + a_url[k] + "\" />";
-		}
-		
-		//add the audio element to dom 
-			e(GAME_ID).appendChild(this.element);
-		
-		this.element.load();
 	}
 	
 	this.unload = function(){
@@ -114,21 +125,25 @@ function Sound(sound_id, a_url){
 	/**
 	 * dozssingz
 	 */
-	this.play = function(){
-		console.log("play ", sound_id);
-		this.element.play();
+	this._play = function(){
+		this.element[0].play();
 	}
 	
 	/**
 	 * dozssingz
 	 */
 	this.playLoop = function(){
-//		this.element.setAttribute("loop", "loop"); //doznot work on ff@ubuntu
-		this.element.addEventListener('ended', function(elem){
-			this.currentTime = 0;
-		}, false);
+		this.element[0].play();
 		
-		this.element.play();
+//		this.element.setAttribute("loop", "loop"); //doznot work on ff@ubuntu
+		for(i = 0;i<this.element.length;i++){
+			this.element[i].addEventListener('ended', function(elem){
+				this.currentTime = 0.05;
+				this.pause();
+				self.element[this.neighbourg].play();
+			}, false);
+		}
+		
 	}
 	
 	this.stop = function(){

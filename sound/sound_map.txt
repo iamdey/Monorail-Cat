@@ -1,5 +1,0 @@
-openning 	0-39" loop
-
-level1 		0-40" loop
-
-game_over 	0-12" loop

@@ -20,8 +20,8 @@ function startGame() {
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
     
-    game_sound.stopAll();
-    game_sound.playLoop("level1");
+    GameSound.getInstance().stopAll();
+    GameSound.getInstance().playLoop("level1");
 
     gs.launch();
 }

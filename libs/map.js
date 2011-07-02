@@ -61,8 +61,8 @@ function Map(gs, _tilemap) {
 		
 		entities = new Array();
 		
-		game_sound.stopAll();
-	    game_sound.playLoop("game_over");
+		GameSound.getInstance().stopAll();
+		GameSound.getInstance().playLoop("game_over");
 	    
 	    UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE)
 	}
