@@ -144,8 +144,13 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 			{ roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]] },
 			function() {
 				sprite.action("roooolllinnn");
+				self.playSound();
 			}
 	);
+	
+	this.playSound = function(){
+		GameSound.getInstance().play("meow01");
+	}
 	
 	this.changeDirection = function(newDirection) {
 		direction = newDirection;

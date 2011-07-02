@@ -62,6 +62,7 @@ function GameSound () {
 	this.load("openning", ["sound/openning.ogg", "sound/openning.mp3"]);
 	this.load("game_over", ["sound/game_over.ogg", "sound/game_over.mp3"]);
 	this.load("level1", ["sound/level1.ogg", "sound/level1.mp3"]);
+	this.load("meow01", ["sound/meow01.ogg", "sound/meow01.mp3"]);
 	
 	 
 	if ( GameSound.caller != GameSound.getInstance ) {  
@@ -125,7 +126,7 @@ function Sound(sound_id, a_url){
 	/**
 	 * dozssingz
 	 */
-	this._play = function(){
+	this.play = function(){
 		this.element[0].play();
 	}
 	
