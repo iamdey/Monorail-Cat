@@ -79,12 +79,13 @@ img.bonusImage {
 #otherMaps p {
 	width:795px;
 	margin:.3em auto;
+	text-align:center;
 }
 
 .right {
 	float:right;
 }
 
-.startGameButton {
-	text-align:center;
+.left {
+	float:left;
 }
