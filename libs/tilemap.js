@@ -1,6 +1,12 @@
 /*
  * Représentation du niveau de jeu
  *
+ * Membres utiles :
+ *  - level : matrice représentant le niveau
+ *  - scale : échelle appliquée si un des côtés du niveau >7
+ *  - load(mapId) : charge la map mapId
+ *  - draw(canvas) : dessine la map dans le canvas canvas.
+ *  - isValidDirection(x,y, from, to) : permet de savoir si une entité, sur la tuile (x,y), venant de from, peut aller vers to.
  */
 
 
@@ -10,6 +16,7 @@ function TileMap(_canvas) {
 	var tiles;
 	var images;
 	var bits;
+	var scale;
 	var ready;
 	var tilesize = TILE_SIZE;
 	var nbSprites = 0;
@@ -45,11 +52,32 @@ function TileMap(_canvas) {
 
 	// Affichage de la map
 	this.draw = function(c) {
-		c.getContext('2d').clearRect(0,0, c.width, c.height);
-		var i, j;
-		for(i=0; i< this.level.length; i++) {
-			for(j=0; j< this.level[i].length; j++) {
-				c.getContext('2d').drawImage(this.images[this.level[i][j]], j * TILE_SIZE, i * TILE_SIZE);
+		// Si une map est chargée :
+		if(this.ready) {
+			// Si la map a une longueur/hauteur plus grande que 7, on définit un coefficient d'échelle < 1.
+			var maxMapSize = Math.max(this.level.length, this.level[0].length);
+			this.scale = 1;
+			if(maxMapSize > 7) {
+				this.scale = 7.0 / maxMapSize;
+			}
+			alert('scale = ' + this.scale);
+			// Redimensionnement des images :
+			for(var tid in this.images) {
+				this.images[tid].width  = TILE_SIZE * this.scale;
+				this.images[tid].height = TILE_SIZE * this.scale;
+			}
+			// Effacer la map précédente.
+			c.getContext('2d').clearRect(0,0, c.width, c.height);
+			var i, j;
+			for(i=0; i< this.level.length; i++) {
+				for(j=0; j< this.level[i].length; j++) {
+					c.getContext('2d').drawImage(this.images[this.level[i][j]], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
+				}
+			}
+			// Redimensionnement des images vers leur taille d'origine, pour éviter d'éventuels conflits :
+			for(var tid in this.images) {
+				this.images[tid].width  = TILE_SIZE;
+				this.images[tid].height = TILE_SIZE;
 			}
 		}
 	}
@@ -74,8 +102,6 @@ function TileMap(_canvas) {
 
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
-		/*console.log(x+";"+y+" from "+from+" to "+to+" ("+this.level[x][y]+" & "+
-		(1 << this.bits[from][to])+" = "+(this.level[x][y] & (1 << this.bits[from][to])) + ")")*/
 		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
 	}
 
