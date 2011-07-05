@@ -15,7 +15,7 @@ var PROBA_TOTAL = PROBA_RAINBOW;
  * 
  * @author esion
  */
-function MapItem(mapItemId, map, startingXTile, startingYTile){
+function MapItem(map, startingXTile, startingYTile){
 	var parent 	= new Entity(map, startingXTile, startingYTile);
 	var invisibleCt = 0;
 	
@@ -107,8 +107,6 @@ function Water(map, startingXTile, startingYTile) {
 	
 	// SHOO! 
 	this.die = function() {
-		//TODO: okay this should check what kind of instance is the thing that collide to this
-		GameSound.getInstance().play("meow03");
 		map.removeEntity(this);
 	}
 	
@@ -257,11 +255,4 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		case WEST:	parent.pos[1] = TILE_SIZE - 1;	break;
 	}
 	
-}
-
-Array.prototype.shuffle = function() {
-	var s = [];
-	while (this.length) s.push(this.splice(Math.random() * this.length, 1)[0]);
-	while (s.length) this.push(s.pop());
-	return this;
 }

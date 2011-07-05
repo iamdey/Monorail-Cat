@@ -1,7 +1,7 @@
 /**
  * GameSound manager
  *
- * @author vlavb
+ * @author vlavv
  * @author esion
  *
  * @returns {Sound}

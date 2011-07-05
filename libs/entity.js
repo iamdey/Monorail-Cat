@@ -10,7 +10,7 @@ var RAINBOW_TIME = FRAMERATE * 2;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
-var CAT_SPEED = TILE_SIZE * 3.5;
+var CAT_SPEED = TILE_SIZE * 3;
 var WOOLBALL_SPEED = TILE_SIZE * 6;
 var WOOLBALL_LIFE_TIME = FRAMERATE * 8;
 
@@ -166,7 +166,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 		return strength;
 	}
 
-	// Sprite
+	// Cat sprite
 	var sprite = new Sprite(["center", "center"], {
 			left:	[["arts/cat"+color+"-left.png", 0]],
 			right:	[["arts/cat"+color+"-right.png", 0]],
@@ -176,6 +176,14 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			self.changeDirection(direction);
 		}
 	);
+	
+	// Rainbow sprite
+	var rainbowSprite = new Sprite(["center", "center"], {
+		left:	[["arts/rainbow-left1.png", 6],		["arts/rainbow-left2.png", 6]],
+		right:	[["arts/rainbow-right1.png", 6],	["arts/rainbow-right2.png", 6]],
+		up:		[["arts/rainbow-up1.png", 6],		["arts/rainbow-up2.png", 6]],
+		down:	[["arts/rainbow-down1.png", 6],		["arts/rainbow-down2.png", 6]]
+	});
 
 	// Moves the entity by dx ; dy (in pixels)
 	this.move = function(dx, dy) {
@@ -250,20 +258,28 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 
 				// NYAN NYAN NYAN
 				if (item == RAINBOW) {
+					switch (direction) {
+						case NORTH:	rainbowSprite.action("up");		break;
+						case SOUTH:	rainbowSprite.action("down");	break;
+						case WEST:	rainbowSprite.action("left");	break;
+						case EAST:	rainbowSprite.action("right");	break;
+					}
+					
 					rainbowTimer = RAINBOW_TIME;
 					strength = RAINBOW_CAT_STRENGTH;
 					speed = RAINBOW_SPEED;
+					
 					GameSound.getInstance().play("yahoo");
 				}
 				// PSSSSHHHH
 				else if (item == WATER) {
-					map.addEntity(new Water(map, parent.tile[0], parent.tile[1]));
+					map.addEntity(new Water(map, parent.tile[0], parent.tile[1]), true);
 				}
 				// SHOO!
 				else if (item == WOOLBALL) {
-					map.addEntity(new Woolball(map, parent.tile[0], parent.tile[1], direction));
+					map.addEntity(new Woolball(map, parent.tile[0], parent.tile[1], direction), true);
 				}
-
+				
 				if(stackedItems.length > 0) {
 					UI.setPlayerBonus(playerId, stackedItems[stackedItems.length - 1]);
 				} else {
@@ -276,6 +292,7 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 	this.changeDirection = function(newDirection) {
 		direction = newDirection;
 
+		// Change direction variables
 		switch (direction) {
 			case NORTH:	sx = -1;	sy =  0;	break;
 			case SOUTH:	sx = +1;	sy =  0;	break;
@@ -283,18 +300,31 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 			case EAST:	sx =  0;	sy = +1;	break;
 			default:	sx =  0;	sy =  0;	break;
 		}
-
+		
+		// Change sprite orientation
 		switch (direction) {
 			case NORTH:	sprite.action("up");	break;
 			case SOUTH:	sprite.action("down");	break;
 			case WEST:	sprite.action("left");	break;
 			case EAST:	sprite.action("right");	break;
 		}
+		
+		// Change rainbow sprite orientation
+		if (rainbowTimer > 0) {
+			switch (direction) {
+				case NORTH:	rainbowSprite.action("up");		break;
+				case SOUTH:	rainbowSprite.action("down");	break;
+				case WEST:	rainbowSprite.action("left");	break;
+				case EAST:	rainbowSprite.action("right");	break;
+			}
+		}
 	}
 
 	// Dumbledore diez
 	this.die = function() {
 		UI.setPlayerLives(playerId, --nbLives);
+		
+		GameSound.getInstance().play("meow03");
 
 		// TODO: Restart from elsewhere
 
@@ -314,6 +344,20 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 
 	// Draws the cat
 	this.draw = function(c) {
+		if(rainbowTimer > 0) {
+			var rainbowPos = parent.getAbsolutePos();
+			
+			// Position rainbow behind the cat
+			switch (direction) {
+				case NORTH:	rainbowPos[1] += TILE_MIDDLE;	break;
+				case SOUTH:	rainbowPos[1] -= TILE_MIDDLE;	break;
+				case WEST:	rainbowPos[0] += TILE_MIDDLE;	break;
+				case EAST:	rainbowPos[0] -= TILE_MIDDLE;	break;
+			}
+			
+			rainbowSprite.draw(c, rainbowPos);
+		}
+		
 		sprite.draw(c, parent.getAbsolutePos());
 	}
 
@@ -323,9 +367,12 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 
 		if(rainbowTimer > 0) {
 			rainbowTimer--;
+			rainbowSprite.update();
+			
 			if(rainbowTimer == 0) {
 				speed = 1;
 				strength = CAT_STRENGTH;
+				rainbowSprite ;
 			}
 		}
 

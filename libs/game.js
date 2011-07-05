@@ -16,14 +16,13 @@ function loadMap(mapName) {
 }
 
 function startGame() {
-    var surface = document.getElementById("monorail-cat");
-    var gs 		= new JSGameSoup(surface, FRAMERATE);
-    var game 	= new Game(gs);
-    
-    GameSound.getInstance().stopAll();
-    GameSound.getInstance().playLoop("level1");
-
-    gs.launch();
+	var surface = document.getElementById("monorail-cat");
+	var gs 		= new JSGameSoup(surface, FRAMERATE);
+	new Game(gs);
+	gs.launch();
+	
+	GameSound.getInstance().stopAll();
+	GameSound.getInstance().playLoop("level1");
 }
 
 function Game(gs) {
@@ -46,16 +45,16 @@ function Game(gs) {
 	var map = new Map(gs, tilemap);
 
 	var mapItems = [
-		new MapItem("6_0", map, 6, 0),
-		new MapItem("0_6", map, 0, 6),
-		new MapItem("1_1", map, 1, 1),
-		new MapItem("5_5", map, 5, 5),
-		new MapItem("2_2", map, 4, 2),
-		new MapItem("4_4", map, 2, 4)
+		new MapItem(map, 6, 0),
+		new MapItem(map, 0, 6),
+		new MapItem(map, 1, 1),
+		new MapItem(map, 5, 5),
+		new MapItem(map, 4, 2),
+		new MapItem(map, 2, 4)
 	];
 
 	for (var i = 0; i < mapItems.length; i++) {
-		map.addEntity(mapItems[i]);
+		map.addEntity(mapItems[i], true);
 	}
 
 	var cats = [
@@ -71,6 +70,6 @@ function Game(gs) {
 	gs.addEntity(players[0]);
 	gs.addEntity(players[1]);
 
-	map.addEntity(cats[0]);
-	map.addEntity(cats[1]);
+	map.addEntity(cats[0], true);
+	map.addEntity(cats[1], true);
 }

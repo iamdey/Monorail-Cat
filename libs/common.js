@@ -34,3 +34,10 @@ function rtrim(str, chars) {
 	chars = chars || "\\s";
 	return str.replace(new RegExp("[" + chars + "]+$", "g"), "");
 }
+
+Array.prototype.shuffle = function() {
+	var s = [];
+	while (this.length) s.push(this.splice(Math.random() * this.length, 1)[0]);
+	while (s.length) this.push(s.pop());
+	return this;
+}

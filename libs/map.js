@@ -6,8 +6,11 @@ function Map(gs, _tilemap) {
 		return tilemap.isValidDirection(x, y, from, to);
 	}
 	
-	this.addEntity = function(entity) {
-		entities.push(entity);
+	this.addEntity = function(entity, collidable) {
+		if (collidable) {
+			entities.push(entity);
+		}
+		
 		gs.addEntity(entity);
 	}
 	

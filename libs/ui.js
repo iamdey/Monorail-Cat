@@ -8,7 +8,7 @@ function _UI() {
 	// Map Bonus => Img
 	this.bonusImages = new Array();
 	this.bonusImages['woolball'] = 'wool_ball1.png';
-	this.bonusImages['rainbow'] = 'rainbow_eo1.png';
+	this.bonusImages['rainbow'] = 'rainbow-right1.png';
 	this.bonusImages['water'] = 'ice_pick.png';
 
 	// Last Timeout defined for msg
@@ -18,7 +18,6 @@ function _UI() {
 	this.NORMAL = '20pt';
 	this.BIG    = '35pt';
 	this.HUGE   = '50pt';
-
 
 	this.setPlayerName = function(player, name) {
 		if(player == 1 || player == 2) {
