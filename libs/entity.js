@@ -6,7 +6,7 @@ var EAST = 4;
 
 var NB_LIVES = 9;
 var MAX_ITEMS = 1;
-var RAINBOW_TIME = FRAMERATE * 2;
+var RAINBOW_TIME = FRAMERATE * 3;
 
 var TILE_SIZE = 79;
 var TILE_MIDDLE = TILE_SIZE / 2 + 1;
@@ -268,7 +268,12 @@ function Cat(map, _playerId, color, startingXTile, startingYTile, _direction) {
 					rainbowTimer = RAINBOW_TIME;
 					strength = RAINBOW_CAT_STRENGTH;
 					speed = RAINBOW_SPEED;
-					GameSound.getInstance().play("nyan_shot");
+					
+					// Start NYAN sound
+					GameSound.getInstance().pause("level1");
+					GameSound.getInstance().play("nyan", function() {
+						GameSound.getInstance().play("level1");
+					});
 				}
 				// PSSSSHHHH
 				else if (item == WATER) {

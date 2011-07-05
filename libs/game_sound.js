@@ -21,9 +21,9 @@ function GameSound () {
 		}
 	}
 
-	this.play = function(id) {
+	this.play = function(id, endedCallback) {
 		if(MUSIC){
-			this.loaded_sounds[id].play();
+			this.loaded_sounds[id].play(endedCallback);
 		}
 	}
 
@@ -31,6 +31,9 @@ function GameSound () {
 		if(MUSIC){
 			this.loaded_sounds[id].playLoop();
 		}
+	}
+	this.pause = function(id){
+		this.loaded_sounds[id].pause();
 	}
 
 	/**
@@ -53,7 +56,7 @@ function GameSound () {
 	this.load("meow01", ["sound/meow01.ogg", "sound/meow01.mp3"]);
 	this.load("meow03", ["sound/meow03.ogg", "sound/meow03.mp3"]);
 	this.load("geyser02", ["sound/geyser02.ogg", "sound/geyser02.mp3"]);
-	this.load("nyan_shot", ["sound/nyan_shot.ogg", "sound/nyan_shot.mp3"]);
+	this.load("nyan", ["sound/nyan.ogg", "sound/nyan.mp3"]);
 	
 	 
 	if ( GameSound.caller != GameSound.getInstance ) {  
@@ -117,7 +120,11 @@ function Sound(sound_id, a_url){
 	/**
 	 * dozssingz
 	 */
-	this.play = function(){
+	this.play = function(endedCallback){
+		if(endedCallback) {
+			this.element[0].addEventListener('ended', endedCallback, false);
+		}
+		
 		this.element[0].play();
 	}
 
@@ -138,8 +145,8 @@ function Sound(sound_id, a_url){
 
 	}
 
-	this.stop = function(){
-		this.element.stop();
+	this.pause = function(){
+		this.element[0].pause();
 	}
 
 	/**
