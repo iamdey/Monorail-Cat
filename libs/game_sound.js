@@ -53,11 +53,11 @@ function GameSound () {
 	this.load("meow01", ["sound/meow01.ogg", "sound/meow01.mp3"]);
 	this.load("meow03", ["sound/meow03.ogg", "sound/meow03.mp3"]);
 	this.load("geyser02", ["sound/geyser02.ogg", "sound/geyser02.mp3"]);
-	this.load("yahoo", ["sound/yahoo.ogg", "sound/yahoo.mp3"]);
-
-
-	if ( GameSound.caller != GameSound.getInstance ) {
-		throw new Error("This object cannot be instanciated");
+	this.load("nyan_shot", ["sound/nyan_shot.ogg", "sound/nyan_shot.mp3"]);
+	
+	 
+	if ( GameSound.caller != GameSound.getInstance ) {  
+		throw new Error("This object cannot be instanciated");  
 	}
 }
 

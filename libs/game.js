@@ -1,13 +1,14 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= true;
+var DEBUG 		= false;
+var OFFLINE		= true; 
 
 tilemap = null;
 
 function loadMap(mapName) {
 	tilemap = new TileMap(document.getElementById("tileMap"));
-	if(DEBUG) {
+	if(OFFLINE) {
 		tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
 	} else {
 		tilemap.load(mapName);
