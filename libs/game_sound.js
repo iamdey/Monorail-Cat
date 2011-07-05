@@ -146,7 +146,9 @@ function Sound(sound_id, a_url){
 	}
 
 	this.pause = function(){
-		this.element[0].pause();
+		for(i = 0; i < this.element.length; i++){
+			this.element[i].pause();
+		}
 	}
 
 	/**

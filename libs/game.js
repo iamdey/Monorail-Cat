@@ -13,6 +13,7 @@ function loadMap(mapName) {
 	} else {
 		tilemap.load(mapName);
 	}
+	
 	setTimeout('tilemap.draw(document.getElementById("tileMap"))', 300);
 }
 
@@ -46,31 +47,31 @@ function Game(gs) {
 	var map = new Map(gs, tilemap);
 
 	var mapItems = [
-		new MapItem(map, 6, 0),
-		new MapItem(map, 0, 6),
-		new MapItem(map, 1, 1),
-		new MapItem(map, 5, 5),
-		new MapItem(map, 4, 2),
-		new MapItem(map, 2, 4)
+		new MapItem([6, 0]),
+		new MapItem([0, 6]),
+		new MapItem([1, 1]),
+		new MapItem([5, 5]),
+		new MapItem([4, 2]),
+		new MapItem([2, 4])
 	];
 
-	for (var i = 0; i < mapItems.length; i++) {
-		map.addEntity(mapItems[i], true);
-	}
-
 	var cats = [
-		new Cat(map, 1, RED, 0, 0, SOUTH),
-		new Cat(map, 2, BLUE, 6, 6, NORTH)
+		new Cat(map, 1, RED, [0, 0], SOUTH),
+		new Cat(map, 2, BLUE, [6, 6], NORTH)
 	];
 
 	var players = [
-		new Player("player 1", this.keymap_player_1, cats[0]),
-		new Player("player 2", this.keymap_player_2, cats[1])
+		new Player("Player 1", this.keymap_player_1, cats[0]),
+		new Player("Player 2", this.keymap_player_2, cats[1])
 	];
 
 	gs.addEntity(players[0]);
 	gs.addEntity(players[1]);
 
-	map.addEntity(cats[0], true);
-	map.addEntity(cats[1], true);
+	for (var i = 0; i < mapItems.length; i++) {
+		map.addEntity(mapItems[i]);
+	}
+
+	map.addEntity(cats[0]);
+	map.addEntity(cats[1]);
 }

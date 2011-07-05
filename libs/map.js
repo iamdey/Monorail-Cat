@@ -1,19 +1,25 @@
-function Map(gs, _tilemap) {
+/**
+ * class Map
+ * 
+ * Manages teh entitiz.
+ * 
+ * @author didjor
+ */
+ function Map(gs, _tilemap) {
 	var tilemap = _tilemap;
 	var entities = new Array();
 	
-	this.isValidDirection = function(x, y, from, to) {
-		return tilemap.isValidDirection(x, y, from, to);
-	}
-	
-	this.addEntity = function(entity, collidable) {
-		if (collidable) {
-			entities.push(entity);
-		}
-		
+	/**
+	 *	Adds an entity to the map.
+	 */
+	this.addEntity = function(entity) {
+		entities.push(entity);
 		gs.addEntity(entity);
 	}
 	
+	/**
+	 *	Removes an entity from the map.
+	 */
 	this.removeEntity = function(entity) {
 		for (var i = 0; i < entities.length; i++) {
 			if (entities[i].getId() == entity.getId()) {
@@ -25,6 +31,16 @@ function Map(gs, _tilemap) {
 		gs.delEntity(entity);
 	}
 	
+	/**
+	 *	Returns true if the entity can go from direction "from" to direction "to" on square x;y.
+	 */
+	this.isValidDirection = function(x, y, from, to) {
+		return tilemap.isValidDirection(x, y, from, to);
+	}
+	
+	/**
+	 *	Detect the collisions with an entity.
+	 */
 	this.detectCollision = function(entity) {
 		var tile = entity.getTile();
 		
@@ -57,19 +73,27 @@ function Map(gs, _tilemap) {
 		}
 	}
 	
+	/**
+	 *	Endz teh game.
+	 */
 	this.gameOver = function() {
+		// Remove every entity
 		for (var i = 0; i < entities.length; i++) {
 			gs.delEntity(entities[i]);
 		}
-		
 		entities = new Array();
 		
+		// Stop all sounds and play game over sound
 		GameSound.getInstance().stopAll();
 		GameSound.getInstance().playLoop("game_over");
 	    
+		// Display end message
 	    UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE)
 	}
 	
+	/**
+	 *	Prints the entities (debug).
+	 */
 	this.printEntities = function() {
 		var s = "[ ";
 		for (var i = 0; i < entities.length; i++) {

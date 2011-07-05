@@ -1,11 +1,15 @@
+// Item names
 var WOOLBALL = "woolball"
 var RAINBOW = "rainbow"
 var WATER = "water"
-var INVISIBLE_FRAMES = 30;
 
+// Time of item invizibliness
+var INVISIBLE_FRAMES = FRAMERATE * 1;
+
+// Probability of each item to come (They are cumulated so the formula is simpler)
 var PROBA_WOOLBALL = 5
 var PROBA_WATER = PROBA_WOOLBALL + 5
-var PROBA_RAINBOW = PROBA_WATER + 2000
+var PROBA_RAINBOW = PROBA_WATER + 2
 var PROBA_TOTAL = PROBA_RAINBOW;
 
 /**
@@ -15,31 +19,55 @@ var PROBA_TOTAL = PROBA_RAINBOW;
  * 
  * @author esion
  */
-function MapItem(map, startingXTile, startingYTile){
-	var parent 	= new Entity(map, startingXTile, startingYTile);
+function MapItem(startingTile){
+	var parent 	= new Entity(startingTile);
 	var invisibleCt = 0;
 	
+	// Map item sprite
+	var sprite = new Sprite(["center", "center"], {
+			stand: [["arts/bonus1.png", 3], ["arts/bonus2.png", 5], ["arts/bonus3.png", 5]]
+		}, function() {
+			sprite.action("stand");
+		}
+	);
+	
+	/**
+	 *	Parent binding.
+	 */
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
+	
+	/**
+	 *	Returns the entity type.
+	 */
 	this.getType = function() {
 		return MAP_ITEM;
 	}
 	
-	this.getId = parent.getId;
-	this.getTile = parent.getTile;
-	
+	/**
+	 *	Returns the entity strength.
+	 */
 	this.getStrength = function() {
 		return MAP_ITEM_STRENGTH;
 	}
 	
-	// Sprite
-	var sprite = new Sprite(["center", "center"], 
-			{ stand: [["arts/bonus1.png", 3], ["arts/bonus2.png", 5], ["arts/bonus3.png", 5]] },
-			function() {
-				sprite.action("stand");
-			}
-	);
+	/**
+	 *	Teh itaim haz been taken bye a damm cat!
+	 */
+	this.die = function() {
+		// Doze noting, me cant diez
+		invisibleCt = INVISIBLE_FRAMES;
+	}
 	
 	/**
-	 * Traw teh itaim
+	 * Refresh the sprite.
+	 */
+	this.update = function(c) {
+		sprite.update();
+	}
+	
+	/**
+	 * Draw teh itaim.
 	 */
 	this.draw = function(c) {
 		if(invisibleCt == 0) {
@@ -49,23 +77,11 @@ function MapItem(map, startingXTile, startingYTile){
 		}
 	}
 	
-	this.die = function() {
-		// Doze noting, me cant diez
-		invisibleCt = INVISIBLE_FRAMES;
-	}
-	
 	/**
-	 * refresh the sprite
-	 */
-	this.update = function(c) {
-		sprite.update();
-	}
-	
-	/**
-	 * define a random Item (cf. rand_no = 4)
+	 * Returns a random Item (cf. rand_no = 4).
 	 */
 	this.pickUpRandomizedLoot = function(){
-		var rand_no = Math.floor(PROBA_TOTAL * Math.random());
+		var rand_no = PROBA_TOTAL * Math.random();
 		
 		if (rand_no < PROBA_WOOLBALL) {
 			return WOOLBALL;
@@ -76,52 +92,82 @@ function MapItem(map, startingXTile, startingYTile){
 		}
 	}
 	
-	// do not delete this comment, even if it's useless.
 	/**
-	 * Hmm tired, move constructor at the end is better for kitten
+	 * Hmm tired, doez noting at the end is better for kitten.
 	 */
 }
 
-function Water(map, startingXTile, startingYTile) {
-	var parent 	= new Entity(map, startingXTile, startingYTile);
+/**
+ * class Water 
+ * 
+ * Cold and wet water on the level...
+ * 
+ * @author didjor
+ */
+function Water(map, startingTile) {
+	var parent 	= new Entity(startingTile);
 	
+	// Water sprite
+	var sprite = new Sprite(["center", "center"], {
+		shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]]
+		}, function() {
+			sprite.action("shpritz");
+			GameSound.getInstance().play("geyser02");
+		}
+	);
+	
+	/**
+	 * Parent binding.
+	 */
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
+	
+	/**
+	 * Returns the entity type.
+	 */
 	this.getType = function() {
 		return WATER;
 	}
 	
-	this.getId = parent.getId;
-	this.getTile = parent.getTile;
-	
+	/**
+	 * Returns the entity strength.
+	 */
 	this.getStrength = function() {
 		return WATER_STRENGTH;
 	}
 	
-	// Sprite
-	var sprite = new Sprite(["center", "center"], 
-			{ shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]] },
-			function() {
-				sprite.action("shpritz");
-				GameSound.getInstance().play("geyser02");
-			}
-	);
-	
-	// SHOO! 
+	/**
+	 *	SHHHHHH!
+	 */
 	this.die = function() {
 		map.removeEntity(this);
 	}
 	
+	/**
+	 *	Refresh teh sprite (evn if it dosent need!).
+	 */
 	this.update = function() {
 		sprite.update();
 	}
 	
+	/**
+	 *	Draws teh sprite.
+	 */
 	this.draw = function(c) {
 		sprite.draw(c, parent.getAbsolutePos());
 	}
 }
 
-function Woolball(map, startingXTile, startingYTile, _direction) {
+/**
+ * class Woolball 
+ * 
+ * Funny woolballz in teh map
+ * 
+ * @author didjor
+ */
+function Woolball(map, startingTile, _direction) {
 	var self = this;
-	var parent = new Entity(map, startingXTile, startingYTile);
+	var parent = new Entity(startingTile);
 	var direction = _direction;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
@@ -129,30 +175,38 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 	var lifetime = WOOLBALL_LIFE_TIME;
 	var directions = [SOUTH, NORTH, WEST, EAST];
 	
+	// Woolball sprite
+	var sprite = new Sprite(["center", "center"], {
+		roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]]
+		}, function() {
+			sprite.action("roooolllinnn");
+			GameSound.getInstance().play("meow01");
+		}
+	);
+	
+	/**
+	 * Parent binding.
+	 */
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
+	
+	/**
+	 * Returns the entity type.
+	 */
 	this.getType = function() {
 		return WOOLBALL;
 	}
 	
-	this.getId = parent.getId;
-	this.getTile = parent.getTile;
-	
+	/**
+	 * Returns the entity strength.
+	 */
 	this.getStrength = function() {
 		return WOOLBALL_STRENGTH;
 	}
 	
-	// Sprite
-	var sprite = new Sprite(["center", "center"], 
-			{ roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]] },
-			function() {
-				sprite.action("roooolllinnn");
-				self.playSound();
-			}
-	);
-	
-	this.playSound = function(){
-		GameSound.getInstance().play("meow01");
-	}
-	
+	/**
+	 * Changes the woolball direction.
+	 */
 	this.changeDirection = function(newDirection) {
 		direction = newDirection;
 		
@@ -165,17 +219,24 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		}
 	}
 	
-	// SHOO! 
+	/**
+	 *	Not funny anymoar!
+	 */
 	this.die = function() {
 		map.removeEntity(this);
 	}
 	
+	/**
+	 *	Decides a random direction for the next possible turn.
+	 */
 	this.goRandomlySomewhere = function() {
 		var decided = false;
 		var oppositeDirection = getOppositeDirection(direction);
 		
+		// Shuffle possible directions
 		directions = directions.shuffle();
 		
+		// Try to go on each direction...
 		for (var i = 0; i < 4 && !decided; i++) {
 			var randDir = directions[i];
 			
@@ -188,6 +249,7 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		
 		// Turn successful
 		if(decided) {
+			// Reposition sprite
 			if(direction == NORTH) {
 				parent.pos[0] -= Math.abs(TILE_MIDDLE - parent.pos[1]);
 				parent.pos[1] = TILE_MIDDLE;
@@ -204,6 +266,9 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		}
 	}
 	
+	/**
+	 *	Updates the woolball.
+	 */
 	this.update = function() {
 		if (lifetime-- == 0) {
 			self.die();
@@ -211,10 +276,12 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 			sprite.update();
 			
 			parent.move(sx * DELTA_WOOLBALL_SPEED, sy * DELTA_WOOLBALL_SPEED,
+			
 			// Change Square callback function
 			function() {
-				parent.map.detectCollision(self);
+				map.detectCollision(self);
 			},
+
 			// Middle passed callback function
 			function() {
 				self.goRandomlySomewhere();
@@ -222,6 +289,9 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 		}
 	}
 	
+	/**
+	 *	Draws teh sprite.
+	 */
 	this.draw = function(c) {
 		sprite.draw(c, parent.getAbsolutePos());
 	}
@@ -229,7 +299,6 @@ function Woolball(map, startingXTile, startingYTile, _direction) {
 	/**
 	 *	CONSTRUCTORZ
 	 */
-	
 	// Set initial direction
 	this.changeDirection(direction);
 	
