@@ -148,9 +148,12 @@ function Sound(sound_id, a_url){
 	this.load(sound_id, a_url);
 }
 
+SOUND_ON = true;
+
 function muteUnmute() {
+	SOUND_ON = !SOUND_ON;
 	var audios = document.getElementsByTagName('audio');
 	for(var i=0; i< audios.length; i++) {
-		audios[i].muted = !audios[i].muted;
+		audios[i].muted = ! SOUND_ON;
 	}
 }

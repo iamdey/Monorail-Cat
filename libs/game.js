@@ -1,7 +1,7 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= true;
+var DEBUG 		= false;
 
 tilemap = null;
 
@@ -19,7 +19,7 @@ function startGame() {
     var surface = document.getElementById("monorail-cat");
     var gs 		= new JSGameSoup(surface, FRAMERATE);
     var game 	= new Game(gs);
-    
+
     GameSound.getInstance().stopAll();
     GameSound.getInstance().playLoop("level1");
 
@@ -58,9 +58,12 @@ function Game(gs) {
 		map.addEntity(mapItems[i]);
 	}
 
+	var departChat1 = tilemap.getPlayerStartTile(1);
+	var departChat2 = tilemap.getPlayerStartTile(2);
+
 	var cats = [
-		new Cat(map, 1, RED, 0, 0, SOUTH),
-		new Cat(map, 2, BLUE, 6, 6, NORTH)
+		new Cat(map, 1, RED,  departChat1.x, departChat1.y, SOUTH),
+		new Cat(map, 2, BLUE, departChat2.x, departChat2.y, NORTH)
 	];
 
 	var players = [

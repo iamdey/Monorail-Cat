@@ -1,4 +1,4 @@
-/*
+/**
  * Représentation du niveau de jeu
  *
  * Membres utiles :
@@ -6,7 +6,28 @@
  *  - scale : échelle appliquée si un des côtés du niveau >7
  *  - load(mapId) : charge la map mapId
  *  - draw(canvas) : dessine la map dans le canvas canvas.
+ *  - getPlayerStartTile(player) : renvoie le point de départ du joueur player (défaut : 0,0 pour 1; 6,6 pour 2) | pour ces deux méthodes, les coordonnées sont indiquées dans ce genre de structure :
+ *  - getItemTiles() : récupère la liste des coordonnées des tuiles où placer des items                          | {x: 0, y: 0}
  *  - isValidDirection(x,y, from, to) : permet de savoir si une entité, sur la tuile (x,y), venant de from, peut aller vers to.
+ */
+
+/**
+ * Addendum : représentation numérique des tuiles
+ *
+ * Une tuile est représentée par son type et sa spécialité, sous forme binaire.
+ * Les 12 bits de poids faible (0 à 11) servent à indiquer les directions possibles selon la direction d'où l'on vient, comme indiqué dans l'exemple ci-dessous, et représentent le type de la tuile.
+ * Les bits 12 et 13 indiquent si la case est spéciale (00 : non, 01 départ chat rouge, 10 départ chat bleu, 11 item box).
+ *
+ * Exemple : tuile [┐], avec boîte d'item dessus
+ *
+ * 	directions (du)   :    |  N  |  E  |  S  |  O  |
+ *  directions (vers) :    |E S O|N S O|N E O|N E S|
+ *  -----------------------+-----+-----+-----+-----+
+ *  bit no            : 1 1|1 1  |     |     |     |
+ *                      3 2|1 0 9|8 7 6|5 4 3|2 1 0|
+ *  -----------------------+-----+-----+-----+-----+
+ *  Valeur tuile      : 1 1|0 0 0|0 0 0|0 0 1|0 0 1| (binaire)
+ *                                            12297  (decimal)
  */
 
 
@@ -24,7 +45,6 @@ function TileMap(_canvas) {
 
 	// matrice représentant le niveau
 	this.level = new Array();
-
 	// association type de tuile => image à utiliser
 	this.tiles = new Array();
 	this.tiles[   0] = 'blank';
@@ -50,6 +70,12 @@ function TileMap(_canvas) {
 	// de base, map non chargée
 	this.ready = false;
 
+	// Extraction du type de tuile (retrait d'éventuelle spécialité)
+	this.tileType = function(t) {
+		return (t & 4095);
+	}
+
+
 	// Affichage de la map
 	this.draw = function(c) {
 		// Si une map est chargée :
@@ -68,10 +94,11 @@ function TileMap(_canvas) {
 			}
 			// Effacer la map précédente.
 			c.getContext('2d').clearRect(0,0, c.width, c.height);
+			// Dessin de la nouvelle map
 			var i, j;
 			for(i=0; i< this.level.length; i++) {
 				for(j=0; j< this.level[i].length; j++) {
-					c.getContext('2d').drawImage(this.images[this.level[i][j]], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
+					c.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
 				}
 			}
 			// Redimensionnement des images vers leur taille d'origine, pour éviter d'éventuels conflits :
@@ -103,6 +130,37 @@ function TileMap(_canvas) {
 	// Validité de la direction demandée en fonction de la tuile
 	this.isValidDirection = function(x, y, from, to) {
 		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
+	}
+
+	// Permet de récupérer les coordonnées du point de départ du joueur player.
+	this.getPlayerStartTile = function(player) {
+		for(var i=0; i<this.level.length; i++) {
+			for(var j=0; j<this.level[i].length; j++) {
+				var tmp = this.level[i][j] >>> 12;
+				if(tmp == player) {
+					return {x: i, y: j};
+				}
+			}
+		}
+		// Emplacements par défaut :
+		if(player == 2) {
+			return {x: 0, y: 0};
+		}
+		return {x: 0, y: 0};
+	}
+
+	// Permet de récupérer la liste des coordonnées des tuiles sur lesquelles placer des items
+	this.getItemTiles = function() {
+		var ret = new Array();
+		for(var i=0; i<this.level.length; i++) {
+			for(var j=0; j<this.level[i].length; j++) {
+				var tmp = this.level[i][j] >>> 12;
+				if(tmp == 3) {
+					 ret.push({x: i, y: j});
+				}
+			}
+		}
+		return ret;
 	}
 
 	// Appelée une fois la map chargée
