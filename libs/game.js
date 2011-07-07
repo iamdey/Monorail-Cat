@@ -17,6 +17,7 @@ function loadMap(mapName) {
 }
 
 function startGame() {
+	loadMap('default');
 	var surface = document.getElementById("monorail-cat");
 	var gs 		= new JSGameSoup(surface, FRAMERATE);
 	new Game(gs);
@@ -59,18 +60,43 @@ function Game(gs) {
 	}
 
 	var cats = [
-		new Cat(map, 1, RED, 0, 0, SOUTH),
-		new Cat(map, 2, BLUE, 6, 6, NORTH)
+//		new Cat(map, 1, RED, 0, 0, SOUTH),
+//		new Cat(map, 2, BLUE, 6, 6, NORTH)
 	];
 
 	var players = [
-		new Player("player 1", this.keymap_player_1, cats[0]),
-		new Player("player 2", this.keymap_player_2, cats[1])
+//		new Player("player 1", this.keymap_player_1, cats[0]),
+//		new Player("player 2", this.keymap_player_2, cats[1])
 	];
+	
+	console.log("t0");
+	gui = GameGui(e("gameBoard"));
+	gui.addPlayer("player A", 0);
+	console.log("added");
 
-	gs.addEntity(players[0]);
-	gs.addEntity(players[1]);
+//	gs.addEntity(players[0]);
+//	gs.addEntity(players[1]);
 
-	map.addEntity(cats[0], true);
-	map.addEntity(cats[1], true);
+//	map.addEntity(cats[0], true);
+//	map.addEntity(cats[1], true);
+}
+
+var GameGui = function(gameBoard){
+	this.gameBoard = gameBoard;
+	this.players = new Array(0, 1, 3)
+}
+
+GameGui.prototype = {
+	initialize : function(){
+		
+	},
+	/**
+	 * 
+	 */
+	addPlayer : function(name, pos){
+		id = this.players.length;
+		console.log(id);
+		this.players.append("<div id=\"player" + id + "\"><p class=\"playerName\" id=\"player" + id + "name\">Player 1</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"></img></p><p class=\"lives\" id=\"player" + id + "lives\"></p></div>");
+		this.gameBoard.append(this.players[id]);
+	}
 }
