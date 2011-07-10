@@ -1,14 +1,24 @@
 <?php
 
 $mode='rw';
+$dir='maps';
 
-// Récupérer une map
-if((strpos($mode, 'r') !== false) && array_key_exists('GET', $_REQUEST)) {
-	$id = $_REQUEST['GET'];
-	$filename = 'maps/'.trim($id).'.csv';
-	if(is_readable($filename)) {
-		echo file_get_contents($filename);
+// Récupérer la liste des maps
+if(array_key_exists('GET', $_REQUEST)) {
+	$list = '';
+	if(is_dir($dir)) {
+		if($dh=opendir($dir)) {
+			while(($file=readdir($dh)) !== false) {
+				if(substr($file, -4) == '.csv') {
+					if(is_readable($dir.'/'.$file)) {
+						$list .= substr($file, 0, -4)."\n";
+					}
+				}
+			}
+			closedir($dh);
+		}
 	}
+	echo $list;
 }
 
 // Sauvegarder une map

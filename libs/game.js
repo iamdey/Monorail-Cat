@@ -46,21 +46,20 @@ function Game(gs) {
 
 	var map = new Map(gs, tilemap);
 
-	var mapItems = [
-		new MapItem([6, 0]),
-		new MapItem([0, 6]),
-		new MapItem([1, 1]),
-		new MapItem([5, 5]),
-		new MapItem([4, 2]),
-		new MapItem([2, 4])
-	];
+	var itemsCoords = tilemap.getItemTiles();
+	var mapItems = new Array();
+
+	var i = 0;
+	for(var key in itemCoords) {
+		mapItems[i] = new MapItem([itemCoords[key].x, itemCoords[key].y]);
+	}
 
 	var departChat1 = tilemap.getPlayerStartTile(1);
 	var departChat2 = tilemap.getPlayerStartTile(2);
 
 	var cats = [
-		new Cat(map, 1, RED, [0, 0], SOUTH),
-		new Cat(map, 2, BLUE, [6, 6], NORTH)
+		new Cat(map, 1, RED, [departChat1.x, departChat1.y], SOUTH),
+		new Cat(map, 2, BLUE, [departChat2.x, departChat2.y], NORTH)
 	];
 
 	var players = [

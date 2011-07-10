@@ -4,7 +4,7 @@
 		<style type="text/css">
 			p { margin:0; padding:0; }
 			img { margin:0; padding:0; border:1px dashed #AAA; }
-			img.rail { width:63px; height:63px; }
+			img.rail { width:53px; height:53px; }
 		</style>
 		<script type="text/javascript">
 			TILE_SIZE = 79;
@@ -83,6 +83,9 @@
 				for(var tid in tiles) {
 					tools += '<img class="rail" src="arts/'+tiles[tid]+'.png" onclick="selectedTool = parseInt('+tid+'); e(\'stimg\').src= \'arts/'+tiles[tid]+'.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
 				}
+				tools += '<img class="rail" src="arts/cat1-down-1.png" onclick="selectedTool = 4096; e(\'stimg\').src= \'arts/cat1-down-1.png\'; return false;" stlye="margin:0 0.5em; border:solid 1px black;"></img>';
+				tools += '<img class="rail" src="arts/cat2-down-1.png" onclick="selectedTool = 8192; e(\'stimg\').src= \'arts/cat2-down-1.png\'; return false;" stlye="margin:0 0.5em; border:solid 1px black;"></img>';
+				tools += '<img class="rail" src="arts/bonus1.png" onclick="selectedTool = 12288; e(\'stimg\').src= \'arts/bonus1.png\'; return false;" stlye="margin:0 0.5em; border:solid 1px black;"></img>';
 				tools += '</p>';
 				e('blocks').innerHTML = tools;
 			}
@@ -94,7 +97,12 @@
 				for(i=0; i<map.level.length; i++) {
 					editor += '<p>';
 					for(j=0; j<map.level[i].length; j++) {
-						editor += '<img src="arts/'+tiles[map.level[i][j]]+'.png" onclick="updateBlock(parseInt('+i+'), parseInt('+j+'))"></img>';
+						if(map.level[i][j] < 4096) {
+							// Tuile normale
+							editor += '<img src="arts/'+tiles[map.tileType(map.level[i][j])]+'.png" onclick="updateBlock(parseInt('+i+'), parseInt('+j+'))"></img>';
+						} else {
+							// Tuile spéciale
+						}
 					}
 					editor += '</p>';
 				}
@@ -103,7 +111,13 @@
 			}
 
 			function updateBlock(i,j) {
-				map.level[i][j] = selectedTool;
+				if(selectedTool < 4096) {
+					// Tuiles normales
+					map.level[i][j] = selectedTool;
+				} else {
+					// Spéciaux
+					map.level[i][j] += selectedTool;
+				}
 				drawEditor();
 			}
 		</script>
