@@ -82,10 +82,21 @@ img.bonusImage {
 	text-align:center;
 }
 
+#startGameButton {
+	font-size:200%;
+}
+
 .right {
 	float:right;
 }
 
 .left {
 	float:left;
+}
+
+.bottomLine {
+	background:url(arts/bg2.png) repeat;
+	margin:.3em auto;
+	height:32px;
+	vertical-align:middle;
 }

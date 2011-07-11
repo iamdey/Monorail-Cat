@@ -81,11 +81,12 @@
 			function loadEditor() {
 				var tools = '<p></p><img class="rail" id="stimg" src="arts/blank.png" style="border:solid red 3px;"></img>';
 				for(var tid in tiles) {
-					tools += '<img class="rail" src="arts/'+tiles[tid]+'.png" onclick="selectedTool = parseInt('+tid+'); e(\'stimg\').src= \'arts/'+tiles[tid]+'.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
+					if(tid >= 0 && tid < 4096)	// condition pour éliminer une clé 'shuffle' du tableau qui sort d'on ne sait où (Oo)
+						tools += '<img class="rail" src="arts/'+tiles[tid]+'.png" onclick="selectedTool = parseInt('+tid+'); e(\'stimg\').src= \'arts/'+tiles[tid]+'.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
 				}
-				tools += '<img class="rail" src="arts/cat1-down-1.png" onclick="selectedTool = 4096; e(\'stimg\').src= \'arts/cat1-down-1.png\'; return false;" stlye="margin:0 0.5em; border:solid 1px black;"></img>';
-				tools += '<img class="rail" src="arts/cat2-down-1.png" onclick="selectedTool = 8192; e(\'stimg\').src= \'arts/cat2-down-1.png\'; return false;" stlye="margin:0 0.5em; border:solid 1px black;"></img>';
-				tools += '<img class="rail" src="arts/bonus1.png" onclick="selectedTool = 12288; e(\'stimg\').src= \'arts/bonus1.png\'; return false;" stlye="margin:0 0.5em; border:solid 1px black;"></img>';
+				tools += '<img class="rail" src="arts/cat1-down-1.png" onclick="selectedTool = 4096; e(\'stimg\').src= \'arts/cat1-down-1.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
+				tools += '<img class="rail" src="arts/cat2-down-1.png" onclick="selectedTool = 8192; e(\'stimg\').src= \'arts/cat2-down-1.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
+				tools += '<img class="rail" src="arts/bonus1.png" onclick="selectedTool = 12288; e(\'stimg\').src= \'arts/bonus1.png\'; return false;" style="margin:0 0.5em; border:solid 1px black;"></img>';
 				tools += '</p>';
 				e('blocks').innerHTML = tools;
 			}
@@ -97,12 +98,16 @@
 				for(i=0; i<map.level.length; i++) {
 					editor += '<p>';
 					for(j=0; j<map.level[i].length; j++) {
-						if(map.level[i][j] < 4096) {
-							// Tuile normale
-							editor += '<img src="arts/'+tiles[map.tileType(map.level[i][j])]+'.png" onclick="updateBlock(parseInt('+i+'), parseInt('+j+'))"></img>';
-						} else {
+						var style = '';
+						if(map.level[i][j] > 4095) {
 							// Tuile spéciale
+							switch(map.level[i][j] >>> 12) {
+								case 1 : style = 'background: url(arts/bg.png) repeat;'; break;	// depart j1
+								case 2 : style = 'background: url(arts/bg3.png) repeat;'; break;	// depart j2
+								case 3 : style = 'background: url(arts/bg4.png) repeat;'; break;	// item
+							}
 						}
+						editor += '<img src="arts/'+tiles[map.tileType(map.level[i][j])]+'.png" onclick="updateBlock(parseInt('+i+'), parseInt('+j+'))" style="'+style+'"></img>';
 					}
 					editor += '</p>';
 				}
@@ -116,7 +121,11 @@
 					map.level[i][j] = selectedTool;
 				} else {
 					// Spéciaux
-					map.level[i][j] += selectedTool;
+					if(map.level[i][j] == 0) {
+						alert("An item or a start position cannot be affected to an empty tile.");
+					} else {
+						map.level[i][j] += selectedTool;
+					}
 				}
 				drawEditor();
 			}

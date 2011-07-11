@@ -40,7 +40,6 @@ function TileMap(_canvas) {
 	var scale;
 	var ready;
 	var tilesize = TILE_SIZE;
-	var nbSprites = 0;
 	var canvas = _canvas;
 
 	// matrice représentant le niveau
@@ -131,6 +130,28 @@ function TileMap(_canvas) {
 		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
 	}
 
+	this.getAValidDirection = function(x, y, prefered) {
+		var valid = 0;
+		if(prefered >=1 && prefered <= 4) {
+			// Test de la direction souhaitée
+			for(var i=1; i<=4; i++) {
+				if((i!=prefered) && this.isValidDirection(x,y,i,prefered)) {
+					return prefered;
+				}
+			}
+		}
+		// Sinon, première direction valide :
+		for(var i=1; i<=4; i++) {
+			for(var j=1; j<=4; j++) {
+				if((j!=i) && this.isValidDirection(x,y,i,j)) {
+					return j;
+				}
+			}
+		}
+		// Sinon, on est sur la case vide. Ce cas ne devrait pas se produire.
+		return 0;
+	}
+
 	// Permet de récupérer les coordonnées du point de départ du joueur player.
 	this.getPlayerStartTile = function(player) {
 		for(var i=0; i<this.level.length; i++) {
@@ -143,7 +164,7 @@ function TileMap(_canvas) {
 		}
 		// Emplacements par défaut :
 		if(player == 2) {
-			return {x: 0, y: 0};
+			return {x: 6, y: 6};
 		}
 		return {x: 0, y: 0};
 	}

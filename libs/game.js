@@ -2,14 +2,14 @@ var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
-var OFFLINE		= true;
+var OFFLINE		= false;
 
 tilemap = null;
 
 function loadMap(mapName) {
 	tilemap = new TileMap(document.getElementById("tileMap"));
 	if(OFFLINE) {
-		tilemap.loadCsv("144;66;66;219;66;66;9\n1056;144;66;2886;66;9;1056\n1056;1056;144;66;9;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;2304;66;516;1056;1056\n1056;2304;66;219;66;516;1056\n2304;66;66;2886;66;66;516\n");
+		tilemap.loadCsv("4240;66;66;219;66;66;12297\n1056;12432;66;2886;66;9;1056\n1056;1056;144;66;12297;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;14592;66;516;1056;1056\n1056;2304;66;219;66;12804;1056\n14592;66;66;2886;66;66;8708");
 	} else {
 		tilemap.load(mapName);
 	}
@@ -47,19 +47,19 @@ function Game(gs) {
 	var map = new Map(gs, tilemap);
 
 	var itemsCoords = tilemap.getItemTiles();
-	var mapItems = new Array();
-
+	var mapItems = [];
 	var i = 0;
-	for(var key in itemCoords) {
-		mapItems[i] = new MapItem([itemCoords[key].x, itemCoords[key].y]);
+	while(tmp = itemsCoords.pop()) {
+		mapItems[i] = new MapItem([tmp.x, tmp.y]);
+		i++;
 	}
 
 	var departChat1 = tilemap.getPlayerStartTile(1);
 	var departChat2 = tilemap.getPlayerStartTile(2);
 
 	var cats = [
-		new Cat(map, 1, RED, [departChat1.x, departChat1.y], SOUTH),
-		new Cat(map, 2, BLUE, [departChat2.x, departChat2.y], NORTH)
+		new Cat(map, 1, RED, [departChat1.x, departChat1.y], tilemap.getAValidDirection(departChat1.x,departChat1.y, SOUTH)),
+		new Cat(map, 2, BLUE, [departChat2.x, departChat2.y], tilemap.getAValidDirection(departChat2.x,departChat2.y, NORTH))
 	];
 
 	var players = [
