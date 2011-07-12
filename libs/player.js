@@ -14,7 +14,21 @@ var DOWN = "down";
  * @param keymap json
  * @param cat Cat
  */
-function Player(player_id, keymap, cat){
+function Player(name, keymap, cat){
+	/**
+	 * Knock, knock
+	 */
+	this.name = name;
+	
+	/**
+	 * keyboard
+	 */
+	this.keymap = keymap;
+	
+	/**
+	 * T3h r33ty cat
+	 */
+	this.cat = cat;
 	
 	/**
 	 * list of pressed keys
@@ -22,25 +36,45 @@ function Player(player_id, keymap, cat){
 	this.keys_stack = new Array();
 	
 	/**
+	 * obviously obvious method
+	 */
+	this.initialize();
+}
+
+Player.prototype = {
+		
+	initialize: function(){
+		console.log("init");
+		UI.addPlayer(this);
+	},
+
+	/**
+	 * cat getter
+	 */
+	getCat : function(){
+		return this.cat;
+	},
+	
+	/**
 	 * capture keys
 	 */
-	this.keyDown = function (keyCode) {
+	keyDown : function (keyCode) {
 		this.catManipulation(keyCode);
-	}
+	},
 	
 	/**
 	 * Reset captured key
 	 */
-	this.keyUp = function(keyCode) {
+	keyUp : function(keyCode) {
 		this.catManipulation(keyCode, true);
-	}
+	},
 	
 	/**
 	 * property setter turn or action depends on given keymap
 	 */
-	this.catManipulation = function(keyCode, reset){
-		for(key in keymap){
-			if(keymap[key] == keyCode){
+	catManipulation : function(keyCode, reset){
+		for(key in this.keymap){
+			if(this.keymap[key] == keyCode){
 				
 				/**
 				 * setting turn property
@@ -81,14 +115,14 @@ function Player(player_id, keymap, cat){
 				}
 			}
 		}
-	}
+	},
 	
 	
 	/**
 	 * proxy method for cat manipulation
 	 * @param key - string direction
 	 */
-	this.setCatDirection = function(key){
+	setCatDirection : function(key){
 		switch(key) {
 			case LEFT:	cat.setDesiredDirection(WEST);	break;
 			case RIGHT:	cat.setDesiredDirection(EAST);	break;
@@ -97,8 +131,5 @@ function Player(player_id, keymap, cat){
 			
 			default: 	cat.setDesiredDirection(NONE);	break;
 		}
-	}
-	
-	
-	
-}
+	}		
+};

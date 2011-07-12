@@ -1,10 +1,15 @@
-
 /*
  * Manipulation de l'interface utilisateur autour du jeu (compteurs de vies, items, messages)
  *
  */
 
-function _UI() {
+var UI = new function(){
+
+	//-----------------------
+	//--- tihs iz conztructor
+	
+	this.gameBoard_id = "gameBoard";
+	
 	// Map Bonus => Img
 	this.bonusImages = new Array();
 	this.bonusImages['woolball'] = 'wool_ball1.png';
@@ -18,12 +23,39 @@ function _UI() {
 	this.NORMAL = '20pt';
 	this.BIG    = '35pt';
 	this.HUGE   = '50pt';
+	
+	//players' id
+	this.count_players = 0;
+	
+	//-----------------------
+	
+	
+	
+	/**
+	 * add html to layout for new player
+	 */
+	this.addPlayer = function(my_player){
+		var id 		= ++this.count_players;
+		console.log("id cat", id, "color ", my_player.getCat().getColor());
+//		var html 	= "<div id=\"player" + id + "\" class=\"player " + my_player.getCat().getColor() + "\"><p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p></div>";
+//		var html 	= "<div id=\"player" + id + "\" class=\"player\"><p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p></div>";
+//		var html = "<div>hi</div>";
+		div_player = document.createElement("div");
+		div_player.id = "player" + id;
+		div_player.setAttribute("class", "player " + my_player.getCat().getColor());
+		div_player.innerHTML = "<p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p>";
 
+		e(this.gameBoard_id).insertBefore(div_player, e(this.gameBoard_id).firstChild);
+		
+		// Initalizes teh cat lives
+		this.setPlayerLives(id, my_player.getCat().nbLives);
+	};
+	
 	this.setPlayerName = function(player, name) {
 		if(player == 1 || player == 2) {
 			e('player'+player+'name').innerHTML = name;
 		}
-	}
+	};
 
 	this.setPlayerLives = function(player, nbLives) {
 		if(player == 1 || player == 2) {
@@ -36,7 +68,7 @@ function _UI() {
 			}
 			e('player'+player+'lives').innerHTML = lives;
 		}
-	}
+	};
 
 	this.setPlayerBonus = function(player, bonusName) {
 		if(player == 1 || player == 2) {
@@ -46,7 +78,7 @@ function _UI() {
 				e('player'+player+'bonus').src = 'arts/blank.png';
 			}
 		}
-	}
+	};
 
 	// Affiche un message
 	// @param text texte à afficher (HTML autorisé)
@@ -81,7 +113,7 @@ function _UI() {
 		}
 		// affichage final :
 		box.style.display = 'block';
-	}
+	};
 
 	// Ferme le message actuellemnt à l'écran
 	this.closeMsg = function() {
@@ -92,8 +124,6 @@ function _UI() {
 			clearTimeout(this.lastTimeout);
 			this.lastTimeout = null;
 		}
-	}
+	};
+};
 
-}
-
-UI = new _UI();
