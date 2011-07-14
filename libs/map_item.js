@@ -112,7 +112,7 @@ function Water(map, startingTile) {
 		shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]]
 		}, function() {
 			sprite.action("shpritz");
-			GameSound.getInstance().play("geyser02");
+			GameSound.play("geyser02");
 		}
 	);
 	
@@ -180,7 +180,7 @@ function Woolball(map, startingTile, _direction) {
 		roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]]
 		}, function() {
 			sprite.action("roooolllinnn");
-			GameSound.getInstance().play("meow01");
+			GameSound.play("meow01");
 		}
 	);
 	

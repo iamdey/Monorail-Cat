@@ -8,28 +8,24 @@ body {
 }
 
 #gameBoard {
-	width:795px;
 	margin:0 auto;
-	height:750px;
+	min-height:550px;
+	position: relative;
+	width:795px;
+	z-index: 0;
 }
 
-
-.player.red,
-#player1 {
+.player.red {
 	float:left;
 	background:#CA6A40;
 }
 
-.player.blue,
-#player2 {
+.player.blue {
 	float:right;
 	background:#4B6D97;
 }
 
-.player,
-#player1, #player2 {
-	position:relative;
-	top:200px;
+.player {
 	width:100px;
 	text-align:center;
 }
@@ -103,4 +99,29 @@ img.bonusImage {
 	margin:.3em auto;
 	height:32px;
 	vertical-align:middle;
+}
+
+
+canvas#tileMap {
+	position:absolute; 
+	top:0; 
+	z-index:1;
+}
+
+canvas#monorail-cat {
+	position: absolute; 
+	top: -0; 
+	z-index: 2;
+}
+
+
+.clearer:after {
+	content:".";
+    display:block;
+    clear:both;
+    height:0;
+    font-size:0;
+    line-height:0;
+    visibility:hidden;
+    overflow:hidden;
 }

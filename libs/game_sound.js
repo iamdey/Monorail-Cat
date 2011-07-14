@@ -1,94 +1,135 @@
 /**
  * GameSound manager
+ * 
+ * this must initialized after the dom is ready
  *
  * @author vlavv
  * @author esion
  *
  * @returns {Sound}
  */
-function GameSound () {
+function _GameSound() {
 	/**
-	 * Stack sounds
+	 * @var Stacked sounds
 	 */
-	this.loaded_sounds = new Array();
+	this.loaded_sounds 	= {};
+	
+	/**
+	 * @var game sound is muted?
+	 */ 
+	this.is_mute 		= false;
+}
 
-	this.load = function(sound_id, a_url){
+_GameSound.prototype = {
+	/**
+	 * constructor
+	 * path is relative to html file
+	 */
+	initialize : function(){
+		this.load("openning", ["sound/openning.ogg", "sound/openning.mp3"]);
+		this.load("game_over", ["sound/game_over.ogg", "sound/game_over.mp3"]);
+		this.load("level1", ["sound/level1.ogg", "sound/level1.mp3"]);
+		this.load("meow01", ["sound/meow01.ogg", "sound/meow01.mp3"]);
+		this.load("meow03", ["sound/meow03.ogg", "sound/meow03.mp3"]);
+		this.load("geyser02", ["sound/geyser02.ogg", "sound/geyser02.mp3"]);
+		this.load("nyan", ["sound/nyan.ogg", "sound/nyan.mp3"]);
+	},
+	/**
+	 * load sound into dom
+	 */
+	load : function(sound_id, a_url){
 		try{
 			this.loaded_sounds[sound_id] = new Sound(sound_id, a_url);
 		}catch(e){
 			if(DEBUG)
 				console.log(e);
 		}
-	}
+	},
 
-	this.play = function(id, endedCallback) {
+	/**
+	 * Play a sound
+	 */
+	play : function(id, endedCallback) {
 		if(MUSIC){
 			this.loaded_sounds[id].play(endedCallback);
 		}
-	}
+	},
 
-	this.playLoop = function(id) {
+	/**
+	 * Play sound as a loop
+	 */
+	playLoop : function(id) {
 		if(MUSIC){
 			this.loaded_sounds[id].playLoop();
 		}
-	}
-	this.pause = function(id){
+	},
+	
+	/**
+	 * Pause a sound
+	 */
+	pause : function(id){
 		this.loaded_sounds[id].pause();
-	}
+	},
 
 	/**
-	 * Kill all sounds from the page
+	 * Kill all sounds from the dom
 	 */
-	this.stopAll = function(){
-		doc_audio = document.getElementsByTagName("audio");
-		for(i = 0; i < doc_audio.length; i++){
-			doc_audio[i].pause();
+	stopAll : function(){
+		for(i in this.loaded_sounds){
+			this.loaded_sounds[i].stop();
+		}
+	},
+
+	/**
+	 * Toggle mute all sound
+	 */ 
+	toggleMute : function() {
+		this.is_mute = !this.is_mute;
+
+		for(i in this.loaded_sounds){
+			this.loaded_sounds[i].mute(this.is_mute);
 		}
 	}
-
-	/**
-	 * constructor
-	 * path is relative to html file
-	 */
-	this.load("openning", ["sound/openning.ogg", "sound/openning.mp3"]);
-	this.load("game_over", ["sound/game_over.ogg", "sound/game_over.mp3"]);
-	this.load("level1", ["sound/level1.ogg", "sound/level1.mp3"]);
-	this.load("meow01", ["sound/meow01.ogg", "sound/meow01.mp3"]);
-	this.load("meow03", ["sound/meow03.ogg", "sound/meow03.mp3"]);
-	this.load("geyser02", ["sound/geyser02.ogg", "sound/geyser02.mp3"]);
-	this.load("nyan", ["sound/nyan.ogg", "sound/nyan.mp3"]);
-	
-	 
-	if ( GameSound.caller != GameSound.getInstance ) {  
-		throw new Error("This object cannot be instanciated");  
-	}
 }
 
 /**
- * Singleton design pattern
+ * Sound class
+ * 
+ * manage one sound foar the lulz
  */
-GameSound.instance = null;
-GameSound.getInstance = function(){
-	if (this.instance == null) {
-		this.instance = new GameSound();
-	}
-
-	return this.instance;
-}
-/**
- */
-
 function Sound(sound_id, a_url){
 
-	this.element = new Array();
-	element_prefix = "snd_";
-	var self = this;
+	this.element 	= new Array();
+	element_prefix 	= "snd_";
+	this.sound_id 	= sound_id;
+	this.a_url 		= a_url;
+	var self 		= this;
+	
+	/**
+	 * this is the callback launched at the end of a loop
+	 * We need a ref to self
+	 * this cannot be prototyped
+	 */
+	this.toggleLoopSound = function(event){
+		this.currentTime = 0.05;
+		this.pause();
+		self.element[this.neighbourg].play();
+	};	
+	
+	this.initialize();
+}
 
-	this.load = function(sound_id, a_url){
+Sound.prototype = {
+	
+	initialize: function(){
+		
+		this.load(this.sound_id, this.a_url);
+	},
 
-		if(e(element_prefix + sound_id) != null){
+	load : function(sound_id, a_url){
+		/*if(e(element_prefix + sound_id) != null){
 			throw new Error("A loaded sound already has the same name : " + sound_id);
-		}
+		}*/
 
 		//the basic html attribut loop won't work on FF
 		//Loop by setting time is very laggy
@@ -99,9 +140,9 @@ function Sound(sound_id, a_url){
 			for(k = 0; k < a_url.length; k++){
 				this.element[i].innerHTML += "<source src=\"" + a_url[k] + "\" />";
 			}
-
+			
 			//add the audio element to dom
-			e(GAME_ID).appendChild(this.element[i]);
+			//e(GAME_ID).appendChild(this.element[i]);
 			this.element[i].load();
 
 			//define its neighbour id in order to play almost fluent loop
@@ -111,58 +152,65 @@ function Sound(sound_id, a_url){
 				this.element[i].setAttribute("controls", "controls");
 			}
 		}
-	}
+	},
 
-	this.unload = function(){
-
-	}
+	/**
+	 * Maybe that will do things a day
+	 */
+	unload : function(){
+		throw new Error("unload iz not yet implemented");
+	},
 
 	/**
 	 * dozssingz
 	 */
-	this.play = function(endedCallback){
+	play : function(endedCallback){
 		if(endedCallback) {
 			this.element[0].addEventListener('ended', endedCallback, false);
 		}
 		
 		this.element[0].play();
-	}
+	},
 
 	/**
 	 * dozssingz
 	 */
-	this.playLoop = function(){
+	playLoop : function(){
 		this.element[0].play();
 
 //		this.element.setAttribute("loop", "loop"); //doznot work on ff@ubuntu
 		for(i = 0;i<this.element.length;i++){
-			this.element[i].addEventListener('ended', function(elem){
-				this.currentTime = 0.05;
-				this.pause();
-				self.element[this.neighbourg].play();
-			}, false);
+			this.element[i].addEventListener('ended', this.toggleLoopSound, false);
 		}
-
-	}
-
-	this.pause = function(){
+	},
+	
+	/**
+	 * pause and reset the sound
+	 */ 
+	stop : function(){
+		for(i = 0; i < this.element.length; i++){
+			this.element[i].pause();
+			this.element[i].currentTime = 0;
+		}
+	},
+	
+	/**
+	 * pause the sound
+	 */ 
+	pause : function(){
 		for(i = 0; i < this.element.length; i++){
 			this.element[i].pause();
 		}
-	}
-
-	/**
-	 * constructor
-	 */
-	this.load(sound_id, a_url);
-}
-
-SOUND_ON = true;
-
-function muteUnmute() {
-	SOUND_ON = !SOUND_ON;
-	var audios = document.getElementsByTagName('audio');
-	for(var i=0; i< audios.length; i++) {
-		audios[i].muted = ! SOUND_ON;
+	},
+	
+	mute: function(is_mute){
+		for(i = 0; i < this.element.length; i++){
+			this.element[i].muted = is_mute;
+		}
 	}
 }
+
+/**
+ * @var game sound manager singleton 
+ */
+GameSound = new _GameSound();

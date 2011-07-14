@@ -1,8 +1,8 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= false;
-var OFFLINE		= false;
+var DEBUG 		= true;
+var OFFLINE		= true;
 
 tilemap = null;
 
@@ -14,18 +14,24 @@ function loadMap(mapName) {
 		tilemap.load(mapName);
 	}
 
-	setTimeout('tilemap.draw(document.getElementById("tileMap"))', 300);
+	tilemap.draw(document.getElementById("tileMap"));
 }
 
 function startGame() {
-	loadMap('default');
+	//load deh canvas Cuiiiik!
+	UI.loadGameView();
+	
 	var surface = document.getElementById("monorail-cat");
 	var gs 		= new JSGameSoup(surface, FRAMERATE);
+	
+	//TODO: make tihs followin line mooar sexy kthxbye
+	loadMap();
+	
 	new Game(gs);
 	gs.launch();
 
-	GameSound.getInstance().stopAll();
-	GameSound.getInstance().playLoop("level1");
+	GameSound.stopAll();
+	GameSound.playLoop("level1");
 }
 
 function Game(gs) {
@@ -44,7 +50,7 @@ function Game(gs) {
 		right: 39, 	// right
 		action1: 13	// enter
 	};
-
+	
 	var map = new Map(gs, tilemap);
 
 	var itemsCoords = tilemap.getItemTiles();
@@ -67,13 +73,10 @@ function Game(gs) {
 		new Player("Player 1", this.keymap_player_1, cats[0]),
 		new Player("Player 2", this.keymap_player_2, cats[1])
 	];
-	
-	for(i = 0; i < players.length; i++){
-//		UI.addPlayer(players[i]);
-		gs.addEntity(players[i]);
-		
-	}
-	
+
+	gs.addEntity(players[0]);
+	gs.addEntity(players[1]);
+
 	for (var i = 0; i < mapItems.length; i++) {
 		map.addEntity(mapItems[i]);
 	}
@@ -82,3 +85,6 @@ function Game(gs) {
 	map.addEntity(cats[1]);
 }
 
+/*Game.prototype = {
+	
+};*/

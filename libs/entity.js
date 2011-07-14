@@ -1,6 +1,6 @@
 // Game parameters
 var TILE_SIZE = 79;
-var NB_LIVES = 9;
+var NB_LIVES = 1;
 var MAX_ITEMS = 1;
 var CAT_SPEED = TILE_SIZE * 3;
 var WOOLBALL_SPEED = TILE_SIZE * 5;
@@ -188,7 +188,11 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	this.getTile = parent.getTile;
 	
 	this.getColor = function(){
-		return color;
+		switch(color){
+			case RED: return "red";
+			case BLUE: return "blue";
+			default: return "I is not really a Cat";
+		 }
 	}
 	
 	/**
@@ -297,9 +301,9 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 					speed = RAINBOW_SPEED;
 					
 					// Start NYAN sound
-					GameSound.getInstance().pause("level1");
-					GameSound.getInstance().play("nyan", function() {
-						GameSound.getInstance().play("level1");
+					GameSound.pause("level1");
+					GameSound.play("nyan", function() {
+						GameSound.play("level1");
 					});
 				}
 				// PSSSSHHHH
@@ -372,7 +376,7 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	 */
 	this.die = function() {
 		// Play hit sound
-		GameSound.getInstance().play("meow03");
+		GameSound.play("meow03");
 		
 		// Reset position
 		self.changeDirection(startingDirection);
@@ -385,8 +389,8 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		strength = CAT_STRENGTH;
 		
 		// Lose a life
-		UI.setPlayerLives(playerId, --nbLives);
-		if(nbLives == 0) {
+		UI.setPlayerLives(playerId, --this.nbLives);
+		if(this.nbLives == 0) {
 			map.gameOver();
 		}
 	}

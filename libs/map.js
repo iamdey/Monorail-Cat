@@ -83,12 +83,7 @@
 		}
 		entities = new Array();
 		
-		// Stop all sounds and play game over sound
-		GameSound.getInstance().stopAll();
-		GameSound.getInstance().playLoop("game_over");
-	    
-		// Display end message
-	    UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE)
+		UI.loadGameOver();
 	}
 	
 	/**

@@ -7,10 +7,10 @@ var DOWN = "down";
  * class Player 
  * 
  * keyboard bindings
- * damned the cat must control the player !!! 
+ * damned the cat MUST control the player !!! 
  * 
  * @author esion
- * @param player_id string
+ * @param name string
  * @param keymap json
  * @param cat Cat
  */
@@ -42,9 +42,11 @@ function Player(name, keymap, cat){
 }
 
 Player.prototype = {
-		
+	
+	/**
+	 * Oley initilaize the player lif' bar on ze Gui
+	 */
 	initialize: function(){
-		console.log("init");
 		UI.addPlayer(this);
 	},
 
@@ -57,6 +59,7 @@ Player.prototype = {
 	
 	/**
 	 * capture keys
+	 * @param keyCode string (@see LEFT, RIGHT ...)
 	 */
 	keyDown : function (keyCode) {
 		this.catManipulation(keyCode);
@@ -64,6 +67,7 @@ Player.prototype = {
 	
 	/**
 	 * Reset captured key
+	 * @param keyCode string (@see LEFT, RIGHT ...)
 	 */
 	keyUp : function(keyCode) {
 		this.catManipulation(keyCode, true);
@@ -71,14 +75,14 @@ Player.prototype = {
 	
 	/**
 	 * property setter turn or action depends on given keymap
+	 * @param keyCode string (@see LEFT, RIGHT ...)
+	 * @param reset boolean - user has releazed deh foacking button on meh shouldr
 	 */
 	catManipulation : function(keyCode, reset){
 		for(key in this.keymap){
 			if(this.keymap[key] == keyCode){
-				
-				/**
-				 * setting turn property
-				 */
+				//---------------------
+				//setting turn property
 				if(key == LEFT || key == RIGHT || key == UP || key == DOWN){
 					if(!reset) {
 						//stack key and set direction
@@ -102,14 +106,13 @@ Player.prototype = {
 						}
 					}
 				}
-				/**
-				 * action property case
-				 */
+				//---------------------
+				//action property case
 				else{
 					if(!reset){
-						cat.doAction(key);
+						this.cat.doAction(key);
 					}else{
-						cat.doAction(NONE);
+						this.cat.doAction(NONE);
 					}
 						
 				}
@@ -124,12 +127,12 @@ Player.prototype = {
 	 */
 	setCatDirection : function(key){
 		switch(key) {
-			case LEFT:	cat.setDesiredDirection(WEST);	break;
-			case RIGHT:	cat.setDesiredDirection(EAST);	break;
-			case UP:	cat.setDesiredDirection(NORTH);	break;
-			case DOWN:	cat.setDesiredDirection(SOUTH);	break;
+			case LEFT:	this.cat.setDesiredDirection(WEST);	break;
+			case RIGHT:	this.cat.setDesiredDirection(EAST);	break;
+			case UP:	this.cat.setDesiredDirection(NORTH);	break;
+			case DOWN:	this.cat.setDesiredDirection(SOUTH);	break;
 			
-			default: 	cat.setDesiredDirection(NONE);	break;
+			default: 	this.cat.setDesiredDirection(NONE);	break;
 		}
 	}		
 };

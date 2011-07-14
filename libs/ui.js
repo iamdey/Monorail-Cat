@@ -29,6 +29,37 @@ var UI = new function(){
 	
 	//-----------------------
 	
+	this.loadGameOver = function(winner, looser, time, restingLives){
+		// Stop all sounds and play game over sound
+		GameSound.stopAll();
+		GameSound.playLoop("game_over");
+	    
+		// Display end message
+	    UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE)
+	    
+		this.resetGameBoard();
+	    
+	    //then ui must kill the game content!!!!!!
+	};
+	
+	/**
+	 * reset game board then load canvas
+	 */
+	this.loadGameView = function(){
+		this.resetGameBoard();
+		//loadz deh tilemap
+		canvas = document.createElement("canvas");
+		canvas.id = "tileMap";
+		canvas.setAttribute("height", 553);
+		canvas.setAttribute("width", 554);
+		e(this.gameBoard_id).appendChild(canvas);
+		//loadz deh entities frame
+		canvas = document.createElement("canvas");
+		canvas.id = "monorail-cat";
+		canvas.setAttribute("height", 553);
+		canvas.setAttribute("width", 554);
+		e(this.gameBoard_id).appendChild(canvas);
+	};
 	
 	
 	/**
@@ -36,27 +67,18 @@ var UI = new function(){
 	 */
 	this.addPlayer = function(my_player){
 		var id 		= ++this.count_players;
-		console.log("id cat", id, "color ", my_player.getCat().getColor());
-//		var html 	= "<div id=\"player" + id + "\" class=\"player " + my_player.getCat().getColor() + "\"><p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p></div>";
-//		var html 	= "<div id=\"player" + id + "\" class=\"player\"><p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p></div>";
-//		var html = "<div>hi</div>";
 		div_player = document.createElement("div");
 		div_player.id = "player" + id;
 		div_player.setAttribute("class", "player " + my_player.getCat().getColor());
 		div_player.innerHTML = "<p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p>";
 
+		//add the elem before the frrist child ov deh gameboard
 		e(this.gameBoard_id).insertBefore(div_player, e(this.gameBoard_id).firstChild);
 		
 		// Initalizes teh cat lives
 		this.setPlayerLives(id, my_player.getCat().nbLives);
 	};
 	
-	this.setPlayerName = function(player, name) {
-		if(player == 1 || player == 2) {
-			e('player'+player+'name').innerHTML = name;
-		}
-	};
-
 	this.setPlayerLives = function(player, nbLives) {
 		if(player == 1 || player == 2) {
 			var lives = '';
@@ -78,6 +100,10 @@ var UI = new function(){
 				e('player'+player+'bonus').src = 'arts/blank.png';
 			}
 		}
+	};
+	
+	this.resetGameBoard = function(){
+		e(this.gameBoard_id).innerHTML = "";
 	};
 
 	// Affiche un message
