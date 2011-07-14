@@ -53,6 +53,7 @@ function _Game() {
 
 _Game.prototype = {
 	initialize : function(){
+		UI.loadGameIntro();
 		GameSound.initialize();
 		GameSound.playLoop("openning");
 	},

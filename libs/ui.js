@@ -28,6 +28,25 @@ var UI = new function(){
 	//-----------------------
 	
 	/**
+	 * intro screen
+	 */ 
+	this.loadGameIntro = function(){
+		//IE iz not welcome; bleargh!
+		if (navigator.appName == 'Microsoft Internet Explorer'){
+			var html = "<div class=\"msg\">";
+			html += "<p><img src=\"arts/ie-foar-real.jpg\" alt=\"Wait... Internet exlporer for real?!\" /></p>";
+			html += "<p>Owh noes you cannot start the MonorailCat wid' tihs shizt. Go get one of thoze FOC browzer:</p>";
+			html += "<ul><li><a href=\"http://www.mozilla.com\">Firefox</a></li><li><a href=\"http://www.opera.com/\">Opera</a></li><li><a href=\"http://www.google.com/chrome/\">Chrome</a></li></ul>";
+			html += "</div>";
+			e(GAME_ID).innerHTML = html;
+			return;
+		}
+		return;
+		
+		e(GAME_ID).innerHTML = "<p><input type=\"button\" id=\"startGameButton\" value=\"PLAY TEH GAME\" onclick=\"Game.start();\"></p>";
+	};
+	
+	/**
 	 * Game over screen
 	 * TODO:display winner, looser, score, time?
 	 * allow to restart game
