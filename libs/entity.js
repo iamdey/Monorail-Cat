@@ -155,9 +155,11 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var strength = CAT_STRENGTH;
-	var nbLives = NB_LIVES;
 	var rainbowTimer = 0;
 	var speed = 1;
+	
+	//makit public nah
+	this.nbLives = NB_LIVES;
 
 	// Cat sprite
 	var sprite = new Sprite(["center", "center"], {
@@ -178,14 +180,16 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		down:	[["arts/rainbow-down1.png", 6],		["arts/rainbow-down2.png", 6]]
 	});
 	
-	// Initalizes teh cat lives
-	UI.setPlayerLives(playerId, nbLives);
 
 	/**
 	 *	Parent binding.
 	 */
 	this.getId = parent.getId;
 	this.getTile = parent.getTile;
+	
+	this.getColor = function(){
+		return color;
+	}
 	
 	/**
 	 *	Returns the entity type.

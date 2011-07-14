@@ -13,16 +13,20 @@ body {
 	height:750px;
 }
 
+
+.player.red,
 #player1 {
 	float:left;
 	background:#CA6A40;
 }
 
+.player.blue,
 #player2 {
 	float:right;
 	background:#4B6D97;
 }
 
+.player,
 #player1, #player2 {
 	position:relative;
 	top:200px;

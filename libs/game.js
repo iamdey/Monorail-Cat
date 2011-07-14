@@ -18,6 +18,7 @@ function loadMap(mapName) {
 }
 
 function startGame() {
+	loadMap('default');
 	var surface = document.getElementById("monorail-cat");
 	var gs 		= new JSGameSoup(surface, FRAMERATE);
 	new Game(gs);
@@ -66,10 +67,13 @@ function Game(gs) {
 		new Player("Player 1", this.keymap_player_1, cats[0]),
 		new Player("Player 2", this.keymap_player_2, cats[1])
 	];
-
-	gs.addEntity(players[0]);
-	gs.addEntity(players[1]);
-
+	
+	for(i = 0; i < players.length; i++){
+//		UI.addPlayer(players[i]);
+		gs.addEntity(players[i]);
+		
+	}
+	
 	for (var i = 0; i < mapItems.length; i++) {
 		map.addEntity(mapItems[i]);
 	}
@@ -77,3 +81,4 @@ function Game(gs) {
 	map.addEntity(cats[0]);
 	map.addEntity(cats[1]);
 }
+

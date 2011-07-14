@@ -85,6 +85,7 @@ function TileMap(_canvas) {
 			if(maxMapSize > 7) {
 				this.scale = 7.0 / maxMapSize;
 			}
+
 			// Redimensionnement des images :
 			for(var tid in this.images) {
 				this.images[tid].width  = TILE_SIZE * this.scale;
