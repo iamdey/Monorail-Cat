@@ -24,7 +24,7 @@
 		</div>
 		
 		<div id="gameBoard" class="clearer">
-			<p><input type="button" id="startGameButton" value="PLAY TEH GAME" onclick="startGame();"></p>
+			<p><input type="button" id="startGameButton" value="PLAY TEH GAME" onclick="Game.start();"></p>
 		</div>
 		
 		<div id="controls">
@@ -49,8 +49,7 @@
 		  DomReady.ready(function(){
 				// bootscreen
 		//		UI.printMsg('TEH REAL CAT<br/><img src="arts/TEH REAL CAT.jpg" height="300px"></img>', undefined, 5000);
-				GameSound.initialize();
-				GameSound.playLoop("openning");
+				Game = new _Game();
 		  });
 		</script>
 	</body>

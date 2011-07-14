@@ -8,8 +8,6 @@ var UI = new function(){
 	//-----------------------
 	//--- tihs iz conztructor
 	
-	this.gameBoard_id = "gameBoard";
-	
 	// Map Bonus => Img
 	this.bonusImages = new Array();
 	this.bonusImages['woolball'] = 'wool_ball1.png';
@@ -29,6 +27,11 @@ var UI = new function(){
 	
 	//-----------------------
 	
+	/**
+	 * Game over screen
+	 * TODO:display winner, looser, score, time?
+	 * allow to restart game
+	 */
 	this.loadGameOver = function(winner, looser, time, restingLives){
 		// Stop all sounds and play game over sound
 		GameSound.stopAll();
@@ -39,7 +42,7 @@ var UI = new function(){
 	    
 		this.resetGameBoard();
 	    
-	    //then ui must kill the game content!!!!!!
+	    e(GAME_ID).innerHTML = "<p><input type=\"button\" id=\"startGameButton\" value=\"PLAY AGAIN AND AGAIN TEH GAME\" onclick=\"Game.start();\"></p>";
 	};
 	
 	/**
@@ -52,13 +55,13 @@ var UI = new function(){
 		canvas.id = "tileMap";
 		canvas.setAttribute("height", 553);
 		canvas.setAttribute("width", 554);
-		e(this.gameBoard_id).appendChild(canvas);
+		e(GAME_ID).appendChild(canvas);
 		//loadz deh entities frame
 		canvas = document.createElement("canvas");
 		canvas.id = "monorail-cat";
 		canvas.setAttribute("height", 553);
 		canvas.setAttribute("width", 554);
-		e(this.gameBoard_id).appendChild(canvas);
+		e(GAME_ID).appendChild(canvas);
 	};
 	
 	
@@ -73,7 +76,7 @@ var UI = new function(){
 		div_player.innerHTML = "<p class=\"playerName\">"+ my_player.name + "</p><p><img class=\"bonusImage\" src=\"arts/blank.png\" id=\"player" + id + "bonus\"/></p><p class=\"lives\" id=\"player" + id + "lives\"></p>";
 
 		//add the elem before the frrist child ov deh gameboard
-		e(this.gameBoard_id).insertBefore(div_player, e(this.gameBoard_id).firstChild);
+		e(GAME_ID).insertBefore(div_player, e(GAME_ID).firstChild);
 		
 		// Initalizes teh cat lives
 		this.setPlayerLives(id, my_player.getCat().nbLives);
@@ -103,7 +106,7 @@ var UI = new function(){
 	};
 	
 	this.resetGameBoard = function(){
-		e(this.gameBoard_id).innerHTML = "";
+		e(GAME_ID).innerHTML = "";
 	};
 
 	// Affiche un message

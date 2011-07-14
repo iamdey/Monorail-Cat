@@ -76,14 +76,12 @@
 	/**
 	 *	Endz teh game.
 	 */
-	this.gameOver = function() {
+	this.reset = function() {
 		// Remove every entity
 		for (var i = 0; i < entities.length; i++) {
 			gs.delEntity(entities[i]);
 		}
 		entities = new Array();
-		
-		UI.loadGameOver();
 	}
 	
 	/**

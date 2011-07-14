@@ -59,6 +59,8 @@ Player.prototype = {
 	
 	/**
 	 * capture keys
+	 * Overiden method from JsGameSoup::Entity (or something similar)
+	 * 
 	 * @param keyCode string (@see LEFT, RIGHT ...)
 	 */
 	keyDown : function (keyCode) {
@@ -67,6 +69,8 @@ Player.prototype = {
 	
 	/**
 	 * Reset captured key
+	 * Overiden method from JsGameSoup::Entity
+	 * 
 	 * @param keyCode string (@see LEFT, RIGHT ...)
 	 */
 	keyUp : function(keyCode) {

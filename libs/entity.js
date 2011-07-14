@@ -391,7 +391,7 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		// Lose a life
 		UI.setPlayerLives(playerId, --this.nbLives);
 		if(this.nbLives == 0) {
-			map.gameOver();
+			Game.over();
 		}
 	}
 
