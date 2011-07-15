@@ -201,13 +201,20 @@ var UI = new function(){
 			clearTimeout(this.lastTimeout);
 			this.lastTimeout = null;
 		}
-		timeout = timeout ||3000;
+		console.log(timeout);
+		timeout = timeout || 3000;
 		command = command || '';
 		// préparation du texte
 		text = '<p>'+text+'</p>';
+		
+		
+		
 		if(timeout <= 0) {
 			text += '<p><input type="button" value="Fermer" onclick="'+command+';UI.closeMsg(); return false;" /></p>';
 		}
+		
+		console.log(text);
+		
 		box.innerHTML = text;
 		// timeout si nécessaire
 		if(timeout >0) {
@@ -227,6 +234,32 @@ var UI = new function(){
 			clearTimeout(this.lastTimeout);
 			this.lastTimeout = null;
 		}
+	};
+	
+	
+	this.openMapSelection = function(){
+		var html = "";
+		
+		html += "<label for=\"mapSelection\">Select the map U want to play :</label><br/>";
+		html += "<select id=\"mapSelection\"><option value=\"default\">default</option><option value=\"Azesomap\">Azesomap</option><option value=\"bite2\">bite2</option></select><br/>";
+		
+		if(Game.date_game_start){
+			html += "<button id=\"startGameButton\">Restart Game</button><br/>";
+		}
+		
+		html += "Hey, You can save your own map online with <br/><a href=\"mapEditor.html\">The Map Edotir</a><br/>";
+		
+		this.printMsg(html, this.NORMAL, -1);
+		
+		e("startGameButton").addEventListener("click", function(){
+			Game.map_name = e("mapSelection").value;
+			
+			if(Game.date_game_start){
+				Game.stop();
+			}
+			Game.start();
+			e('msg').style.display = "none";
+		}, false);
 	};
 };
 

@@ -3,7 +3,7 @@ var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
 var DOMAIN		= "boarf.net";
-//var DOMAIN		= "localhost";
+var DOMAIN		= "localhost";
 
 
 /**
@@ -85,14 +85,11 @@ _Game.prototype = {
 		e("name_player2").addEventListener("blur", function(){
 			Game.player2_cfg.name = this.value;	
 		}, false);
-		
-		e("mapId").addEventListener("change", function(){
-			Game.map_name = this.value;	
-		}, false);
 		//--------------
 	},
 	
 	start : function() {
+		this.is_running = true; 
 		//load deh canvas Cuiiiik!
 		UI.loadGameView();
 		UI.mapLoading();

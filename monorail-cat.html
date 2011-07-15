@@ -42,18 +42,15 @@
 		<div id="controls">
 			<ul>
 				<li title="Mute/unmute sounds"><img src="arts/sound_on.png" onclick="GameSound.toggleMute(); if(!GameSound.is_mute) { this.src = 'arts/sound_on.png' } else { this.src = 'arts/sound_off.png' };" /></li>
-				<!--<li title="Choose a map"><img src="arts/map.png" onclick="UI.openMapSelection();" /></li>-->
+				<li title="Choose a map"><img src="arts/map.png" onclick="UI.openMapSelection();" /></li>
 			</ul>
 		</div>
 		
 		<div id="footer">
 			<p class="bottomLine">
-				<input type="text" id="mapId" value="default" />
-				<input type="button" value="Load teh map" onclick="Game.loadMap(e('mapId').value)" />
+				Tihs game iz proudly brought to U bye somz dyslexics - 
 				<a href="mapEditor.html">Map editor</a>
 			</p>
-			
-			<p>Tihs game iz proudly brought to U bye somz dyslexics</p>
 		</div>
 		
 		<!-- remoooove meh -->
