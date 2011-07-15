@@ -39,20 +39,26 @@ function _Game() {
 	 */
 	this.date_game_start = null;
 	
-	this.keymap_player_1 = {
-		up: 90,		// z
-		down: 83,	// s
-		left: 81, 	// q
-		right: 68, 	// d
-		action1: 32	// space
+	this.player1_cfg = {
+		name : "Player 1",
+		keymap : {
+			up: 90,		// z
+			down: 83,	// s
+			left: 81, 	// q
+			right: 68, 	// d
+			action1: 32	// space
+		}
 	};
 
-	this.keymap_player_2 = {
-		up: 38,		// up
-		down: 40,	// down
-		left: 37, 	// left
-		right: 39, 	// right
-		action1: 13	// enter
+	this.player2_cfg = {
+		name : "Player 2",
+		keymap : {
+			up: 38,		// up
+			down: 40,	// down
+			left: 37, 	// left
+			right: 39, 	// right
+			action1: 13	// enter
+		}
 	};
 	
 	this.initialize();
@@ -63,6 +69,18 @@ _Game.prototype = {
 		UI.loadGameIntro();
 		GameSound.initialize();
 		GameSound.playLoop("openning");
+		
+		//--------------
+		//Events listener
+		e("name_player1").addEventListener("blur", function(){
+			Game.player1_cfg.name = this.value;	
+		}, false);
+		
+		e("name_player2").addEventListener("blur", function(){
+			Game.player2_cfg.name = this.value;	
+		}, false);
+		
+		//--------------
 	},
 	
 	start : function() {
@@ -101,8 +119,8 @@ _Game.prototype = {
 		];
 
 		this.players = [
-			new Player("Player 1", this.keymap_player_1, cats[0]),
-			new Player("Player 2", this.keymap_player_2, cats[1])
+			new Player(this.player1_cfg, cats[0]),
+			new Player(this.player2_cfg, cats[1])
 		];
 
 		this.gs.addEntity(this.players[0]);

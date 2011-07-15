@@ -14,16 +14,16 @@ var DOWN = "down";
  * @param keymap json
  * @param cat Cat
  */
-function Player(name, keymap, cat){
+function Player(player_cfg, cat){
 	/**
 	 * Knock, knock
 	 */
-	this.name = name;
+	this.name = player_cfg.name;
 	
 	/**
 	 * keyboard
 	 */
-	this.keymap = keymap;
+	this.keymap = player_cfg.keymap;
 	
 	/**
 	 * T3h r33ty cat
