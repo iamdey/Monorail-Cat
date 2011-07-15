@@ -150,6 +150,9 @@ img.bonusImage {
 .msg ul {
 	text-align: left;
 }
+.msg span {
+	color: #d17810;
+}
 
 #otherMaps p {
 	width:795px;

@@ -1,7 +1,7 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= true;
+var DEBUG 		= false;
 var OFFLINE		= true;
 
 
@@ -31,6 +31,13 @@ function _Game() {
 	this.gs	 = null;
 	
 	this.map = null;
+	
+	this.players = [];
+	
+	/**
+	 * Date object that game start
+	 */
+	this.date_game_start = null;
 	
 	this.keymap_player_1 = {
 		up: 90,		// z
@@ -109,9 +116,12 @@ _Game.prototype = {
 		this.map.addEntity(cats[1]);
 		
 		this.gs.launch();
+		
+		this.date_game_start = new Date();
 
 		GameSound.stopAll();
 		GameSound.playLoop("level1");
+		
 	},
 	
 	/**
@@ -121,6 +131,7 @@ _Game.prototype = {
 		this.map.reset();
 		this.gs.delEntity(this.players[0]);
 		this.gs.delEntity(this.players[1]);
+		this.players = [];
 		UI.count_players = 0;
 		GameSound.stopAll();
 	},
@@ -129,8 +140,27 @@ _Game.prototype = {
 	 * Dhis iz deh gameOver
 	 */
 	over : function(){
+		//--------------------
+		//get a json w/ winner, looser
+		var players 	= {};
+		if( this.players[0].getCat().nbLives > this.players[1].getCat().nbLives ) {
+			players.winner = this.players[0];
+			players.looser = this.players[1];
+		}else{
+			players.winner = this.players[1];
+			players.looser = this.players[0];
+		}
+		//--------------------
+		//--------------------
+		//get time interval for the game duration
+		var date_end 	= new Date();
+		var time 		= date_end.getTime() - this.date_game_start.getTime();
+		//--------------------
+		//--------------------
+		//stop and free memory (almost) then display ending screen
 		this.stop();
-		UI.loadGameOver();
+		UI.loadGameOver(players, time);
+		//--------------------
 	},
 	
 	/**

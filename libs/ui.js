@@ -48,20 +48,50 @@ var UI = new function(){
 	
 	/**
 	 * Game over screen
-	 * TODO:display winner, looser, score, time?
 	 * allow to restart game
+	 * 
+	 * @param players json - contain winner and looser Player instance
+	 * @param time int - time interval in milliseconds
 	 */
-	this.loadGameOver = function(winner, looser, time, restingLives){
+	this.loadGameOver = function(players, time){
 		// Stop all sounds and play game over sound
 		GameSound.stopAll();
 		GameSound.playLoop("game_over");
 	    
 		// Display end message
-	    UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE)
+	    //UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE);
 	    
 		this.resetGameBoard();
+		
+		//---------------
+		// time
+		var days_diff = Math.floor(time/1000/60/60/24); //in case oO
+		time -= days_diff*1000*60*60*24
+		var hours_diff = Math.floor(time/1000/60/60); //in case also
+		time -= hours_diff*1000*60*60
+		var min_diff = Math.floor(time/1000/60);
+		time -= min_diff*1000*60
+		var sec_diff = Math.floor(time/1000);
+		//---------------
 	    
-	    e(GAME_ID).innerHTML = "<p><input type=\"button\" id=\"startGameButton\" value=\"PLAY AGAIN AND AGAIN TEH GAME\" onclick=\"Game.start();\"></p>";
+	    var html = "<div class=\"msg\"><p>GAME IZ OVER NAAOO</p><p>";
+	    
+	    html += "zOmg <span>" + players.winner.name + "</span> has pawned " + players.looser.name + " in <span>";
+	    html += (days_diff > 0) ? days_diff + " day" + ((days_diff > 1) ? "s ": " ")  : ""; 
+	    html += (hours_diff > 0) ? hours_diff + " hour" + ((hours_diff > 1) ? "s ": " ") : "";
+	    html += (min_diff > 0) ? min_diff + " minute" + ((min_diff > 1) ? "s ": " ") : "";
+	    html += (sec_diff > 0) ? sec_diff + " second" + ((sec_diff > 1) ? "s ": " "): "";
+	    
+	    html += "</span> with its " + players.winner.getCat().nbLives + " remaining lives.";
+	    html += (players.winner.getCat().nbLives == NB_LIVES) ? "WAIT... this is a humiliation!!!1! Hey " + players.looser.name + " go back play to Sims <span>U noob!</span>" : "";
+	    html += "</p>";
+	  
+	    html += "<button id=\"startGameButton\" onclick=\"Game.start();\">PLAY AGAIN TEH GAME</button>";
+		html += "</div>";
+		html += "<p>beccauze it's sooow fnu!</p>";
+		
+		
+	    e(GAME_ID).innerHTML = html;
 	};
 	
 	/**
