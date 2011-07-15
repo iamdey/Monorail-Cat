@@ -3,7 +3,7 @@ var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
 var DOMAIN		= "boarf.net";
-var DOMAIN		= "localhost";
+//var DOMAIN		= "localhost";
 
 
 /**
