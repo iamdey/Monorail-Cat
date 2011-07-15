@@ -170,6 +170,7 @@ Sound.prototype = {
 		}
 		
 		this.element[0].play();
+		this.element[0].currentTime = 0;
 	},
 
 	/**
@@ -178,7 +179,7 @@ Sound.prototype = {
 	playLoop : function(){
 		this.element[0].play();
 
-//		this.element.setAttribute("loop", "loop"); //doznot work on ff@ubuntu
+		//this.element[0].setAttribute("loop", "loop"); //doznot work on ff@ubuntu
 		for(i = 0;i<this.element.length;i++){
 			this.element[i].addEventListener('ended', this.toggleLoopSound, false);
 		}
