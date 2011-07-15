@@ -3,6 +3,7 @@ var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
 var DOMAIN		= "boarf.net";
+//var DOMAIN		= "localhost";
 
 
 /**
@@ -102,7 +103,6 @@ _Game.prototype = {
 		this.loadMap();
 		
 		this.gs			= new JSGameSoup(this.surface, FRAMERATE);
-		
 		this.map 		= new Map(this.gs, this.tilemap);
 		
 		//-----------------------------
@@ -170,10 +170,11 @@ _Game.prototype = {
 		//--------------------
 		//get a json w/ winner, looser
 		var players 	= {};
-		if( this.players[0].getCat().nbLives > this.players[1].getCat().nbLives ) {
+		
+		if(this.players[0].getCat().nbLives > this.players[1].getCat().nbLives){
 			players.winner = this.players[0];
 			players.looser = this.players[1];
-		}else{
+		}else if(this.players[0].getCat().nbLives < this.players[1].getCat().nbLives){
 			players.winner = this.players[1];
 			players.looser = this.players[0];
 		}

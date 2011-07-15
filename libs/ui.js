@@ -76,20 +76,27 @@ var UI = new function(){
 	    
 	    var html = "<div class=\"msg\"><p>GAME IZ OVER NAAOO</p><p>";
 	    
-	    html += "zOmg <span>" + players.winner.name + "</span> has pawned " + players.looser.name + " in <span>";
-	    html += (days_diff > 0) ? days_diff + " day" + ((days_diff > 1) ? "s ": " ")  : ""; 
-	    html += (hours_diff > 0) ? hours_diff + " hour" + ((hours_diff > 1) ? "s ": " ") : "";
-	    html += (min_diff > 0) ? min_diff + " minute" + ((min_diff > 1) ? "s ": " ") : "";
-	    html += (sec_diff > 0) ? sec_diff + " second" + ((sec_diff > 1) ? "s ": " "): "";
-	    
-	    html += "</span> with its " + players.winner.getCat().nbLives + " remaining lives.";
-	    html += (players.winner.getCat().nbLives == NB_LIVES) ? "WAIT... this is a humiliation!!!1! Hey " + players.looser.name + " go back play to Sims <span>U noob!</span>" : "";
-	    html += "</p>";
-	  
-	    html += "<button id=\"startGameButton\" onclick=\"Game.start();\">PLAY AGAIN TEH GAME</button>";
-		html += "</div>";
-		html += "<p>beccauze it's sooow fnu!</p>";
-		
+	    if(typeof(players.winner) != "undefined"){
+			html += "zOmg <span>" + players.winner.name + "</span> has pawned " + players.looser.name + " in <span>";
+			html += (days_diff > 0) ? days_diff + " day" + ((days_diff > 1) ? "s ": " ")  : ""; 
+			html += (hours_diff > 0) ? hours_diff + " hour" + ((hours_diff > 1) ? "s ": " ") : "";
+			html += (min_diff > 0) ? min_diff + " minute" + ((min_diff > 1) ? "s ": " ") : "";
+			html += (sec_diff > 0) ? sec_diff + " second" + ((sec_diff > 1) ? "s ": " "): "";
+			
+			html += "</span> with its " + players.winner.getCat().nbLives + " remaining lives.";
+			html += (players.winner.getCat().nbLives == NB_LIVES) ? "WAIT... this is a humiliation!!!1! Hey " + players.looser.name + " go back play to Sims <span>U noob!</span>" : "";
+			html += "</p>";
+		  
+			html += "<button id=\"startGameButton\" onclick=\"Game.start();\">PLAY AGAIN TEH GAME</button>";
+			html += "</div>";
+			html += "<p>beccauze it's sooow fnu!</p>";
+		}else{
+			html += "You both loozers! Null score is not possible.";
+			html += "</p>";
+		  
+			html += "<button id=\"startGameButton\" onclick=\"Game.start();\">PLAY AGAIN I SAID</button>";
+			html += "</div>";
+		}
 		
 	    e(GAME_ID).innerHTML = html;
 	};
