@@ -30,6 +30,9 @@ a:hover {
 	text-decoration: underline; 
 }
 
+p {
+	margin-bottom: 0.3em;
+}
 #gameBoard {
 	margin:0 auto;
 	min-height:550px;
@@ -138,10 +141,12 @@ img.bonusImage {
 
 .msg {
 	color: #fff;
-	font: 60px/68px 'MatizRegular', Arial, sans-serif;
+	font: 40px 'MatizRegular', Arial, sans-serif;
 	text-shadow: -3px 3px black, 3px -3px black, 3px 3px black, -3px -3px black;
 	text-align: center;
 }
+.msg img { display: block; margin: 0 auto; }
+.msg p { text-align: left; } 
 .msg ul {
 	text-align: left;
 }
