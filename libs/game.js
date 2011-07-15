@@ -2,7 +2,7 @@ var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
-var OFFLINE		= true;
+var DOMAIN		= "boarf.net";
 
 
 /**
@@ -31,6 +31,11 @@ function _Game() {
 	this.gs	 = null;
 	
 	this.map = null;
+	
+	/**
+	 * The map to load
+	 */
+	this.map_name = "default";
 	
 	this.players = [];
 	
@@ -80,21 +85,25 @@ _Game.prototype = {
 			Game.player2_cfg.name = this.value;	
 		}, false);
 		
+		e("mapId").addEventListener("change", function(){
+			Game.map_name = this.value;	
+		}, false);
 		//--------------
 	},
 	
 	start : function() {
 		//load deh canvas Cuiiiik!
 		UI.loadGameView();
+		UI.mapLoading();
 		
 		this.surface 	= e("monorail-cat");
 		this.tilemap 	= new TileMap(e("tileMap"));
 		
-		this.gs			= new JSGameSoup(this.surface, FRAMERATE);
-		
 		this.loadMap();
 		
-		this.map = new Map(this.gs, this.tilemap);
+		this.gs			= new JSGameSoup(this.surface, FRAMERATE);
+		
+		this.map 		= new Map(this.gs, this.tilemap);
 		
 		//-----------------------------
 		//suppose that loads item from deh tilemap
@@ -139,7 +148,7 @@ _Game.prototype = {
 
 		GameSound.stopAll();
 		GameSound.playLoop("level1");
-		
+		UI.mapLoading(false);
 	},
 	
 	/**
@@ -184,13 +193,28 @@ _Game.prototype = {
 	/**
 	 * Load a map 
 	 */
-	loadMap : function(mapName) {
-		if(OFFLINE) {
+	loadMap : function() {
+		if(this.isOffline()) {
 			this.tilemap.loadCsv("4240;66;66;219;66;66;12297\n1056;12432;66;2886;66;9;1056\n1056;1056;144;66;12297;1056;1056\n1056;3504;1581;0;3504;1581;1056\n1056;1056;14592;66;516;1056;1056\n1056;2304;66;219;66;12804;1056\n14592;66;66;2886;66;66;8708");
 		} else {
-			this.tilemap.load(mapName);
+			this.tilemap.load(this.map_name);
 		}
-
-		this.tilemap.draw(e("tileMap"));
+		
+		this.tilemap.draw();
+	},
+	
+	/**
+	 * Test if the game is running locally or somewhere that's not configured
+	 */
+	isOffline : function() {
+		try{
+			//try to change the domain
+			var sub 		= document.domain;
+			document.domain = DOMAIN;
+			document.domain = sub;
+			return false;
+		}catch(e){
+			return true;
+		}
 	}
 };

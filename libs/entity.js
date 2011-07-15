@@ -1,6 +1,6 @@
 // Game parameters
 var TILE_SIZE = 79;
-var NB_LIVES = 9;
+var NB_LIVES = 1;
 var MAX_ITEMS = 1;
 var CAT_SPEED = TILE_SIZE * 3;
 var WOOLBALL_SPEED = TILE_SIZE * 5;

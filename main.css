@@ -56,8 +56,7 @@ canvas#monorail-cat {
 #controls {
 	background-color: #FFFFFF;
     border-radius: 50px 50px 50px 50px;
-    height: 65px;
-    line-height: 85px;
+    
     margin: 0 auto;
     opacity: 0.3;
     position: absolute;
@@ -65,10 +64,20 @@ canvas#monorail-cat {
     text-align: center;
     top: 50px;
     width: 100px;
-	
 }
 #controls:hover {
 	opacity: 1;
+}
+
+#controls li {
+	line-height: 45px;
+    padding-bottom: 20px;
+}
+#controls li:first-child {
+	padding-top: 20px;
+}
+#controls img {
+	vertical-align: middle;
 }
 #controls img:hover {
 	cursor: pointer;

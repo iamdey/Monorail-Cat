@@ -157,6 +157,24 @@ var UI = new function(){
 	this.resetGameBoard = function(){
 		e(GAME_ID).innerHTML = "";
 	};
+	
+	this.mapLoading = function(add){
+		
+		if(typeof(add) == "undefined"){
+			add = true; //yep yep yep 
+		}
+		
+		if(!add && typeof(this.loading_el) != "undefined" && this.loading_el){
+			e(GAME_ID).removeChild(this.loading_el);
+			this.loading_el = null;
+		}else{
+			this.loading_el = document.createElement("div");
+			this.loading_el.setAttribute("class", "msg");
+			this.loading_el.innerHTML = "<img src=\"arts/ajax-loader.gif\" alt=\"loading\" /> I is loading!";
+			e(GAME_ID).appendChild(this.loading_el);
+		}
+		
+	};
 
 	// Affiche un message
 	// @param text texte à afficher (HTML autorisé)

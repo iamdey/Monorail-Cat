@@ -33,6 +33,7 @@
 
 // Classe, map vide de taille 0 par défaut.
 function TileMap(_canvas) {
+	this.inst = 0;
 	var level;
 	var tiles;
 	var images;
@@ -40,7 +41,7 @@ function TileMap(_canvas) {
 	var scale;
 	var ready;
 	var tilesize = TILE_SIZE;
-	var canvas = _canvas;
+	this.canvas = _canvas;
 
 	// matrice représentant le niveau
 	this.level = new Array();
@@ -76,7 +77,8 @@ function TileMap(_canvas) {
 
 
 	// Affichage de la map
-	this.draw = function(c) {
+	this.draw = function() {
+		
 		// Si une map est chargée :
 		if(this.ready) {
 			// Si la map a une longueur/hauteur plus grande que 7, on définit un coefficient d'échelle < 1.
@@ -92,12 +94,12 @@ function TileMap(_canvas) {
 				this.images[tid].height = TILE_SIZE * this.scale;
 			}
 			// Effacer la map précédente.
-			c.getContext('2d').clearRect(0,0, c.width, c.height);
+			this.canvas.getContext('2d').clearRect(0,0, this.canvas.width, this.canvas.height);
 			// Dessin de la nouvelle map
 			var i, j;
 			for(i=0; i< this.level.length; i++) {
 				for(j=0; j< this.level[i].length; j++) {
-					c.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
+					this.canvas.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
 				}
 			}
 			// Redimensionnement des images vers leur taille d'origine, pour éviter d'éventuels conflits :
@@ -202,7 +204,9 @@ function TileMap(_canvas) {
 				}
 			}
 		};
-		xhr.open("GET", 'maps/'+mapId+'.csv',  true);
+		
+		//Wait for answer
+		xhr.open("GET", 'maps/'+mapId+'.csv',  false);
 		xhr.send(null);
 	}
 
@@ -222,6 +226,7 @@ function TileMap(_canvas) {
 				ieff ++;
 			}
 		}
+		
 		this.ready = true;
 		this.onload();
 	}

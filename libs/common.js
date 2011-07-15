@@ -13,8 +13,7 @@ function getXHR() {
 		} catch (e) {
 		xhr = new ActiveXObject("Microsoft.XMLHTTP");
 		}
-	}
-	else { // XMLHttpRequest non supporté par le navigateur
+	} else { // XMLHttpRequest non supporté par le navigateur
 		//alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
 		xhr = false;
 	}
