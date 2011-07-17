@@ -8,6 +8,7 @@ body {
 }
 
 #gameBoard {
+	top:200px;
 	width:795px;
 	margin:0 auto;
 	height:750px;
@@ -25,7 +26,7 @@ body {
 
 #player1, #player2 {
 	position:relative;
-	top:200px;
+	top:30px;
 	width:100px;
 	text-align:center;
 }
@@ -39,6 +40,7 @@ body {
 #header {
 	margin:0;
 	text-align: center;
+	height:166px;
 }
 
 p.playerName {
@@ -66,12 +68,12 @@ img.bonusImage {
 	text-align:center;
 	vertical-align:middle;
 	padding:20px 30px;
-	border:solid 3px #880000;
+	border:solid 3px #000066;
 	-moz-border-radius:10px;
 	-webkit-border-radius:10px;
 	border-radius:10px;
-	color:#880000;
-	background:url(arts/bg.png) repeat;
+	color:#000066;
+	background:url(arts/bg3.png) repeat;
 	font-family:fantasy;
 	display:none;
 }
@@ -82,7 +84,13 @@ img.bonusImage {
 	text-align:center;
 }
 
-#startGameButton {
+#startGameLine {
+	position:relative;
+	text-align:center;
+	top:-190px;
+}
+
+#startGameLine input {
 	font-size:200%;
 }
 
@@ -98,5 +106,26 @@ img.bonusImage {
 	background:url(arts/bg2.png) repeat;
 	margin:.3em auto;
 	height:32px;
-	vertical-align:middle;
+	vertical-align:bottom;
+}
+
+.bottomLine select {
+	width:150px;
+	height:32px;
+}
+
+.bottomLine a {
+	display:block;
+	margin:0 .5em;
+	height:32px;
+	float: right;
+	padding:0 .3em;
+	color:black;
+	text-decoration:none;
+	font-weight:bold;
+	font-size:150%;
+}
+
+.bottomLine a:hover {
+	background:#AAF;
 }

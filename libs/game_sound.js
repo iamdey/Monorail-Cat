@@ -57,10 +57,10 @@ function GameSound () {
 	this.load("meow03", ["sound/meow03.ogg", "sound/meow03.mp3"]);
 	this.load("geyser02", ["sound/geyser02.ogg", "sound/geyser02.mp3"]);
 	this.load("nyan", ["sound/nyan.ogg", "sound/nyan.mp3"]);
-	
-	 
-	if ( GameSound.caller != GameSound.getInstance ) {  
-		throw new Error("This object cannot be instanciated");  
+
+
+	if ( GameSound.caller != GameSound.getInstance ) {
+		throw new Error("This object cannot be instanciated");
 	}
 }
 
@@ -124,7 +124,7 @@ function Sound(sound_id, a_url){
 		if(endedCallback) {
 			this.element[0].addEventListener('ended', endedCallback, false);
 		}
-		
+
 		this.element[0].play();
 	}
 
@@ -161,6 +161,7 @@ SOUND_ON = true;
 
 function muteUnmute() {
 	SOUND_ON = !SOUND_ON;
+	createCookie('sound_on', SOUND_ON);
 	var audios = document.getElementsByTagName('audio');
 	for(var i=0; i< audios.length; i++) {
 		audios[i].muted = ! SOUND_ON;

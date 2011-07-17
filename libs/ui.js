@@ -71,7 +71,7 @@ function _UI() {
 		// préparation du texte
 		text = '<p>'+text+'</p>';
 		if(timeout <= 0) {
-			text += '<p><input type="button" value="Fermer" onclick="'+command+';UI.closeMsg(); return false;" /></p>';
+			text += '<p><input type="button" value="Close" onclick="'+command+';UI.closeMsg(); return false;" style="font-size:16pt; padding:.1em .3em;"/></p>';
 		}
 		box.innerHTML = text;
 		// timeout si nécessaire

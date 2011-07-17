@@ -18,7 +18,15 @@
 		<link rel="stylesheet" href="main.css" type="text/css" />
 	</head>
 
-	<body onload="loadMap('default')">
+	<body onload="initPage();">
+		<div id="header">
+			<p>
+				<img src="arts/title.png"></img>
+			</p>
+		</div>
+		<div id="otherMaps">
+			<p class="bottomLine"><span class="left"><span id="MapList"></span></span><span class="right"><img id="muteIcon" src="arts/sound_on.png" onclick="muteUnmute(); if(SOUND_ON) { this.src = 'arts/sound_on.png' } else { this.src = 'arts/sound_off.png' };"></img></span><a href="mapEditor.html">Map editor</a><a onclick="showCredits(); return false;">Credits</a><a onclick="showInstructions(); return false;">Instructions</a></p>
+		</div>
 		<div id="gameBoard">
 			<div id="player1">
 				<p class="playerName" id="player1name">Player 1</p>
@@ -31,28 +39,72 @@
 				<p class="lives" id="player2lives"></p>
 			</div>
 			<div id="gameView">
-				<div id="header">
-					<p>
-						<img src="arts/title.png"></img>
-					</p>
-				</div>
 				<canvas id="tileMap" height="553" width="554" style="position:relative; top:10px; left:0px; z-index:1;"></canvas>
 				<canvas id="monorail-cat" height="553" width="554" style="position:relative; top:-550px; left:-5px; z-index:2;"></canvas>
 			</div>
-
-		</div>
-		<div id="otherMaps">
-			<p><input type="button" id="startGameButton" value="PLAY TEH GAME" onclick="startGame();"></p>
-			<p class="bottomLine"><span class="left"><input type="text" id="mapId" value="default" /><input type="button" value="Load teh map" onclick="loadMap(e('mapId').value)"></span><span class="right"><img src="arts/sound_on.png" onclick="muteUnmute(); if(SOUND_ON) { this.src = 'arts/sound_on.png' } else { this.src = 'arts/sound_off.png' };"></img></span><a href="mapEditor.html">Map editor</a></p>
+			<div id="startGameLine">
+				<p><input type="button" value="PLAY TEH GAME" onclick="startGame();"></p>
+			</div>
 		</div>
 		<div id="msg"></div>
 
 		<script type="text/javascript">
-			UI.setPlayerLives(1, 9);
-			UI.setPlayerLives(2, 9);
-			// bootscreen
-			UI.printMsg('TEH REAL CAT<br/><img src="arts/TEH REAL CAT.jpg" height="300px"></img>', undefined, 3000);
-			GameSound.getInstance().playLoop("openning");
+			function initPage() {
+				// Players Lives.
+				UI.setPlayerLives(1, 9);
+				UI.setPlayerLives(2, 9);
+				// Loading map list
+				var xhr;
+				xhr = getXHR();
+				xhr.onreadystatechange  = function() {
+					if(xhr.readyState  == 4) {
+						if(xhr.status  == 200) {
+							generateMapList(xhr.responseText);
+						} else {
+							generateMapList('default');
+						}
+					}
+				};
+				xhr.open("GET", 'map.php?GET=',  true);
+				xhr.send(null);
+				GameSound.getInstance().playLoop("openning");
+				// Setting mute/unmute according to cookie if exists
+				var tmp = readCookie('sound_on');
+				if(tmp != null) {
+					if(SOUND_ON != tmp) {
+						muteUnmute();
+						if(! SOUND_ON) {
+							e('muteIcon').src = 'arts/sound_off.png';
+						}
+					}
+				}
+				loadMap('default');
+			}
+
+			function generateMapList(list) {
+				var maplist = 'Choose a map&nbsp;:&nbsp;<select onchange="loadMap(this.value);">';
+				var maps = list.split("\n");
+				for(var i=0; i<maps.length; i++) {
+					var mapname = trim(maps[i]);
+					if(mapname != '') {
+						maplist += '<option';
+						if(mapname == 'default') {
+							maplist += ' selected="selected"';
+						}
+						maplist += '>'+mapname+'</option>';
+					}
+				}
+				maplist += '</select>';
+				e('MapList').innerHTML = maplist;
+			}
+
+			function showInstructions() {
+				UI.printMsg('<iframe src="instructions.html" width="530px" height="360px" style="border:none; background:url(arts/bg2.png) repeat;"></iframe>' , undefined, -1, undefined);
+			}
+
+			function showCredits() {
+				UI.printMsg('<iframe src="credits.html" width="530px" height="360px" style="border:none; background:url(arts/bg2.png) repeat;"></iframe>' , undefined, -1, undefined);
+			}
 		</script>
 	</body>
 </html>
