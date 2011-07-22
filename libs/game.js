@@ -6,6 +6,12 @@ var OFFLINE		= false;
 
 tilemap = null;
 
+// Global settings
+player1Name = getPlayerDefaultName(1);
+player2Name = getPlayerDefaultName(2);
+player1Keymap = getPlayerDefaultKeyMap(1);
+player2Keymap = getPlayerDefaultKeyMap(2);
+
 function loadMap(mapName) {
 	tilemap = new TileMap(document.getElementById("tileMap"));
 	if(OFFLINE) {
@@ -28,21 +34,9 @@ function startGame() {
 }
 
 function Game(gs) {
-	this.keymap_player_1 = {
-		up: 90,		// z
-		down: 83,	// s
-		left: 81, 	// q
-		right: 68, 	// d
-		action1: 32	// space
-	};
+	this.keymap_player_1 = player1Keymap;
 
-	this.keymap_player_2 = {
-		up: 38,		// up
-		down: 40,	// down
-		left: 37, 	// left
-		right: 39, 	// right
-		action1: 13	// enter
-	};
+	this.keymap_player_2 = player2Keymap;
 
 	var map = new Map(gs, tilemap);
 
@@ -63,8 +57,8 @@ function Game(gs) {
 	];
 
 	var players = [
-		new Player("Player 1", this.keymap_player_1, cats[0]),
-		new Player("Player 2", this.keymap_player_2, cats[1])
+		new Player(player1Name, this.keymap_player_1, cats[0]),
+		new Player(player2Name, this.keymap_player_2, cats[1])
 	];
 
 	gs.addEntity(players[0]);

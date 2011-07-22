@@ -1,5 +1,7 @@
 body {
 	background:url(arts/backgroung.png) repeat;
+	font-family:sans-serif;
+	font-size:11pt;
 }
 
 * {
@@ -78,12 +80,6 @@ img.bonusImage {
 	display:none;
 }
 
-#otherMaps p {
-	width:795px;
-	margin:.3em auto;
-	text-align:center;
-}
-
 #startGameLine {
 	position:relative;
 	text-align:center;
@@ -103,10 +99,13 @@ img.bonusImage {
 }
 
 .bottomLine {
+	width:795px;
+	margin:.3em auto;
+	text-align:right;
 	background:url(arts/bg2.png) repeat;
 	margin:.3em auto;
 	height:32px;
-	vertical-align:bottom;
+	vertical-align:middle;
 }
 
 .bottomLine select {
@@ -114,18 +113,6 @@ img.bonusImage {
 	height:32px;
 }
 
-.bottomLine a {
-	display:block;
-	margin:0 .5em;
-	height:32px;
-	float: right;
-	padding:0 .3em;
-	color:black;
-	text-decoration:none;
-	font-weight:bold;
-	font-size:150%;
-}
-
-.bottomLine a:hover {
-	background:#AAF;
+.bottomLine img {
+	cursor:pointer;
 }

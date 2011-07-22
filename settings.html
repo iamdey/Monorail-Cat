@@ -1,0 +1,114 @@
+<html>
+	<head>
+		<title>Monorail Cats : Settings</title>
+		<style type="text/css">
+			h1 { text-align:center; margin-bottom:.5em; }
+			img { vertical-align:middle; }
+			p { text-align:justify; }
+			table {margin:0 auto;}
+			td, th {padding:.1em .5em;}
+			.rb {border-right:solid 1px grey;}
+			.tb {border-top:solid 1px grey;}
+			.r { text-align:right; }
+			.short { width:7em; }
+			input[type="text"] { border: solid 1px black; padding:.05em .3em; }
+		</style>
+		<script type="text/javascript" src="libs/common.js"></script>
+	</head>
+	<body onload="initSettings();">
+		<h1>Settings</h1>
+		<table>
+			<tr><th class="rb"></th><th class="rb">Player 1 (red)</th><th>Player 2 (blue)</th></tr>
+			<tr>
+				<td class="rb tb r">Names</td>
+				<td class="rb tb"><input type="text" id="player1name" /></td>
+				<td class="tb"><input type="text" id="player2name" /></td>
+			</tr>
+			<tr>
+				<td class="rb tb r">Up Key</td>
+				<td class="rb tb"><input class="short" type="text" id="player1up" onfocus="this.value = 'Press Key...'; selectedPlayer=1; selectedAction='up';" onblur="this.value=keyCodeToString(keys[1]['up']); selectedPlayer=null; selectedAction=null;" /></td>
+				<td class="tb"><input class="short" type="text" id="player2up" onfocus="this.value = 'Press Key...'; selectedPlayer=2; selectedAction='up';" onblur="this.value=keyCodeToString(keys[2]['up']); selectedPlayer=null; selectedAction=null;" /></td>
+			</tr>
+			<tr>
+				<td class="rb tb r">Down Key</td>
+				<td class="rb tb"><input class="short" type="text" id="player1down" onfocus="this.value = 'Press Key...'; selectedPlayer=1; selectedAction='down';" onblur="this.value=keyCodeToString(keys[1]['down']); selectedPlayer=null; selectedAction=null;" /></td>
+				<td class="tb"><input class="short" type="text" id="player2down" onfocus="this.value = 'Press Key...'; selectedPlayer=2; selectedAction='down';" onblur="this.value=keyCodeToString(keys[2]['down']); selectedPlayer=null; selectedAction=null;" /></td>
+			</tr>
+			<tr>
+				<td class="rb tb r">Left Key</td>
+				<td class="rb tb"><input class="short" type="text" id="player1left" onfocus="this.value = 'Press Key...'; selectedPlayer=1; selectedAction='left';" onblur="this.value=keyCodeToString(keys[1]['left']); selectedPlayer=null; selectedAction=null;" /></td>
+				<td class="tb"><input class="short" type="text" id="player2left" onfocus="this.value = 'Press Key...'; selectedPlayer=2; selectedAction='left';" onblur="this.value=keyCodeToString(keys[2]['left']); selectedPlayer=null; selectedAction=null;" /></td>
+			</tr>
+			<tr>
+				<td class="rb tb r">Right Key</td>
+				<td class="rb tb"><input class="short" type="text" id="player1right" onfocus="this.value = 'Press Key...'; selectedPlayer=1; selectedAction='right';" onblur="this.value=keyCodeToString(keys[1]['right']); selectedPlayer=null; selectedAction=null;" /></td>
+				<td class="tb"><input class="short" type="text" id="player2right" onfocus="this.value = 'Press Key...'; selectedPlayer=2; selectedAction='right';" onblur="this.value=keyCodeToString(keys[2]['right']); selectedPlayer=null; selectedAction=null;" /></td>
+			</tr>
+			<tr>
+				<td class="rb tb r">Action Key</td>
+				<td class="rb tb"><input class="short" type="text" id="player1action1" onfocus="this.value = 'Press Key...'; selectedPlayer=1; selectedAction='action1';" onblur="this.value=keyCodeToString(keys[1]['action1']); selectedPlayer=null; selectedAction=null;" /></td>
+				<td class="tb"><input class="short" type="text" id="player2action1" onfocus="this.value = 'Press Key...'; selectedPlayer=2; selectedAction='action1';" onblur="this.value=keyCodeToString(keys[2]['action1']); selectedPlayer=null; selectedAction=null;" /></td>
+			</tr>
+		</table>
+		<p style="text-align:center"><input type="button" value="Save" onclick="saveSettings();"</p>
+		<p style="font-size:90%; padding:0 .5em; margin:0; text-align:center;">Note : settings changes won't take effect while playing the game.</p>
+		<script type="text/javascript">
+			var selectedPlayer = null;
+			var selectedAction = null;
+
+			var keys = new Array();
+			keys[1] = getPlayerDefaultKeyMap(1);
+			keys[2] = getPlayerDefaultKeyMap(2);
+
+			function initSettings() {
+				// player names
+				e('player1name').value=getPlayerName(1);
+				e('player2name').value=getPlayerName(2);
+				// init keys
+				keys[1] = getPlayerKeyMap(1);
+				keys[2] = getPlayerKeyMap(2);
+				e('player'+1+'up').value = keyCodeToString(keys[1].up);
+				e('player'+1+'down').value = keyCodeToString(keys[1].down);
+				e('player'+1+'left').value = keyCodeToString(keys[1].left);
+				e('player'+1+'right').value = keyCodeToString(keys[1].right);
+				e('player'+1+'action1').value = keyCodeToString(keys[1].action1);
+				e('player'+2+'up').value = keyCodeToString(keys[2].up);
+				e('player'+2+'down').value = keyCodeToString(keys[2].down);
+				e('player'+2+'left').value = keyCodeToString(keys[2].left);
+				e('player'+2+'right').value = keyCodeToString(keys[2].right);
+				e('player'+2+'action1').value = keyCodeToString(keys[2].action1);
+			}
+
+			function saveSettings() {
+				var tmp;
+				//player names
+				savePlayerName(1);
+				savePlayerName(2);
+				// Keymaps:
+				savePlayerKeyMap(1);
+				savePlayerKeyMap(2);
+			}
+
+			function savePlayerName(player) {
+				var tmp = trim(e('player'+player+'name').value);
+				if(tmp != '') {
+					createCookie('player'+player+'name', tmp);
+				}
+			}
+
+			function savePlayerKeyMap(player) {
+				keycodes = keys[player].up+'|'+keys[player].down+'|'+keys[player].left+'|'+keys[player].right+'|'+keys[player].action1;
+				createCookie('player'+player+'keymap', keycodes);
+			}
+
+			document.onkeyup = function(event) {
+				if(selectedPlayer!=null && selectedAction!=null && keyCodeToString(event.keyCode)!='Tab') {
+					e('player'+selectedPlayer+selectedAction).value = keyCodeToString(event.keyCode);
+					keys[selectedPlayer][selectedAction] = event.keyCode;
+				}
+				return false;
+			}
+		</script>
+	</body>
+</html>
+

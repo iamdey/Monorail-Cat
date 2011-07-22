@@ -2,9 +2,16 @@
 	<head>
 		<title>Map Editor</title>
 		<style type="text/css">
-			p { margin:0; padding:0; }
+			body { background:url(arts/backgroung.png) repeat; font-family:sans-serif; font-size:11pt; margin:0; padding:0; }
+			p { margin:0; padding:0; text-align:center; }
+			#mapEdit { background:url(arts/bg2.png) repeat; }
 			img { margin:0; padding:0; border:1px dashed #AAA; }
 			img.rail { width:53px; height:53px; }
+			#blocks img { background:url(arts/bg2.png) repeat; }
+			a {color:black; text-decoration:none;}
+			.button {display:inline; background:url(arts/bg2.png) repeat; padding:.3em .5em; font-weight:bold; font-size:130%; margin:.3em .5em;}
+			.button:hover {background:url(arts/bg3.png) repeat;}
+			.dialog { display:none; z-index:10; position:fixed; width:300px; height:250px; background:url(arts/bg2.png) repeat; border:solid 1px #006; padding:1em 1.5em; margin:0 auto; }
 		</style>
 		<script type="text/javascript">
 			TILE_SIZE = 79;
@@ -129,16 +136,52 @@
 				}
 				drawEditor();
 			}
+
+			var dialogs = ["newDialog", "loadDialog", "saveDialog"];
+
+			function showDialog(name) {
+				// changement de style, positionnement
+				var sw = document.body.clientWidth || window.innerWidth;
+				var sh = document.body.clientHeight || window.innerHeight;
+				for(var i=0; i< dialogs.length; i++) {
+					if(dialogs[i] == name) {
+						e(name).style.display = 'block';
+					} else {
+						e(dialogs[i]).style.display = 'none';
+					}
+					e(dialogs[i]).style.left = ((sw - 300) / 2 -30) + 'px';
+				}
+			}
+
+			function closeAllDialogs() {
+				for(var i=0; i< dialogs.length; i++) {
+					e(dialogs[i]).style.display = 'none';
+				}
+			}
 		</script>
 	</head>
 	<body>
-		<h1>Map Editor</h1>
-		<h2><a href="monorail-cat.html">Play Monorail Cats</a></h2>
-		<p>New map : W <input type="text" id="nmapw" value="7" style="width:3em;"/>
-		           | H <input type="text" id="nmaph"  value="7" style="width:3em;"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		               <input type="button" value="create new map" onclick="newmap(); return false;">
-		</p>
-		<p>Map Id : <input type="text" id="mapId" /> <input type="button" value="Load" onclick="load(e('mapId').value); return false;" /> <input type="button" value="Save" onclick="save(e('mapId').value); return false;" /></p>
+		<p id="header"><img src="arts/title.png" style="border:none;margin:0 0 1em 0;"></img></p>
+		<p style=""><a class="button" href="monorail-cat.html">Back to the game</a><a class="button" href="#" onclick="showDialog('newDialog'); return false;">New empty map</a><a class="button" href="#" onclick="showDialog('loadDialog'); return false;">Load map</a><a class="button" href="#" onclick="showDialog('saveDialog'); return false;">Save as</a></p>
+		<div id="newDialog" class="dialog">
+			<h2>New map</h2>
+			<p>Width in blocks : <input type="text" id="nmapw" value="7" style="width:3em;"/></p>
+			<p>Height in blocks : <input type="text" id="nmaph" value="7" style="width:3em;"/></p>
+			<hr></hr>
+			<p><input type="button" value="Cancel" onclick="closeAllDialogs(); return false;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Create new map" onclick="newmap(); closeAllDialogs(); return false;"></p>
+		</div>
+		<div id="loadDialog" class="dialog">
+			<h2>Load map</h2>
+			<p>Map name : <input type="text" id="lmapId" /></p>
+			<hr></hr>
+			<p><input type="button" value="Cancel" onclick="closeAllDialogs(); return false;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Load" onclick="load(e('lmapId').value); closeAllDialogs(); return false;" /></p>
+		</div>
+		<div id="saveDialog" class="dialog">
+			<h2>Save as</h2>
+			<p>Map name : <input type="text" id="smapId" /></p>
+			<hr></hr>
+			<p><input type="button" value="Cancel" onclick="closeAllDialogs(); return false;" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Save" onclick="save(e('smapId').value); closeAllDialogs(); return false;" /></p>
+		</div>
 		<hr></hr>
 		<p id="blocks">
 		</p>

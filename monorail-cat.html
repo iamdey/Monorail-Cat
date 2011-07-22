@@ -24,8 +24,14 @@
 				<img src="arts/title.png"></img>
 			</p>
 		</div>
-		<div id="otherMaps">
-			<p class="bottomLine"><span class="left"><span id="MapList"></span></span><span class="right"><img id="muteIcon" src="arts/sound_on.png" onclick="muteUnmute(); if(SOUND_ON) { this.src = 'arts/sound_on.png' } else { this.src = 'arts/sound_off.png' };"></img></span><a href="mapEditor.html">Map editor</a><a onclick="showCredits(); return false;">Credits</a><a onclick="showInstructions(); return false;">Instructions</a></p>
+		<div>
+			<p class="bottomLine"><span class="left"><span id="MapList"></span></span>
+				<img src="arts/instructions.png" alt="Instructions" title="Instructions" onclick="showInstructions();"></img>
+				&nbsp;<img src="arts/information.png" alt="Credits" title="Credits" onclick="showCredits();"></img>
+				&nbsp;<a href="mapEditor.html"><img src="arts/mapEditor.png" alt="Map Editor" title="Map Editor"></img></a>
+				&nbsp;<img src="arts/settings.png" alt="Settings" title="Settings" onclick="showSettings();"></img>
+				&nbsp;<img id="muteIcon" src="arts/sound_on.png" alt="Sound Mute" title="Sound Mute" onclick="muteUnmute(); if(SOUND_ON) { this.src = 'arts/sound_on.png' } else { this.src = 'arts/sound_off.png' };"></img>
+			</p>
 		</div>
 		<div id="gameBoard">
 			<div id="player1">
@@ -43,7 +49,7 @@
 				<canvas id="monorail-cat" height="553" width="554" style="position:relative; top:-550px; left:-5px; z-index:2;"></canvas>
 			</div>
 			<div id="startGameLine">
-				<p><input type="button" value="PLAY TEH GAME" onclick="startGame();"></p>
+				<p><input type="button" value="PLAY TEH GAME" onclick="startGame(); this.onclick= function() { location.reload(); }; this.value='RESTART GAME';"></p>
 			</div>
 		</div>
 		<div id="msg"></div>
@@ -67,28 +73,27 @@
 				};
 				xhr.open("GET", 'map.php?GET=',  true);
 				xhr.send(null);
+				// Title song
 				GameSound.getInstance().playLoop("openning");
-				// Setting mute/unmute according to cookie if exists
-				var tmp = readCookie('sound_on');
-				if(tmp != null) {
-					if(SOUND_ON != tmp) {
-						muteUnmute();
-						if(! SOUND_ON) {
-							e('muteIcon').src = 'arts/sound_off.png';
-						}
-					}
-				}
-				loadMap('default');
+				// Load User Settings and selected map
+				reloadSettings();
 			}
 
 			function generateMapList(list) {
-				var maplist = 'Choose a map&nbsp;:&nbsp;<select onchange="loadMap(this.value);">';
+				// if a map is already selected
+				var tmp = readCookie('mapId');
+				if(tmp!=null) {
+					tmp = trim(tmp);
+				} else {
+					tmp = 'default';
+				}
+				var maplist = 'Choose a map&nbsp;:&nbsp;<select onchange="loadMap(this.value); createCookie(\'mapId\', this.value);">';
 				var maps = list.split("\n");
 				for(var i=0; i<maps.length; i++) {
 					var mapname = trim(maps[i]);
 					if(mapname != '') {
 						maplist += '<option';
-						if(mapname == 'default') {
+						if(mapname == tmp) {
 							maplist += ' selected="selected"';
 						}
 						maplist += '>'+mapname+'</option>';
@@ -104,6 +109,40 @@
 
 			function showCredits() {
 				UI.printMsg('<iframe src="credits.html" width="530px" height="360px" style="border:none; background:url(arts/bg2.png) repeat;"></iframe>' , undefined, -1, undefined);
+			}
+
+			function showSettings() {
+				UI.printMsg('<iframe src="settings.html" width="530px" height="360px" style="border:none; background:url(arts/bg2.png) repeat;"></iframe>' , undefined, -1, 'reloadSettings()');
+			}
+
+			function reloadSettings() {
+				// Setting mute/unmute according to cookie if exists
+				var tmp = readCookie('sound_on');
+				if(tmp != null) {
+					if((SOUND_ON && (tmp!='true'))||((! SOUND_ON) && (tmp!='false'))) {
+						muteUnmute();
+						if(! SOUND_ON) {
+							e('muteIcon').src = 'arts/sound_off.png';
+						} else {
+							e('muteIcon').src = 'arts/sound_on.png';
+						}
+					}
+				}
+				// Setting players names
+				player1Name = getPlayerName(1);
+				UI.setPlayerName(1, player1Name);
+				player2Name = getPlayerName(2);
+				UI.setPlayerName(2, player2Name);
+				// Setting keymap
+				player1Keymap = getPlayerKeyMap(1);
+				player2Keymap = getPlayerKeyMap(2);
+				// Load default map
+				tmp = readCookie('mapId');
+				if(tmp!=null) {
+					loadMap(trim(tmp));
+				} else {
+					loadMap('default');
+				}
 			}
 		</script>
 	</body>

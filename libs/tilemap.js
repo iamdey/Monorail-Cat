@@ -61,8 +61,10 @@ function TileMap(_canvas) {
 
 	// chargement des images
 	this.images = new Array();
+	var refmap = this;
 	for(var tid in this.tiles) {
 		this.images[tid] = new Image();
+		this.images[tid].onload = function() { refmap.draw(canvas); }
 		this.images[tid].src = 'arts/'+this.tiles[tid]+'.png';
 	}
 
@@ -79,30 +81,37 @@ function TileMap(_canvas) {
 	this.draw = function(c) {
 		// Si une map est chargée :
 		if(this.ready) {
-			// Si la map a une longueur/hauteur plus grande que 7, on définit un coefficient d'échelle < 1.
-			var maxMapSize = Math.max(this.level.length, this.level[0].length);
-			this.scale = 1;
-			if(maxMapSize > 7) {
-				this.scale = 7.0 / maxMapSize;
-			}
-			// Redimensionnement des images :
+			// on vérifie que toutes les images des tuiles ont été chargées
+			var imagesLoaded = true;
 			for(var tid in this.images) {
-				this.images[tid].width  = TILE_SIZE * this.scale;
-				this.images[tid].height = TILE_SIZE * this.scale;
+				imagesLoaded = (imagesLoaded && this.images[tid].complete);
 			}
-			// Effacer la map précédente.
-			c.getContext('2d').clearRect(0,0, c.width, c.height);
-			// Dessin de la nouvelle map
-			var i, j;
-			for(i=0; i< this.level.length; i++) {
-				for(j=0; j< this.level[i].length; j++) {
-					c.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
+			if(imagesLoaded) {
+				// Si la map a une longueur/hauteur plus grande que 7, on définit un coefficient d'échelle < 1.
+				var maxMapSize = Math.max(this.level.length, this.level[0].length);
+				this.scale = 1;
+				if(maxMapSize > 7) {
+					this.scale = 7.0 / maxMapSize;
 				}
-			}
-			// Redimensionnement des images vers leur taille d'origine, pour éviter d'éventuels conflits :
-			for(var tid in this.images) {
-				this.images[tid].width  = TILE_SIZE;
-				this.images[tid].height = TILE_SIZE;
+				// Redimensionnement des images :
+				for(var tid in this.images) {
+					this.images[tid].width  = TILE_SIZE * this.scale;
+					this.images[tid].height = TILE_SIZE * this.scale;
+				}
+				// Effacer la map précédente.
+				c.getContext('2d').clearRect(0,0, c.width, c.height);
+				// Dessin de la nouvelle map
+				var i, j;
+				for(i=0; i< this.level.length; i++) {
+					for(j=0; j< this.level[i].length; j++) {
+						c.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
+					}
+				}
+				// Redimensionnement des images vers leur taille d'origine, pour éviter d'éventuels conflits :
+				for(var tid in this.images) {
+					this.images[tid].width  = TILE_SIZE;
+					this.images[tid].height = TILE_SIZE;
+				}
 			}
 		}
 	}

@@ -5,19 +5,21 @@ $dir='maps';
 
 // Récupérer la liste des maps
 if(array_key_exists('GET', $_REQUEST)) {
-	$list = '';
+	$list = array();
 	if(is_dir($dir)) {
 		if($dh=opendir($dir)) {
 			while(($file=readdir($dh)) !== false) {
 				if(substr($file, -4) == '.csv') {
 					if(is_readable($dir.'/'.$file)) {
-						$list .= substr($file, 0, -4)."\n";
+						$list[]= substr($file, 0, -4);
 					}
 				}
 			}
 			closedir($dh);
 		}
 	}
+	sort($list);
+	$list = implode("\n", $list);
 	echo $list;
 }
 
