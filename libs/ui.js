@@ -30,7 +30,7 @@ var UI = new function(){
 	/**
 	 * intro screen
 	 */ 
-	this.loadGameIntro = function(){
+	this.loadGameIntro = function(a_players){
 		//IE iz not welcome; bleargh!
 		if (navigator.appName == 'Microsoft Internet Explorer'){
 			var html = "<div class=\"msg\">";
@@ -42,7 +42,8 @@ var UI = new function(){
 			return;
 		}
 		
-		//Doz nossing rufl
+		//add tmp players 
+        
 		return;
 	};
 	

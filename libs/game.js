@@ -72,7 +72,18 @@ function _Game() {
 
 _Game.prototype = {
 	initialize : function(){
-		UI.loadGameIntro();
+    
+        this.cats = [
+			new Cat(false, 1, RED, [0, 0], SOUTH),
+			new Cat(false, 2, BLUE, [0, 0], NORTH)
+		];
+        
+        this.players = [
+			new Player(this.player1_cfg, this.cats[0]),
+			new Player(this.player2_cfg, this.cats[1])
+		];
+    
+		UI.loadGameIntro(this.players);
 		GameSound.initialize();
 		GameSound.playLoop("openning");
 		
@@ -119,15 +130,19 @@ _Game.prototype = {
 		var departChat2 = this.tilemap.getPlayerStartTile(2);
 		//-----------------------------
 
-		var cats = [
+        //-----------------------------
+        //Load game actors
+		this.cats = [
 			new Cat(this.map, 1, RED, [departChat1.x, departChat1.y], this.tilemap.getAValidDirection(departChat1.x,departChat1.y, SOUTH)),
 			new Cat(this.map, 2, BLUE, [departChat2.x, departChat2.y], this.tilemap.getAValidDirection(departChat2.x,departChat2.y, NORTH))
 		];
 
 		this.players = [
-			new Player(this.player1_cfg, cats[0]),
-			new Player(this.player2_cfg, cats[1])
+			new Player(this.player1_cfg, this.cats[0]),
+			new Player(this.player2_cfg, this.cats[1])
 		];
+        //--------------------------------
+        
 
 		this.gs.addEntity(this.players[0]);
 		this.gs.addEntity(this.players[1]);
@@ -136,8 +151,8 @@ _Game.prototype = {
 			this.map.addEntity(mapItems[i]);
 		}
 
-		this.map.addEntity(cats[0]);
-		this.map.addEntity(cats[1]);
+		this.map.addEntity(this.cats[0]);
+		this.map.addEntity(this.cats[1]);
 		
 		this.gs.launch();
 		
