@@ -43,6 +43,7 @@
 	 */
 	this.detectCollision = function(entity) {
 		var tile = entity.getTile();
+		var gameOver = false;
 		
 		for (var i = 0; i < entities.length; i++) {
 			var otherEntity = entities[i];
@@ -55,7 +56,7 @@
 				
 				if(strength > otherStrength) {
 					// Killz collider
-					otherEntity.die();
+					gameOver |= otherEntity.die();
 					
 					// Pick up item
 					if (entity.getType() == CAT && otherEntity.getType() == MAP_ITEM) {
@@ -63,13 +64,17 @@
 					}
 				} else if(strength < otherStrength) {
 					// Cat diez 
-					entity.die();
+					gameOver |= entity.die();
 				} else {
 					// Both diez
-					entity.die();
-					otherEntity.die();
+					gameOver |= entity.die();
+					gameOver |= otherEntity.die();
 				}
 			}
+		}
+		
+		if (gameOver) {
+			Game.over();
 		}
 	}
 	

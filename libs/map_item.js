@@ -57,6 +57,8 @@ function MapItem(startingTile){
 	this.die = function() {
 		// Doze noting, me cant diez
 		invisibleCt = INVISIBLE_FRAMES;
+		
+		return false;
 	}
 	
 	/**
@@ -141,6 +143,8 @@ function Water(map, startingTile) {
 	 */
 	this.die = function() {
 		map.removeEntity(this);
+		
+		return false;
 	}
 	
 	/**
@@ -224,6 +228,8 @@ function Woolball(map, startingTile, _direction) {
 	 */
 	this.die = function() {
 		map.removeEntity(this);
+		
+		return false;
 	}
 	
 	/**

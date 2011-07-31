@@ -390,9 +390,9 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		
 		// Lose a life
 		UI.setPlayerLives(playerId, --this.nbLives);
-		if(this.nbLives == 0) {
-			Game.over(); //FIXME: I is a bug. Game.over should be launch from gamesoup refresh loop
-		}
+		
+		// Return true if game is over
+		return (this.nbLives == 0);
 	}
 
 	/**
