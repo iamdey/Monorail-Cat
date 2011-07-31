@@ -366,9 +366,16 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		// Tek teh itaim
 		if(stackedItems.length < MAX_ITEMS) {
 			var item = mapItem.pickUpRandomizedLoot();
-			stackedItems.push(item);
-			UI.setPlayerBonus(playerId, item);
+			
+			if (item != NO_ITEM) {
+				stackedItems.push(item);
+				UI.setPlayerBonus(playerId, item);
+				
+				return true;
+			}
 		}
+		
+		return false;
 	}
 
 	/**

@@ -1,4 +1,5 @@
 // Item names
+var NO_ITEM = false
 var WOOLBALL = "woolball"
 var RAINBOW = "rainbow"
 var WATER = "water"
@@ -82,15 +83,19 @@ function MapItem(startingTile){
 	/**
 	 * Returns a random Item (cf. rand_no = 4).
 	 */
-	this.pickUpRandomizedLoot = function(){
-		var rand_no = PROBA_TOTAL * Math.random();
-		
-		if (rand_no < PROBA_WOOLBALL) {
-			return WOOLBALL;
-		} else if (rand_no < PROBA_WATER) {
-			return WATER;
+	this.pickUpRandomizedLoot = function() {
+		if (invisibleCt > 0) {
+			return NO_ITEM;
 		} else {
-			return RAINBOW;
+			var rand_no = PROBA_TOTAL * Math.random();
+			
+			if (rand_no < PROBA_WOOLBALL) {
+				return WOOLBALL;
+			} else if (rand_no < PROBA_WATER) {
+				return WATER;
+			} else {
+				return RAINBOW;
+			}
 		}
 	}
 	

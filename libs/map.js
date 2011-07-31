@@ -55,12 +55,15 @@
 				var otherStrength = otherEntity.getStrength();
 				
 				if(strength > otherStrength) {
+					if (otherEntity.getType() == MAP_ITEM) {
+						// Pick up item
+						if (entity.getType() == CAT && entity.pickUp(otherEntity)) {
+							gameOver |= otherEntity.die();
+						}
+					}
 					// Killz collider
-					gameOver |= otherEntity.die();
-					
-					// Pick up item
-					if (entity.getType() == CAT && otherEntity.getType() == MAP_ITEM) {
-						entity.pickUp(otherEntity);
+					else {
+						gameOver |= otherEntity.die();
 					}
 				} else if(strength < otherStrength) {
 					// Cat diez 
