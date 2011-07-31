@@ -132,6 +132,13 @@ function TileMap(_canvas) {
 	this.isValidDirection = function(x, y, from, to) {
 		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
 	}
+	
+	this.isValidOutDirection = function(x, y, to) {
+		return (this.isValidDirection(x, y, NORTH, to)
+		|| this.isValidDirection(x, y, SOUTH, to)
+		|| this.isValidDirection(x, y, WEST, to)
+		|| this.isValidDirection(x, y, EAST, to));
+	}
 
 	this.getAValidDirection = function(x, y, prefered) {
 		var valid = 0;

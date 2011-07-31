@@ -39,6 +39,13 @@
 	}
 	
 	/**
+	 *	Returns true if the entity can go from direction "from" to direction "to" on square x;y.
+	 */
+	this.isValidOutDirection = function(x, y, to) {
+		return tilemap.isValidOutDirection(x, y, to);
+	}
+	
+	/**
 	 *	Detect the collisions with an entity.
 	 */
 	this.detectCollision = function(entity) {

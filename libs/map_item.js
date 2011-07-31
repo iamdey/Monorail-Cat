@@ -315,8 +315,10 @@ function Woolball(map, startingTile, _direction) {
 	
 	// Move two squares ahead
 	for (var i = 0; i < 2; i++) {
-		// Head to random direction from this new square
-		this.goRandomlySomewhere();
+		if (!map.isValidOutDirection(parent.tile[0], parent.tile[1], direction)) {
+			// Head to random direction from this new square
+			this.goRandomlySomewhere();
+		}
 		
 		// Move ahead
 		switch(direction) {
@@ -334,5 +336,4 @@ function Woolball(map, startingTile, _direction) {
 		case EAST:	parent.pos[1] = 0;				break;
 		case WEST:	parent.pos[1] = TILE_SIZE - 1;	break;
 	}
-	
 }
