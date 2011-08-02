@@ -11,15 +11,9 @@
 }
 
 body {
-	background:url(arts/backgroung.png) repeat;
-	font: 15px '04b25Regular', Arial, sans-serif;
-	color: #fff;
-	text-shadow: -1px 0 black, 1px 0 black, 0px 1px black, 0px -1px black;
-}
-
-* {
-	margin:0;
-	padding:0;
+    background:url(arts/backgroung.png) repeat;
+    color: #843240;
+    font: 15px '04b25Regular', Arial, sans-serif;
 }
 
 a {
@@ -31,6 +25,16 @@ a:hover {
 	text-decoration: underline; 
 }
 
+h1 {
+    
+}
+
+h1 span {
+    color: white;
+    display: block;        
+    font-size: 2em;
+}
+
 p {
 	margin-bottom: 0.3em;
 }
@@ -38,6 +42,7 @@ p {
 	margin:0 auto;
 	min-height:550px;
 	position: relative;
+        text-align: center;
 	width:795px;
 	z-index: 0;
 }
@@ -50,12 +55,12 @@ canvas#tileMap {
 
 canvas#monorail-cat {
 	position: absolute; 
-	top: -0; 
+	top: 0; 
 	z-index: 2;
 }
 
 #controls {
-	background-color: #FFFFFF;
+    background-color: #FFFFFF;
     border-radius: 50px 50px 50px 50px;
     
     margin: 0 auto;
@@ -86,17 +91,17 @@ canvas#monorail-cat {
 
 .player.red {
 	float:left;
-	background:#CA6A40;
 }
 
 .player.blue {
 	float:right;
-	background:#4B6D97;
 }
 
 .player {
-	width:100px;
+    color: #fff;
+	
 	text-align:center;
+    width:100px;
 }
 
 #header {
@@ -120,14 +125,14 @@ p.playerName {
 }
 
 p.lives img {
-	width:39px;
-	height:39px;
+    display: block;
+    margin: 0 auto 8px;
 }
 
 img.bonusImage {
-	background:url(arts/bg2.png) repeat;
-	width:79px;
-	margin:0.3em auto;
+    border: 8px solid #843240;
+    margin: 0.3em auto;
+    width: 79px;
 }
 
 
@@ -154,7 +159,7 @@ img.bonusImage {
 	/*font: 40px 'MatizRegular', Arial, sans-serif;*/
     font-size: 40px;
     line-height: 37px;
-	text-shadow: -3px 3px black, 3px -3px black, 3px 3px black, -3px -3px black;
+	/*text-shadow: -3px 3px black, 3px -3px black, 3px 3px black, -3px -3px black;*/
 	text-align: center;
 }
 .msg img { display: block; margin: 0 auto; }
@@ -164,6 +169,10 @@ img.bonusImage {
 }
 .msg span {
 	color: #d17810;
+}
+
+.info {
+    font-size: 0.75em;
 }
 
 #otherMaps p {

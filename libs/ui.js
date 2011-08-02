@@ -144,9 +144,9 @@ var UI = new function(){
 			var lives = '';
 			for(var i = 0; i< nbLives; i++) {
 				if(player == 1)
-					lives += '<img src="arts/cat1-right.png"></img><br />';
+					lives += '<img src="arts/life_cat1.png" alt="one up"/>';
 				else
-					lives += '<img src="arts/cat2-left.png"></img><br />';
+					lives += '<img src="arts/life_cat2.png" alt="one up" />';
 			}
 			e('player'+player+'lives').innerHTML = lives;
 		}
