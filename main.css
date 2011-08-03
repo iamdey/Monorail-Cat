@@ -47,6 +47,48 @@ p {
 	z-index: 0;
 }
 
+#gameBoard .config .player1 {
+    float: left;
+    width: 270px;
+}
+#gameBoard .config .player2 {
+    float: right;
+    width: 270px;
+}
+
+#gameBoard .config input {
+    background-color: white;
+    border: 4px solid #843240;
+    color: #843240;
+    font: 1.5em '04b25Regular', Arial, sans-serif;
+    padding: 4px;
+    width: 200px;
+    
+}
+
+#gameBoard .config img,
+#gameBoard .config input  {
+    display: block;
+    margin: 0 auto;
+}
+#gameBoard .config table.bindings {
+    border-spacing: 8px;
+    margin: 10px auto;
+}
+#gameBoard .config table.bindings tr td.up,
+#gameBoard .config table.bindings tr td.left,
+#gameBoard .config table.bindings tr td.down,
+#gameBoard .config table.bindings tr td.right,
+#gameBoard .config table.bindings tr td.action{
+    background-color: #843240;
+    color: white;
+    height: 40px;
+    width: 40px;    
+}
+#gameBoard .config table.bindings tr td.action {
+    width: auto;
+}
+
 canvas#tileMap {
 	position:absolute; 
 	top:0; 
@@ -185,13 +227,6 @@ img.bonusImage {
 	font-size:100%;
 }
 
-.right {
-	float:right;
-}
-
-.left {
-	float:left;
-}
 
 .bottomLine {
 	background: url("arts/bg2.png") repeat scroll 0 0 transparent;
