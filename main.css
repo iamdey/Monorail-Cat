@@ -1,24 +1,19 @@
 @font-face {
-    font-family: 'MatizRegular';
-    src: url('vendor/Matiz-fontfacekit/Matiz-webfont.eot');
-    src: url('vendor/Matiz-fontfacekit/Matiz-webfont.eot?#iefix') format('embedded-opentype'),
-         url('vendor/Matiz-fontfacekit/Matiz-webfont.woff') format('woff'),
-         url('vendor/Matiz-fontfacekit/Matiz-webfont.ttf') format('truetype'),
-         url('vendor/Matiz-fontfacekit/Matiz-webfont.svg#MatizRegular') format('svg');
+    font-family: '04b25Regular';
+    src: url('vendor/04b_25_-fontfacekit/04b_25_-webfont.eot');
+    src: url('vendor/04b_25_-fontfacekit/04b_25_-webfont.eot?#iefix') format('embedded-opentype'),
+         url('vendor/04b_25_-fontfacekit/04b_25_-webfont.woff') format('woff'),
+         url('vendor/04b_25_-fontfacekit/04b_25_-webfont.ttf') format('truetype'),
+         url('vendor/04b_25_-fontfacekit/04b_25_-webfont.svg#04b25Regular') format('svg');
     font-weight: normal;
     font-style: normal;
+
 }
 
 body {
-	background:url(arts/backgroung.png) repeat;
-	font: 15px/20px 'MatizRegular', Arial, sans-serif;
-	color: #fff;
-	text-shadow: -1px 0 black, 1px 0 black, 0px 1px black, 0px -1px black;
-}
-
-* {
-	margin:0;
-	padding:0;
+    background: #421920;
+    color: #843240;
+    font: 15px '04b25Regular', Arial, sans-serif;
 }
 
 a {
@@ -30,74 +25,78 @@ a:hover {
 	text-decoration: underline; 
 }
 
+h1 {
+	line-height: 1.2em;
+	margin: 0;    
+}
+
+h1 span {
+    color: white;
+    display: block;        
+    font-size: 1.4em;
+}
+
 p {
-	margin-bottom: 0.3em;
-}
-#gameBoard {
-	margin:0 auto;
-	min-height:550px;
-	position: relative;
-	width:795px;
-	z-index: 0;
+	margin: 4px 0 12px 0;
 }
 
-canvas#tileMap {
-	position:absolute; 
-	top:0; 
-	z-index:1;
+
+/*----------------------------------*/
+/* The Factory 						*/
+/*----------------------------------*/ 
+
+.msg {
+	color: #fff;
+    line-height: 37px;
+	text-align: center;
+}
+.msg img { display: block; margin: 0 auto; }
+.msg p { text-align: left; } 
+.msg ul {
+	text-align: left;
+}
+.msg span {
+	color: #d17810;
 }
 
-canvas#monorail-cat {
-	position: absolute; 
-	top: -0; 
-	z-index: 2;
+.info {
+    font-size: 0.75em;
 }
 
-#controls {
-	background-color: #FFFFFF;
-    border-radius: 50px 50px 50px 50px;
-    
-    margin: 0 auto;
-    opacity: 0.3;
-    position: absolute;
-    right: 100px;
-    text-align: center;
-    top: 50px;
-    width: 100px;
+.window {
+	background-color: #421920;
+	height: 510px;
+	left: 14%;
+	padding: 15px;
+	position: absolute;
+	top: 0;
+	width: 510px;
+	z-index: 3;
 }
-#controls:hover {
-	opacity: 1;
-}
-
-#controls li {
-	line-height: 45px;
-    padding-bottom: 20px;
-}
-#controls li:first-child {
-	padding-top: 20px;
-}
-#controls img {
-	vertical-align: middle;
-}
-#controls img:hover {
-	cursor: pointer;
+.window a.close {
+	background-color: #D17810;
+	color: white;
+	display: inline-block;
+	padding: 4px 10px;
 }
 
-.player.red {
-	float:left;
-	background:#CA6A40;
+
+.clearer:after {
+	content:".";
+    display:block;
+    clear:both;
+    height:0;
+    font-size:0;
+    line-height:0;
+    visibility:hidden;
+    overflow:hidden;
 }
 
-.player.blue {
-	float:right;
-	background:#4B6D97;
-}
 
-.player {
-	width:100px;
-	text-align:center;
-}
 
+/*----------------------------------*/
+/* 	Generic blocs 					*/
+/*----------------------------------*/
 #header {
 	margin:0;
 	text-align: center;
@@ -111,25 +110,71 @@ canvas#monorail-cat {
     text-align: center;
     width: 550px;
 }
-
-p.playerName {
+#gameBoard {
+	margin:0 auto;
+	min-height:550px;
+	position: relative;
+	width:754px;
+	z-index: 0;
+}
+#gameBoard .player.red {
+	float:left;
+}
+#gameBoard .player.blue {
+	float:right;
+	text-align: right;
+}
+#gameBoard .player {
+    color: #fff;
+	text-align:center;
+    width:100px;
+}
+#gameBoard .player p.playerName {
 	font-size:130%;
 	font-weight:bold;
 	margin:0.3em 0;
 }
-
-p.lives img {
-	width:39px;
-	height:39px;
+#gameBoard .player p.lives img {
+    display: block;
+    margin: 0 auto 8px;
+}
+#gameBoard .player img.bonusImage {
+    border: 8px solid #843240;
+    margin: 0.3em auto;
+    width: 79px;
 }
 
-img.bonusImage {
-	background:url(arts/bg2.png) repeat;
-	width:79px;
-	margin:0.3em auto;
+
+#controls {
+    
+    margin: 0 auto;
+    text-align: center;
+    width: 150px;
+}
+#controls ul {
+	margin: 0;
+	padding: 0;
+	
+}
+
+#controls li {
+	float: left;
+	line-height: 45px;
+	list-style: none outside none;
+    padding-bottom: 20px;
+    width: 50px;
+}
+#controls li:first-child {
+}
+#controls img {
+	vertical-align: middle;
+}
+#controls img:hover {
+	cursor: pointer;
 }
 
 
+/*FIXME*/
 #msg {
 	z-index:10;
 	position:fixed;
@@ -148,20 +193,96 @@ img.bonusImage {
 	display:none;
 }
 
-.msg {
-	color: #fff;
-	font: 40px 'MatizRegular', Arial, sans-serif;
-	text-shadow: -3px 3px black, 3px -3px black, 3px 3px black, -3px -3px black;
+
+/*----------------------------------*/
+/* 	Intro screen					*/
+/*----------------------------------*/ 
+#gameBoard .text_screen {
+	margin: 0 auto;
 	text-align: center;
+	width: 540px;
 }
-.msg img { display: block; margin: 0 auto; }
-.msg p { text-align: left; } 
-.msg ul {
-	text-align: left;
+
+#gameBoard .config {
+	margin: 25px 0 20px;
+	overflow: hidden;
 }
-.msg span {
-	color: #d17810;
+
+#gameBoard .config .player1 {
+    float: left;
+    width: 270px;
 }
+#gameBoard .config .player2 {
+    float: right;
+    width: 270px;
+}
+
+#gameBoard .config input {
+    background-color: white;
+    border: 4px solid #843240;
+    color: #843240;
+    font: 1.5em '04b25Regular', Arial, sans-serif;
+    padding: 4px;
+    width: 124px;
+}
+
+#gameBoard .config img,
+#gameBoard .config input  {
+    display: block;
+    margin: 0 auto 10px;
+}
+#gameBoard .config table.bindings {
+    border-spacing: 8px;
+    margin: 0 auto 10px;
+}
+#gameBoard .config table.bindings tr td.up,
+#gameBoard .config table.bindings tr td.left,
+#gameBoard .config table.bindings tr td.down,
+#gameBoard .config table.bindings tr td.right,
+#gameBoard .config table.bindings tr td.action{
+    background-color: #843240;
+    color: white;
+    height: 40px;
+    width: 40px;    
+}
+#gameBoard .config table.bindings tr td.action {
+    width: auto;
+}
+
+#gameBoard #startGameButton {
+	background-color: #D17810;
+    border: medium none;
+    color: white;
+    cursor:	pointer;
+    font: 1.5em '04b25Regular', Arial, sans-serif;
+    padding: 11px 29px;
+    text-transform: uppercase;
+}
+
+/*----------------------------------*/
+/* 	Game screen						*/
+/*----------------------------------*/
+
+canvas#tileMap {
+	position:absolute; 
+	top:0; 
+	z-index:1;
+}
+
+canvas#monorail-cat {
+	position: absolute; 
+	top: 0; 
+	z-index: 2;
+}
+
+
+
+
+
+
+/*----------------------------------*/
+/* 	Map selector screen				*/
+/*----------------------------------*/
 
 #otherMaps p {
 	width:795px;
@@ -169,17 +290,8 @@ img.bonusImage {
 	text-align:center;
 }
 
-#startGameButton {
-	font-size:100%;
-}
 
-.right {
-	float:right;
-}
 
-.left {
-	float:left;
-}
 
 .bottomLine {
 	background: url("arts/bg2.png") repeat scroll 0 0 transparent;
@@ -192,13 +304,4 @@ img.bonusImage {
 
 
 
-.clearer:after {
-	content:".";
-    display:block;
-    clear:both;
-    height:0;
-    font-size:0;
-    line-height:0;
-    visibility:hidden;
-    overflow:hidden;
-}
+

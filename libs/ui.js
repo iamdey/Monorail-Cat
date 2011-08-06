@@ -30,19 +30,20 @@ var UI = new function(){
 	/**
 	 * intro screen
 	 */ 
-	this.loadGameIntro = function(){
+	this.loadGameIntro = function(a_players){
 		//IE iz not welcome; bleargh!
 		if (navigator.appName == 'Microsoft Internet Explorer'){
 			var html = "<div class=\"msg\">";
 			html += "<img src=\"arts/ie-foar-real.jpg\" alt=\"Wait... Internet exlporer for real?!\" />";
-			html += "<p>Owh noes you cannot start the MonorailCat wid' tihs shizt. Go get one of thoze FOC browzer:</p>";
+			html += "<p>Owh noes you cannot start the MonorailCat famous game wid' tihs shizt. Go get one of thoze FOC browzer:</p>";
 			html += "<ul><li><a href=\"http://www.mozilla.com\">Firefox</a></li><li><a href=\"http://www.opera.com/\">Opera</a></li><li><a href=\"http://www.google.com/chrome/\">Chrome</a></li></ul>";
 			html += "</div>";
 			e(GAME_ID).innerHTML = html;
 			return;
 		}
 		
-		//Doz nossing rufl
+		//add tmp players 
+        
 		return;
 	};
 	
@@ -143,9 +144,9 @@ var UI = new function(){
 			var lives = '';
 			for(var i = 0; i< nbLives; i++) {
 				if(player == 1)
-					lives += '<img src="arts/cat1-right.png"></img><br />';
+					lives += '<img src="arts/life_cat1.png" alt="one up"/>';
 				else
-					lives += '<img src="arts/cat2-left.png"></img><br />';
+					lives += '<img src="arts/life_cat2.png" alt="one up" />';
 			}
 			e('player'+player+'lives').innerHTML = lives;
 		}
@@ -224,7 +225,7 @@ var UI = new function(){
 		// affichage final :
 		box.style.display = 'block';
 	};
-
+	
 	// Ferme le message actuellemnt à l'écran
 	this.closeMsg = function() {
 		var box = e('msg');
@@ -236,20 +237,63 @@ var UI = new function(){
 		}
 	};
 	
-	
-	this.openMapSelection = function(){
-		var html = "";
+	/**
+	 * Open a new window, add a close button
+	 * 
+	 * @param str - window content
+	 * return the openned element
+	 */ 
+	this.openWindow = function(html, id){
+		var div_window = document.createElement("div");
 		
-		html += "<label for=\"mapSelection\">Select the map U want to play :</label><br/>";
-		html += "<select id=\"mapSelection\"><option value=\"default\">default</option><option value=\"Azesomap\">Azesomap</option><option value=\"bite2\">bite2</option></select><br/>";
-		
-		if(Game.date_game_start){
-			html += "<button id=\"startGameButton\">Restart Game</button><br/>";
+		if(id){
+			div_window.id = id;
 		}
 		
-		html += "Hey, You can save your own map online with <br/><a href=\"mapEditor.html\">The Map Edotir</a><br/>";
+		div_window.setAttribute("class", "window");
+		div_window.innerHTML = html;
 		
-		this.printMsg(html, this.NORMAL, -1);
+		a_close = document.createElement("a");
+		a_close.href = "#";
+		a_close.innerHTML = "Back";
+		a_close.setAttribute("class", "close");
+		
+		div_window.appendChild(a_close);
+		
+		a_close.addEventListener("click", function(event){
+			event.preventDefault();
+			e(GAME_ID).removeChild(div_window);
+			
+		}, false);
+		
+		
+		e(GAME_ID).appendChild(div_window);
+	};
+	
+	
+	/**
+	 * Open a window w/ the map selection
+	 * 
+	 * return void
+	 */
+	this.openMapSelection = function(){
+		var id = "map_selector";
+		if(e(id)){
+			return; // window already open
+		}
+		
+		var html = "";
+		
+		html += "<p><label for=\"mapSelection\">Select the map U want to play :</label><br/>";
+		html += "<select id=\"mapSelection\"><option value=\"default\">default</option><option value=\"Azesomap\">Azesomap</option><option value=\"bite2\">bite2</option></select></p>";
+		
+		if(Game.date_game_start){
+			html += "<p><button id=\"startGameButton\">Restart Game</button></p>";
+		}
+		
+		html += "<p>Hey, You can save your own map online with <br/><a href=\"mapEditor.html\">The Map Editor</a></p>";
+		
+		this.openWindow(html, id);
 		
 		e("startGameButton").addEventListener("click", function(){
 			Game.map_name = e("mapSelection").value;
