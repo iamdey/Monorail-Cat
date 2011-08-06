@@ -1,7 +1,7 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= false;
+var DEBUG 		= true;
 var DOMAIN		= "boarf.net";
 //var DOMAIN		= "localhost";
 
@@ -36,9 +36,10 @@ function _Game() {
 	/**
 	 * The map to load
 	 */
-	this.map_name = "default";
+	this.map_name 	= "default";
 	
-	this.players = [];
+	this.players 	= [];
+	this.cats  		= [];
 	
 	/**
 	 * Date object that game start
@@ -72,7 +73,8 @@ function _Game() {
 
 _Game.prototype = {
 	initialize : function(){
-    
+    	//--------------
+    	// Create fake players for the intro
         this.cats = [
 			new Cat(false, 1, RED, [0, 0], SOUTH),
 			new Cat(false, 2, BLUE, [0, 0], NORTH)
@@ -82,11 +84,14 @@ _Game.prototype = {
 			new Player(this.player1_cfg, this.cats[0]),
 			new Player(this.player2_cfg, this.cats[1])
 		];
-    
+		UI.count_players = 0;
+    	//--------------
+    	//--------------
+    	//Load GUI
 		UI.loadGameIntro(this.players);
 		GameSound.initialize();
 		GameSound.playLoop("openning");
-		
+		//--------------
 		//--------------
 		//Events listener
 		e("name_player1").addEventListener("blur", function(){
