@@ -2,8 +2,8 @@ var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= true;
-var DOMAIN		= "boarf.net";
-//var DOMAIN		= "localhost";
+//var DOMAIN		= "boarf.net";
+var DOMAIN		= "localhost";
 
 
 /**

@@ -17,7 +17,7 @@ body {
 }
 
 a {
-	color: #d17810;
+	color: white;
 	text-decoration: none;
 }
 
@@ -56,7 +56,7 @@ p {
 	text-align: left;
 }
 .msg span {
-	color: #d17810;
+	color: #E28210;
 }
 
 .info {
@@ -74,7 +74,7 @@ p {
 	z-index: 3;
 }
 .window a.close {
-	background-color: #D17810;
+	background-color: #E28210;
 	color: white;
 	display: inline-block;
 	padding: 4px 10px;
@@ -174,26 +174,6 @@ p {
 }
 
 
-/*FIXME*/
-#msg {
-	z-index:10;
-	position:fixed;
-	width:550px;
-	height:400px;
-	text-align:center;
-	vertical-align:middle;
-	padding:20px 30px;
-	border:solid 3px #880000;
-	-moz-border-radius:10px;
-	-webkit-border-radius:10px;
-	border-radius:10px;
-	color:#880000;
-	background:url(arts/bg.png) repeat;
-	font-family:fantasy;
-	display:none;
-}
-
-
 /*----------------------------------*/
 /* 	Intro screen					*/
 /*----------------------------------*/ 
@@ -250,7 +230,7 @@ p {
 }
 
 #gameBoard #startGameButton {
-	background-color: #D17810;
+	background-color: #E28210;
     border: medium none;
     color: white;
     cursor:	pointer;
