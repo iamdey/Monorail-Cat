@@ -139,6 +139,11 @@ var UI = new function(){
 		this.setPlayerLives(id, my_player.getCat().nbLives);
 	};
 	
+	/**
+	 * This is the definition ov what plyer's really is : player without lives is not a plyer that's all
+	 * 
+	 * (it's a noooob)
+	 */
 	this.setPlayerLives = function(player, nbLives) {
 		if(player == 1 || player == 2) {
 			var lives = '';
@@ -152,6 +157,9 @@ var UI = new function(){
 		}
 	};
 
+	/**
+	 * Define the player bonux?
+	 */
 	this.setPlayerBonus = function(player, bonusName) {
 		if(player == 1 || player == 2) {
 			if(this.bonusImages[bonusName] != undefined) {
@@ -162,10 +170,19 @@ var UI = new function(){
 		}
 	};
 	
+	
+	/**
+	 * Reset the whole gameboard w/ the awesomest manner
+	 */
 	this.resetGameBoard = function(){
 		e(GAME_ID).innerHTML = "";
 	};
 	
+	
+	/**
+	 * Do things I can't remember right nao
+	 * Believe that 's used to display a spinner while loading a map
+	 */
 	this.mapLoading = function(add){
 		
 		if(typeof(add) == "undefined"){
@@ -183,59 +200,7 @@ var UI = new function(){
 		}
 		
 	};
-
-	// Affiche un message
-	// @param text texte à afficher (HTML autorisé)
-	// @param size taille du texte (UI.{NORMAL, BIG, HUGE}, ou manuel (eg. '15pt')). Defaut : UI.NORMAL
-	// @param timeout durée de disparition automatique en ms, si <=0 alors fermeture manuelle par l'utilisateur. Defaut : 3s
-	// @param command commande lancée à la fermeture du message. Defaut : ''
-	this.printMsg = function(text, size, timeout, command) {
-		var box = e('msg');
-		// changement de style, positionnement
-		var sw = document.body.clientWidth || window.innerWidth;
-		var sh = document.body.clientHeight || window.innerHeight;
-		box.style.top = /*((sh - 400) / 2)*/ 200 + 'px';
-		box.style.left = ((sw - 550) / 2 -30) + 'px';
-		box.style.fontSize = size || this.NORMAL;
-		// si timeout précédent, on le retire
-		if(this.lastTimeout != null) {
-			clearTimeout(this.lastTimeout);
-			this.lastTimeout = null;
-		}
-		console.log(timeout);
-		timeout = timeout || 3000;
-		command = command || '';
-		// préparation du texte
-		text = '<p>'+text+'</p>';
-		
-		
-		
-		if(timeout <= 0) {
-			text += '<p><input type="button" value="Fermer" onclick="'+command+';UI.closeMsg(); return false;" /></p>';
-		}
-		
-		console.log(text);
-		
-		box.innerHTML = text;
-		// timeout si nécessaire
-		if(timeout >0) {
-			this.lastTimeout = setTimeout('UI.closeMsg();', timeout);
-			setTimeout(command, timeout);
-		}
-		// affichage final :
-		box.style.display = 'block';
-	};
 	
-	// Ferme le message actuellemnt à l'écran
-	this.closeMsg = function() {
-		var box = e('msg');
-		box.style.display = 'none';
-		// s'il y avait un timeout en cours, on le retire
-		if(this.lastTimeout != null) {
-			clearTimeout(this.lastTimeout);
-			this.lastTimeout = null;
-		}
-	};
 	
 	/**
 	 * Open a new window, add a close button
@@ -282,16 +247,53 @@ var UI = new function(){
 			return; // window already open
 		}
 		
+		if(Game.isOffline()){
+			var html = "<p>This Feature is not available offline.</p> <p>U must play at <a href=\"" + MONORAIL_ONLINE_URI + "\">" + MONORAIL_ONLINE_URI + "</a></p>";
+			this.openWindow(html);
+			return;
+		}
+		
+		//--------------------
+		// get list via xhr
+		var xhr;
+		xhr = getXHR();
+		xhr.onreadystatechange  = function() {
+		  if(xhr.readyState  == 4) {
+			if(xhr.status  == 200) {
+			  list = xhr.responseText;
+			} else {
+			  list = 'default';
+			}
+		  }
+		};
+		xhr.open("GET", 'map.php?GET=',  false);
+		xhr.send(null); 
+		
+		var maps = list.split("\n");
+		//--------------------
+		//--------------------
+		// generate html
 		var html = "";
 		
 		html += "<p><label for=\"mapSelection\">Select the map U want to play :</label><br/>";
-		html += "<select id=\"mapSelection\"><option value=\"default\">default</option><option value=\"Azesomap\">Azesomap</option><option value=\"bite2\">bite2</option></select></p>";
+		html += "<select id=\"mapSelection\">";
+		
+		for(var i=0; i < maps.length; i++) {
+			var mapname = trim(maps[i]);
+			if(mapname != '') {
+				var selected = (mapname == 'default')? "selected=\"selected\"" : "";
+				html += "<option value=\"" + mapname + " " + selected + " \">" + mapname + "</option>";
+			}
+		}
+		
+		html += "</select></p>";
 		
 		if(Game.date_game_start){
 			html += "<p><button id=\"startGameButton\">Restart Game</button></p>";
 		}
 		
 		html += "<p>Hey, You can save your own map online with <br/><a href=\"mapEditor.html\">The Map Editor</a></p>";
+		//--------------------
 		
 		this.openWindow(html, id);
 		
@@ -305,5 +307,17 @@ var UI = new function(){
 			e('msg').style.display = "none";
 		}, false);
 	};
+	
+	/**
+	 * check the current button design (on / off)
+	 * @param boolean - state of the sound
+	 */
+	this.checkAudioButton = function(){
+		if(!GameSound.is_mute) { 
+			e("audio_button").src = 'arts/sound_on.png';
+		} else { 
+			e("audio_button").src = 'arts/sound_off.png' 
+		};
+	}
 };
 

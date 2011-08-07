@@ -45,6 +45,7 @@
 				   <a href="#" title="Designer lead">Fred_o</a> -
 				   <a href="http://twitter.com/#!/Macha__" title="Music & Sounds">@Macha__</a> -
 				   <a href="http://twitter.com/#!/speedyop" title="Designer">@speedyop</a> -
+				   <a href="#" title="Actual human lolcat">Vlavv</a>
 				   <a href="#" title="Coder">zouip</a>
 				</p>
 				
@@ -96,7 +97,7 @@
 		
 		<div id="controls">
 			<ul class="clearer">
-				<li title="Mute/unmute sounds"><img src="arts/sound_on.png" onclick="GameSound.toggleMute(); if(!GameSound.is_mute) { this.src = 'arts/sound_on.png' } else { this.src = 'arts/sound_off.png' };" /></li>
+				<li title="Mute/unmute sounds"><img id="audio_button" src="arts/sound_on.png" onclick="GameSound.toggleMute(this);" /></li>
 				<li title="Choose a map"><img src="arts/map.png" onclick="UI.openMapSelection();" /></li>
 				<li><a href="mapEditor.html" title="Map editor"><img src="arts/map_edit.png" alt="Map editor" /></a></li>
 			</ul>

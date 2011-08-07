@@ -85,10 +85,14 @@ _GameSound.prototype = {
 	 */ 
 	toggleMute : function() {
 		this.is_mute = !this.is_mute;
+        
+        createCookie('is_mute', this.is_mute);
 
 		for(i in this.loaded_sounds){
 			this.loaded_sounds[i].mute(this.is_mute);
 		}
+        
+        UI.checkAudioButton();
 	}
 }
 

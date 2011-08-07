@@ -4,6 +4,7 @@ var MUSIC 		= true;
 var DEBUG 		= true;
 //var DOMAIN		= "boarf.net";
 var DOMAIN		= "localhost";
+var MONORAIL_ONLINE_URI = "http://vps.boarf.net/mc/monorail-cat.html";
 
 
 /**
@@ -90,6 +91,13 @@ _Game.prototype = {
     	//Load GUI
 		UI.loadGameIntro(this.players);
 		GameSound.initialize();
+		
+		//mute sound if the cookie says YES
+		if(readCookie('is_mute') == "true"){
+			//default is not mute
+			GameSound.toggleMute();	
+		}
+		
 		GameSound.playLoop("openning");
 		//--------------
 		//--------------
