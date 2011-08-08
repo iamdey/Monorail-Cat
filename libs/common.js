@@ -1,5 +1,4 @@
 function e(bloc) {
-//	console.log(bloc);
 	return document.getElementById(bloc);
 }
 

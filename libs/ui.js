@@ -281,8 +281,8 @@ var UI = new function(){
 		for(var i=0; i < maps.length; i++) {
 			var mapname = trim(maps[i]);
 			if(mapname != '') {
-				var selected = (mapname == 'default')? "selected=\"selected\"" : "";
-				html += "<option value=\"" + mapname + " " + selected + " \">" + mapname + "</option>";
+				var selected = (mapname == "default")? "selected=\"selected\"" : "";
+				html += "<option value=\"" + mapname + "\" " + selected + " \">" + mapname + "</option>";
 			}
 		}
 		
