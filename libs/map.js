@@ -108,7 +108,5 @@
 			s += entities[i].getId() + " ";
 		}
 		s += "]";
-		
-		console.log("Entities = "+s);
 	}
 }

@@ -110,6 +110,10 @@ _Game.prototype = {
 			Game.player2_cfg.name = this.value;	
 		}, false);
 		//--------------
+        //--------------
+        //preload map pictures
+        this.tilemap 	= new TileMap();
+        //--------------
 	},
 	
 	start : function() {
@@ -119,7 +123,6 @@ _Game.prototype = {
 		UI.mapLoading();
 		
 		this.surface 	= e("monorail-cat");
-		this.tilemap 	= new TileMap(e("tileMap"));
 		
 		this.loadMap();
 		
@@ -226,7 +229,7 @@ _Game.prototype = {
 			this.tilemap.load(this.map_name);
 		}
 		
-		this.tilemap.draw();
+		this.tilemap.draw(e("tileMap"));
 	},
 	
 	/**

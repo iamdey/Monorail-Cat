@@ -32,7 +32,7 @@
 
 
 // Classe, map vide de taille 0 par défaut.
-function TileMap(_canvas) {
+function TileMap() {
 	this.inst = 0;
 	var level;
 	var tiles;
@@ -41,44 +41,68 @@ function TileMap(_canvas) {
 	var scale;
 	var ready;
 	var tilesize = TILE_SIZE;
-	this.canvas = _canvas;
+    
+    this.initialize();
+}
 
-	// matrice représentant le niveau
-	this.level = new Array();
-	// association type de tuile => image à utiliser
-	this.tiles = new Array();
-	this.tiles[   0] = 'blank';
-	this.tiles[1056] = 's_ns';
-	this.tiles[  66] = 's_oe';
-	this.tiles[2304] = 's_en';
-	this.tiles[ 144] = 's_es';
-	this.tiles[   9] = 's_os';
-	this.tiles[ 516] = 's_on';
-	this.tiles[3504] = 'tb_e';
-	this.tiles[ 219] = 'tb_s';
-	this.tiles[1581] = 'tb_o';
-	this.tiles[2886] = 'tb_n';
-	this.tiles[4095] = 'qb';
+TileMap.prototype = {
+    initialize : function(){
+        // matrice représentant le niveau
+        this.level = new Array();
+        // association type de tuile => image à utiliser
+        this.tiles = new Array();
+        this.tiles[   0] = 'blank';
+        this.tiles[1056] = 's_ns';
+        this.tiles[  66] = 's_oe';
+        this.tiles[2304] = 's_en';
+        this.tiles[ 144] = 's_es';
+        this.tiles[   9] = 's_os';
+        this.tiles[ 516] = 's_on';
+        this.tiles[3504] = 'tb_e';
+        this.tiles[ 219] = 'tb_s';
+        this.tiles[1581] = 'tb_o';
+        this.tiles[2886] = 'tb_n';
+        this.tiles[4095] = 'qb';
+        
+        this.bits = new Array();
+        this.bits[NORTH] = new Array();
+        this.bits[NORTH][SOUTH] = 10;
+        this.bits[NORTH][WEST] = 9;
+        this.bits[NORTH][EAST] = 11;
+        this.bits[SOUTH] = new Array();
+        this.bits[SOUTH][NORTH] = 5;
+        this.bits[SOUTH][WEST] = 3;
+        this.bits[SOUTH][EAST] = 4;
+        this.bits[WEST] = new Array();
+        this.bits[WEST][NORTH] = 2;
+        this.bits[WEST][SOUTH] = 0;
+        this.bits[WEST][EAST] = 1;
+        this.bits[EAST] = new Array();
+        this.bits[EAST][NORTH] = 8;
+        this.bits[EAST][SOUTH] = 7;
+        this.bits[EAST][WEST] = 6;
 
-	// chargement des images
-	this.images = new Array();
-	for(var tid in this.tiles) {
-		this.images[tid] = new Image();
-		this.images[tid].src = 'arts/'+this.tiles[tid]+'.png';
-	}
+        // chargement des images
+        this.images = new Array();
+        for(var tid in this.tiles) {
+            this.images[tid] = new Image();
+            this.images[tid].src = 'arts/'+this.tiles[tid]+'.png';
+        }
 
-	// de base, map non chargée
-	this.ready = false;
-
-	// Extraction du type de tuile (retrait d'éventuelle spécialité)
-	this.tileType = function(t) {
+        // de base, map non chargée
+        this.ready = false;
+    },
+    
+    // Extraction du type de tuile (retrait d'éventuelle spécialité)
+	tileType : function(t) {
 		return (t & 4095);
-	}
+	},
 
 
 	// Affichage de la map
-	this.draw = function() {
+	draw : function(_canvas) {
 		
+        var canvas = _canvas;
 		// Si une map est chargée :
 		if(this.ready) {
 			// Si la map a une longueur/hauteur plus grande que 7, on définit un coefficient d'échelle < 1.
@@ -94,12 +118,12 @@ function TileMap(_canvas) {
 				this.images[tid].height = TILE_SIZE * this.scale;
 			}
 			// Effacer la map précédente.
-			this.canvas.getContext('2d').clearRect(0,0, this.canvas.width, this.canvas.height);
+			canvas.getContext('2d').clearRect(0,0, canvas.width, canvas.height);
 			// Dessin de la nouvelle map
 			var i, j;
 			for(i=0; i< this.level.length; i++) {
 				for(j=0; j< this.level[i].length; j++) {
-					this.canvas.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
+					canvas.getContext('2d').drawImage(this.images[this.tileType(this.level[i][j])], Math.round(this.scale * j * TILE_SIZE), Math.round(this.scale * i * TILE_SIZE));
 				}
 			}
 			// Redimensionnement des images vers leur taille d'origine, pour éviter d'éventuels conflits :
@@ -108,39 +132,22 @@ function TileMap(_canvas) {
 				this.images[tid].height = TILE_SIZE;
 			}
 		}
-	}
-
-	this.bits = new Array();
-	this.bits[NORTH] = new Array();
-	this.bits[NORTH][SOUTH] = 10;
-	this.bits[NORTH][WEST] = 9;
-	this.bits[NORTH][EAST] = 11;
-	this.bits[SOUTH] = new Array();
-	this.bits[SOUTH][NORTH] = 5;
-	this.bits[SOUTH][WEST] = 3;
-	this.bits[SOUTH][EAST] = 4;
-	this.bits[WEST] = new Array();
-	this.bits[WEST][NORTH] = 2;
-	this.bits[WEST][SOUTH] = 0;
-	this.bits[WEST][EAST] = 1;
-	this.bits[EAST] = new Array();
-	this.bits[EAST][NORTH] = 8;
-	this.bits[EAST][SOUTH] = 7;
-	this.bits[EAST][WEST] = 6;
-
-	// Validité de la direction demandée en fonction de la tuile
-	this.isValidDirection = function(x, y, from, to) {
+	},
+    
+    
+    // Validité de la direction demandée en fonction de la tuile
+	isValidDirection : function(x, y, from, to) {
 		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
-	}
+	},
 	
-	this.isValidOutDirection = function(x, y, to) {
+	isValidOutDirection : function(x, y, to) {
 		return (this.isValidDirection(x, y, NORTH, to)
 		|| this.isValidDirection(x, y, SOUTH, to)
 		|| this.isValidDirection(x, y, WEST, to)
 		|| this.isValidDirection(x, y, EAST, to));
-	}
+	},
 
-	this.getAValidDirection = function(x, y, prefered) {
+	getAValidDirection : function(x, y, prefered) {
 		var valid = 0;
 		if(prefered >=1 && prefered <= 4) {
 			// Test de la direction souhaitée
@@ -160,10 +167,10 @@ function TileMap(_canvas) {
 		}
 		// Sinon, on est sur la case vide. Ce cas ne devrait pas se produire.
 		return 0;
-	}
+	},
 
 	// Permet de récupérer les coordonnées du point de départ du joueur player.
-	this.getPlayerStartTile = function(player) {
+	getPlayerStartTile : function(player) {
 		for(var i=0; i<this.level.length; i++) {
 			for(var j=0; j<this.level[i].length; j++) {
 				var tmp = this.level[i][j] >>> 12;
@@ -177,10 +184,10 @@ function TileMap(_canvas) {
 			return {x: 6, y: 6};
 		}
 		return {x: 0, y: 0};
-	}
+	},
 
 	// Permet de récupérer la liste des coordonnées des tuiles sur lesquelles placer des items
-	this.getItemTiles = function() {
+	getItemTiles : function() {
 		var ret = new Array();
 		for(var i=0; i<this.level.length; i++) {
 			for(var j=0; j<this.level[i].length; j++) {
@@ -191,14 +198,14 @@ function TileMap(_canvas) {
 			}
 		}
 		return ret;
-	}
+	},
 
 	// Appelée une fois la map chargée
 	// A surcharger dans le contexte appelant
-	this.onload = function() {
-	}
+	onload : function() {
+	},
 
-	this.load = function(mapId) {
+	load : function(mapId) {
 		var xhr;
 		var refMap = this;
 		xhr = getXHR();
@@ -215,10 +222,10 @@ function TileMap(_canvas) {
 		//Wait for answer
 		xhr.open("GET", 'maps/'+mapId+'.csv',  false);
 		xhr.send(null);
-	}
+	},
 
 	// Permet de charger les données matricielles sous forme de csv
-	this.loadCsv = function(csv) {
+	loadCsv : function(csv) {
 		var lines = csv.split("\n");
 		var i,j, columns, ieff;
 		this.level = new Array();
