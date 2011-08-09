@@ -1,9 +1,9 @@
 var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
-var DEBUG 		= true;
-//var DOMAIN		= "boarf.net";
-var DOMAIN		= "localhost";
+var DEBUG 		= false;
+var DOMAIN		= "boarf.net";
+//var DOMAIN		= "localhost";
 var MONORAIL_ONLINE_URI = "http://vps.boarf.net/mc/monorail-cat.html";
 
 
@@ -50,10 +50,10 @@ function _Game() {
 	this.player1_cfg = {
 		name : "Player 1",
 		keymap : {
-			up: 90,		// z
-			down: 83,	// s
-			left: 81, 	// q
-			right: 68, 	// d
+			up: 69,		// e
+			down: 68,	// d
+			left: 83, 	// s
+			right: 70, 	// f
 			action1: 32	// space
 		}
 	};
