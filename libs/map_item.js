@@ -1,8 +1,11 @@
 // Item names
-var NO_ITEM = false
-var WOOLBALL = "woolball"
-var RAINBOW = "rainbow"
-var WATER = "water"
+var NO_ITEM = false;
+var WOOLBALL = "woolball";
+var RAINBOW = "rainbow";
+var WATER = "water";
+
+//special not item
+var DEADCAT = "deadcat";
 
 // Time of item invizibliness
 var INVISIBLE_FRAMES = FRAMERATE * 1;
@@ -105,6 +108,80 @@ function MapItem(startingTile){
 }
 
 /**
+ * class remance cat dies on the floor
+ * we don't care what kind of cat hit iz
+ * @author esion
+ */
+function Deadcat(map, startingTile) {
+    
+    console.log("new dead cat");
+    
+	var parent 	= new Entity(startingTile);
+        var lifetime    = DEADCAT_LIFE_TIME;
+        
+        // explosion sprite
+	var sprite = new Sprite(["center", "center"], {
+		kaboom: [["arts/explosion1.png", 6], ["arts/explosion2.png", 6]]
+		},
+                function() {
+			sprite.action("kaboom");
+		}
+        );
+            
+        /**
+	 * Parent binding.
+	 */
+	this.getId = parent.getId;
+	this.getTile = parent.getTile;
+        
+        
+        
+        /**
+	 * Returns the entity type.
+	 */
+	this.getType = function() {
+		return DEADCAT;
+	}
+        
+        /**
+	 *	Returns the entity strength.
+	 */
+	this.getStrength = function() {
+		return DEADCAT_STRENGTH;
+	}
+        
+        /**
+	 * remove this
+	 */
+	this.die = function() {
+		map.removeEntity(this);
+		
+		return false;
+	}
+            
+        /**
+	 *	Refresh teh sprite (evn if it dosent need!).
+	 */
+	this.update = function() {
+            
+            if (lifetime-- == 0) {
+               this.die();
+            } else {
+               sprite.update();
+            sprite.update();
+            }
+	};
+        
+        /**
+	 *	Draws teh sprite.
+	 */
+	this.draw = function(c) {
+		sprite.draw(c, parent.getAbsolutePos());
+	}
+}
+
+
+/**
  * class Water 
  * 
  * Cold and wet water on the level...
@@ -180,7 +257,6 @@ function Woolball(map, startingTile, _direction) {
 	var direction = _direction;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
-	var direction = _direction;
 	var lifetime = WOOLBALL_LIFE_TIME;
 	var directions = [SOUTH, NORTH, WEST, EAST];
 	

@@ -102,7 +102,7 @@ TileMap.prototype = {
 	// Affichage de la map
 	draw : function(_canvas) {
 		
-        var canvas = _canvas;
+            var canvas = _canvas;
 		// Si une map est chargée :
 		if(this.ready) {
 			// Si la map a une longueur/hauteur plus grande que 7, on définit un coefficient d'échelle < 1.

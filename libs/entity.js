@@ -5,6 +5,7 @@ var MAX_ITEMS = 1;
 var CAT_SPEED = TILE_SIZE * 3;
 var WOOLBALL_SPEED = TILE_SIZE * 5;
 var WOOLBALL_LIFE_TIME = FRAMERATE * 8;
+var DEADCAT_LIFE_TIME = FRAMERATE * 1;
 var RAINBOW_TIME = FRAMERATE * 3;
 
 // Directions
@@ -20,6 +21,7 @@ var BLUE = 2;
 
 // Strengths
 var MAP_ITEM_STRENGTH = 0;
+var DEADCAT_STRENGTH = 0;
 var CAT_STRENGTH = 1;
 var WOOLBALL_STRENGTH = 1;
 var WATER_STRENGTH = 1;
@@ -160,6 +162,10 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	
 	//makit public nah
 	this.nbLives = NB_LIVES;
+        
+        //the attribut that's give time before respawning, meanwhile the cat is at purgatory
+        //well we can name this var at the opposite something like alive_for and increment it 
+        this.respawning_in = 0;
 
 	// Cat sprite
 	var sprite = new Sprite(["center", "center"], {
@@ -381,10 +387,16 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	/**
 	 *	Dumbledore diez.
 	 */
-	this.die = function() {
+	this.die = function() { 
 		// Play hit sound
 		GameSound.play("meow03");
+                
+                //display Deadcat
+                map.addEntity(new Deadcat(map, [parent.tile[0], parent.tile[1]], true));
 		
+                //wait before respawn
+                this.respawning_in = DEADCAT_LIFE_TIME;
+                
 		// Reset position
 		self.changeDirection(startingDirection);
 		parent.goTo(startingTile);
@@ -406,6 +418,7 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	 *	Draws the cat, and its rainbow if nyaning.
 	 */
 	this.draw = function(c) {
+            if(this.respawning_in-- <= 0){
 		if(rainbowTimer > 0) {
 			var rainbowPos = parent.getAbsolutePos();
 			
@@ -421,25 +434,28 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		}
 		
 		sprite.draw(c, parent.getAbsolutePos());
+            }
 	}
 
 	/**
 	 *	Updates the cat, by naming it move and updates its sprite.
 	 */
 	this.update = function() {
-		this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
+                if(this.respawning_in <= 0){
+                    this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
 
-		if(rainbowTimer > 0) {
-			rainbowTimer--;
-			rainbowSprite.update();
-			
-			if(rainbowTimer == 0) {
-				speed = 1;
-				strength = CAT_STRENGTH;
-				rainbowSprite ;
-			}
-		}
+                    if(rainbowTimer > 0) {
+                            rainbowTimer--;
+                            rainbowSprite.update();
 
-		sprite.update();
+                            if(rainbowTimer == 0) {
+                                    speed = 1;
+                                    strength = CAT_STRENGTH;
+                                    rainbowSprite ;
+                            }
+                    }
+
+                    sprite.update();
+                }
 	}
 }

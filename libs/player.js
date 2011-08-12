@@ -114,7 +114,9 @@ Player.prototype = {
 				//action property case
 				else{
 					if(!reset){
-						this.cat.doAction(key);
+                                                if(this.cat.respawning_in < 0){
+                                                    this.cat.doAction(key);
+                                                }
 					}else{
 						this.cat.doAction(NONE);
 					}

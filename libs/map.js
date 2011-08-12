@@ -55,12 +55,19 @@
 		for (var i = 0; i < entities.length; i++) {
 			var otherEntity = entities[i];
 			var otherTile = otherEntity.getTile();
-			
+                        
 			// Collision detected
 			if (otherTile[0] == tile[0] && otherTile[1] == tile[1] && otherEntity.getId() != entity.getId()) {
+                                //Doz nossing biccose it's a deadcat U nao
+                                if(entity.getType() == DEADCAT || otherEntity.getType() == DEADCAT){
+                                    //FIXME
+                                    console.log("dead_cat");
+                                    return;
+                                }
+                                
 				var strength = entity.getStrength();
 				var otherStrength = otherEntity.getStrength();
-				
+
 				if(strength > otherStrength) {
 					if (otherEntity.getType() == MAP_ITEM) {
 						// Pick up item
@@ -68,7 +75,7 @@
 							gameOver |= otherEntity.die();
 						}
 					}
-					// Killz collider
+					// Killz collider <- sure it is necessary?
 					else {
 						gameOver |= otherEntity.die();
 					}
@@ -84,7 +91,10 @@
 		}
 		
 		if (gameOver) {
+                    //We wait for the user understand he'z a looser
+                    setTimeout(function(){
 			Game.over();
+                    }, ((DEADCAT_LIFE_TIME / 30 ) * 1000)-10);
 		}
 	}
 	
