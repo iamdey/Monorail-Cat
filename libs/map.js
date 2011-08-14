@@ -53,9 +53,10 @@
 		var gameOver = false;
 
 		for (var i = 0; i < entities.length; i++) {
-			var otherEntity = entities[i];
-			var otherTile = otherEntity.getTile();
-                        
+			var otherEntity         = entities[i];
+			var otherTile           = otherEntity.getTile();
+            var displayDyingItem    = (entity.getType() == CAT || otherEntity.getType() == CAT) ? false : true;
+            
 			// Collision detected
 			if (otherTile[0] == tile[0] && otherTile[1] == tile[1] && otherEntity.getId() != entity.getId()) {
                 
@@ -76,15 +77,15 @@
 					}
 					// Killz collider
 					else {
-						gameOver |= otherEntity.die();
+						gameOver |= otherEntity.die(true);
                     }
 				} else if(strength < otherStrength) {
 					// Cat diez 
-					gameOver |= entity.die();
+					gameOver |= entity.die(displayDyingItem);
 				} else {
 					// Both diez
-					gameOver |= entity.die();
-					gameOver |= otherEntity.die();
+					gameOver |= entity.die(displayDyingItem);
+					gameOver |= otherEntity.die(displayDyingItem);
 				}
 			}
 		}

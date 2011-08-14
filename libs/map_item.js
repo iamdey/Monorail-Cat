@@ -7,6 +7,9 @@ var WATER = "water";
 // Time of item invizibliness
 var INVISIBLE_FRAMES = FRAMERATE * 1;
 
+// Time of dying items (displays deaditem) in seconds
+var DYINGITEM_FRAMES = FRAMERATE * 1;
+
 // Probability of each item to come (They are cumulated so the formula is simpler)
 var PROBA_WOOLBALL = 5
 var PROBA_WATER = PROBA_WOOLBALL + 5
@@ -124,7 +127,8 @@ function Water(map, startingTile) {
 	
 	// Water sprite
 	var sprite = new Sprite(["center", "center"], {
-		shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]]
+		shpritz: [["arts/water1.png", 6], ["arts/water2.png", 6]],
+        dead:    [["arts/explosion1.png", 6], ["arts/explosion2.png", 6]]
 		}, function() {
 			sprite.action("shpritz");
 			GameSound.play("geyser02");
@@ -137,6 +141,8 @@ function Water(map, startingTile) {
 	this.getId = parent.getId;
 	this.getTile = parent.getTile;
 	
+    var dying_in = 0;
+    
 	/**
 	 * Returns the entity type.
 	 */
@@ -154,9 +160,19 @@ function Water(map, startingTile) {
 	/**
 	 *	SHHHHHH!
 	 */
-	this.die = function() {
-		map.removeEntity(this);
-		
+	this.die = function(display_dead) {
+        if(display_dead){
+            sprite.action("dead");
+            dying_in = DYINGITEM_FRAMES;
+            var self = this;
+            
+            setTimeout(function(){
+                map.removeEntity(self);
+            }, DYINGITEM_FRAMES * 1000 / FRAMERATE);
+        }else{
+            map.removeEntity(this);
+        }
+        
 		return false;
 	}
 	
@@ -178,7 +194,11 @@ function Water(map, startingTile) {
      * this can be killed
      */
     this.isKillable = function(){
-        return parent.isKillable();
+         if(dying_in > 0){
+            return false;
+        }
+        
+        return true;
     };
 }
 
@@ -197,10 +217,13 @@ function Woolball(map, startingTile, _direction) {
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var lifetime = WOOLBALL_LIFE_TIME;
 	var directions = [SOUTH, NORTH, WEST, EAST];
-	
+	//if < 0 item is alive; > 0 item is dying; when = 0 item is removed
+    var dying_in = 0;
+    
 	// Woolball sprite
 	var sprite = new Sprite(["center", "center"], {
-		roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]]
+		roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]],
+        dead:    [["arts/explosion1.png", 6], ["arts/explosion2.png", 6]]
 		}, function() {
 			sprite.action("roooolllinnn");
 			GameSound.play("meow01");
@@ -245,8 +268,18 @@ function Woolball(map, startingTile, _direction) {
 	/**
 	 *	Not funny anymoar!
 	 */
-	this.die = function() {
-		map.removeEntity(this);
+	this.die = function(display_dead) {
+		if(display_dead){
+            sprite.action("dead");
+            dying_in = DYINGITEM_FRAMES;
+            var self = this;
+            
+            setTimeout(function(){
+                map.removeEntity(self);
+            }, 1000);
+        }else{
+            map.removeEntity(this);
+        }
 		
 		return false;
 	}
@@ -295,22 +328,25 @@ function Woolball(map, startingTile, _direction) {
 	 *	Updates the woolball.
 	 */
 	this.update = function() {
+        dying_in--;
 		if (lifetime-- == 0) {
 			self.die();
 		} else {
 			sprite.update();
 			
-			parent.move(sx * DELTA_WOOLBALL_SPEED, sy * DELTA_WOOLBALL_SPEED,
-			
-			// Change Square callback function
-			function() {
-				map.detectCollision(self);
-			},
+            if(dying_in <= 0){
+			    parent.move(sx * DELTA_WOOLBALL_SPEED, sy * DELTA_WOOLBALL_SPEED,
+                
+                // Change Square callback function
+                function() {
+                    map.detectCollision(self);
+                },
 
-			// Middle passed callback function
-			function() {
-				self.goRandomlySomewhere();
-			});
+                // Middle passed callback function
+                function() {
+                    self.goRandomlySomewhere();
+                });
+            }
 		}
 	}
 	
@@ -355,6 +391,10 @@ function Woolball(map, startingTile, _direction) {
      * this can be killed
      */
     this.isKillable = function(){
-        return parent.isKillable();
+        if(dying_in > 0){
+            return false;
+        }
+        
+        return true;
     };
 }
