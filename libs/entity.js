@@ -21,7 +21,6 @@ var BLUE = 2;
 
 // Strengths
 var MAP_ITEM_STRENGTH = 0;
-var DEADCAT_STRENGTH = 0;
 var CAT_STRENGTH = 1;
 var WOOLBALL_STRENGTH = 1;
 var WATER_STRENGTH = 1;
@@ -41,7 +40,7 @@ var DELTA_WOOLBALL_SPEED = Math.round(WOOLBALL_SPEED / FRAMERATE);
 var ctId = 0;
 
 /**
- * class Entity 
+ * Abstract class Entity 
  * 
  * Teh class of all classez, wiz a position and stuff
  * 
@@ -137,7 +136,15 @@ function Entity(startingTile) {
 	 */
 	this.getAbsolutePos = function() {
 		return [pos[1] + tile[1] * TILE_SIZE, pos[0] + tile[0] * TILE_SIZE];
-	}
+	};
+    
+    /**
+     * Doz the entity is killable (deadcats, cat respawning not)
+     * @return boolean
+     */
+    this.isKillable = function(){
+        return true;   
+    };
 }
 
 /**
@@ -163,16 +170,17 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	//makit public nah
 	this.nbLives = NB_LIVES;
         
-        //the attribut that's give time before respawning, meanwhile the cat is at purgatory
-        //well we can name this var at the opposite something like alive_for and increment it 
-        this.respawning_in = 0;
+    //the attribut that's give time before respawning, meanwhile the cat is at purgatory
+    //well we can name this var at the opposite something like alive_for and increment it 
+    this.respawning_in = 0;
 
 	// Cat sprite
 	var sprite = new Sprite(["center", "center"], {
 			left:	[["arts/cat"+color+"-left.png", 0]],
 			right:	[["arts/cat"+color+"-right.png", 0]],
 			up:		[["arts/cat"+color+"-up-1.png", 3],		["arts/cat"+color+"-up-2.png", 3]],
-			down:	[["arts/cat"+color+"-down-1.png", 3],	["arts/cat"+color+"-down-2.png", 3]]
+			down:	[["arts/cat"+color+"-down-1.png", 3],	["arts/cat"+color+"-down-2.png", 3]],
+            dead:   [["arts/explosion1.png", 6],            ["arts/explosion2.png", 6]]
 		}, function() {
 			self.changeDirection(direction);
 		}
@@ -391,15 +399,17 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		// Play hit sound
 		GameSound.play("meow03");
                 
-                //display Deadcat
-                map.addEntity(new Deadcat(map, [parent.tile[0], parent.tile[1]], true));
-		
-                //wait before respawn
-                this.respawning_in = DEADCAT_LIFE_TIME;
-                
-		// Reset position
-		self.changeDirection(startingDirection);
-		parent.goTo(startingTile);
+        //display Deadcat
+        sprite.action("dead");
+        
+        //wait before respawn
+        this.respawning_in = DEADCAT_LIFE_TIME;
+        
+        // Reset position
+        setTimeout(function(){
+            self.changeDirection(startingDirection);
+		    parent.goTo(startingTile);
+        },  ((DEADCAT_LIFE_TIME / FRAMERATE ) * 1000));
 		
 		// Reset values
 		self.desiredDirection = NONE;
@@ -411,14 +421,13 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		UI.setPlayerLives(playerId, --this.nbLives);
 		
 		// Return true if game is over
-		return (this.nbLives == 0);
+		return (this.nbLives <= 0);
 	}
 
 	/**
 	 *	Draws the cat, and its rainbow if nyaning.
 	 */
 	this.draw = function(c) {
-            if(this.respawning_in-- <= 0){
 		if(rainbowTimer > 0) {
 			var rainbowPos = parent.getAbsolutePos();
 			
@@ -434,28 +443,38 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		}
 		
 		sprite.draw(c, parent.getAbsolutePos());
-            }
 	}
 
 	/**
 	 *	Updates the cat, by naming it move and updates its sprite.
 	 */
 	this.update = function() {
-                if(this.respawning_in <= 0){
-                    this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
+        if(this.respawning_in-- <= 0){
+            this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
 
-                    if(rainbowTimer > 0) {
-                            rainbowTimer--;
-                            rainbowSprite.update();
+            if(rainbowTimer > 0) {
+                    rainbowTimer--;
+                    rainbowSprite.update();
 
-                            if(rainbowTimer == 0) {
-                                    speed = 1;
-                                    strength = CAT_STRENGTH;
-                                    rainbowSprite ;
-                            }
+                    if(rainbowTimer == 0) {
+                            speed = 1;
+                            strength = CAT_STRENGTH;
+                            rainbowSprite ;
                     }
+            }
+        }
 
-                    sprite.update();
-                }
+        sprite.update();
 	}
+    
+    /**
+     * not killable while repawning time
+     */
+    this.isKillable = function(){
+        if(this.respawning_in >= 0){
+            return false;   
+        }
+        
+        return true;
+    };
 }

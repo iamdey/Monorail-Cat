@@ -4,9 +4,6 @@ var WOOLBALL = "woolball";
 var RAINBOW = "rainbow";
 var WATER = "water";
 
-//special not item
-var DEADCAT = "deadcat";
-
 // Time of item invizibliness
 var INVISIBLE_FRAMES = FRAMERATE * 1;
 
@@ -101,83 +98,17 @@ function MapItem(startingTile){
 			}
 		}
 	}
+    
+    /**
+     * this can be killed
+     */
+    this.isKillable = function(){
+        return parent.isKillable();
+    };
 	
 	/**
 	 * Hmm tired, doez noting at the end is better for kitten.
 	 */
-}
-
-/**
- * class remance cat dies on the floor
- * we don't care what kind of cat hit iz
- * @author esion
- */
-function Deadcat(map, startingTile) {
-    
-    console.log("new dead cat");
-    
-	var parent 	= new Entity(startingTile);
-        var lifetime    = DEADCAT_LIFE_TIME;
-        
-        // explosion sprite
-	var sprite = new Sprite(["center", "center"], {
-		kaboom: [["arts/explosion1.png", 6], ["arts/explosion2.png", 6]]
-		},
-                function() {
-			sprite.action("kaboom");
-		}
-        );
-            
-        /**
-	 * Parent binding.
-	 */
-	this.getId = parent.getId;
-	this.getTile = parent.getTile;
-        
-        
-        
-        /**
-	 * Returns the entity type.
-	 */
-	this.getType = function() {
-		return DEADCAT;
-	}
-        
-        /**
-	 *	Returns the entity strength.
-	 */
-	this.getStrength = function() {
-		return DEADCAT_STRENGTH;
-	}
-        
-        /**
-	 * remove this
-	 */
-	this.die = function() {
-		map.removeEntity(this);
-		
-		return false;
-	}
-            
-        /**
-	 *	Refresh teh sprite (evn if it dosent need!).
-	 */
-	this.update = function() {
-            
-            if (lifetime-- == 0) {
-               this.die();
-            } else {
-               sprite.update();
-            sprite.update();
-            }
-	};
-        
-        /**
-	 *	Draws teh sprite.
-	 */
-	this.draw = function(c) {
-		sprite.draw(c, parent.getAbsolutePos());
-	}
 }
 
 
@@ -242,6 +173,13 @@ function Water(map, startingTile) {
 	this.draw = function(c) {
 		sprite.draw(c, parent.getAbsolutePos());
 	}
+    
+    /**
+     * this can be killed
+     */
+    this.isKillable = function(){
+        return parent.isKillable();
+    };
 }
 
 /**
@@ -412,4 +350,11 @@ function Woolball(map, startingTile, _direction) {
 		case EAST:	parent.pos[1] = 0;				break;
 		case WEST:	parent.pos[1] = TILE_SIZE - 1;	break;
 	}
+    
+    /**
+     * this can be killed
+     */
+    this.isKillable = function(){
+        return parent.isKillable();
+    };
 }

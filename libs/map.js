@@ -51,19 +51,18 @@
 	this.detectCollision = function(entity) {
 		var tile = entity.getTile();
 		var gameOver = false;
-		
+
 		for (var i = 0; i < entities.length; i++) {
 			var otherEntity = entities[i];
 			var otherTile = otherEntity.getTile();
                         
 			// Collision detected
 			if (otherTile[0] == tile[0] && otherTile[1] == tile[1] && otherEntity.getId() != entity.getId()) {
-                                //Doz nossing biccose it's a deadcat U nao
-                                if(entity.getType() == DEADCAT || otherEntity.getType() == DEADCAT){
-                                    //FIXME
-                                    console.log("dead_cat");
-                                    return;
-                                }
+                
+                //Doz nossing bicose datiz respawning kat or deadcat or somethong else
+                if(!otherEntity.isKillable()){
+                    return;
+                }
                                 
 				var strength = entity.getStrength();
 				var otherStrength = otherEntity.getStrength();
@@ -75,10 +74,10 @@
 							gameOver |= otherEntity.die();
 						}
 					}
-					// Killz collider <- sure it is necessary?
+					// Killz collider
 					else {
 						gameOver |= otherEntity.die();
-					}
+                    }
 				} else if(strength < otherStrength) {
 					// Cat diez 
 					gameOver |= entity.die();
@@ -89,12 +88,10 @@
 				}
 			}
 		}
-		
+        
 		if (gameOver) {
-                    //We wait for the user understand he'z a looser
-                    setTimeout(function(){
-			Game.over();
-                    }, ((DEADCAT_LIFE_TIME / 30 ) * 1000)-10);
+            //We wait for the user understand he'z a looser
+            setTimeout(function(){ Game.over(); }, ((DEADCAT_LIFE_TIME / FRAMERATE ) * 1000)-10);
 		}
 	}
 	
@@ -119,4 +116,5 @@
 		}
 		s += "]";
 	}
+    
 }
