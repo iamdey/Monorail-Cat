@@ -245,13 +245,5 @@ _Game.prototype = {
 		}catch(e){
 			return true;
 		}
-	},
-    
-    /**
-     * Add a deadcat to the gameboard
-     */
-    addDeadcat : function(posx, posy){
-        console.log(this.map);
-        this.map.addEntity(new Deadcat(this.map, [posx, posy]));
-    }
+	}
 };
