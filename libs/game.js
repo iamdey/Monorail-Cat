@@ -113,6 +113,41 @@ _Game.prototype = {
         //--------------
         //preload map pictures
         this.tilemap 	= new TileMap();
+        Sprite.preload([
+            "arts/bonus1.png", 
+            "arts/bonus2.png",
+            "arts/bonus3.png",
+            "arts/water1.png", 
+            "arts/water2.png", 
+            "arts/wool_ball1.png",
+            "arts/wool_ball2.png",
+            "arts/cat1-left.png",
+			"arts/cat1-right.png",
+			"arts/cat1-up-1.png", 
+            "arts/cat1-up-2.png",
+			"arts/cat1-down-1.png", 
+            "arts/cat1-down-2.png",
+            "arts/cat2-left.png",
+			"arts/cat2-right.png",
+			"arts/cat2-up-1.png", 
+            "arts/cat2-up-2.png",
+			"arts/cat2-down-1.png", 
+            "arts/cat2-down-2.png",
+            "arts/rainbow-left1.png", 
+            "arts/rainbow-left2.png", 
+            "arts/rainbow-right1.png", 
+            "arts/rainbow-right2.png", 
+            "arts/rainbow-up1.png", 
+            "arts/rainbow-up2.png", 
+            "arts/rainbow-down1.png",
+            "arts/rainbow-down2.png",
+            "arts/explosion1.png", 
+            "arts/explosion2.png",
+            "arts/life_cat1.png",
+            "arts/life_cat2.png",
+            "arts/ice_pick.png"
+        ]);
+        
         //--------------
 	},
 	

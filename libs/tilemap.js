@@ -50,19 +50,20 @@ TileMap.prototype = {
         // matrice représentant le niveau
         this.level = new Array();
         // association type de tuile => image à utiliser
-        this.tiles = new Array();
-        this.tiles[   0] = 'blank';
-        this.tiles[1056] = 's_ns';
-        this.tiles[  66] = 's_oe';
-        this.tiles[2304] = 's_en';
-        this.tiles[ 144] = 's_es';
-        this.tiles[   9] = 's_os';
-        this.tiles[ 516] = 's_on';
-        this.tiles[3504] = 'tb_e';
-        this.tiles[ 219] = 'tb_s';
-        this.tiles[1581] = 'tb_o';
-        this.tiles[2886] = 'tb_n';
-        this.tiles[4095] = 'qb';
+        this.tiles = {
+               0 : 'blank',
+            1056 : 's_ns',
+              66 : 's_oe',
+            2304 : 's_en',
+             144 : 's_es',
+               9 : 's_os',
+             516 : 's_on',
+            3504 : 'tb_e',
+             219 : 'tb_s',
+            1581 : 'tb_o',
+            2886 : 'tb_n',
+            4095 : 'qb'
+        };
         
         this.bits = new Array();
         this.bits[NORTH] = new Array();
