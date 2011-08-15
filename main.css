@@ -244,12 +244,16 @@ p {
 /*----------------------------------*/
 
 canvas#tileMap {
+    left: 50%;
+    margin-left: -277px; /* 554 / 2*/
 	position:absolute; 
 	top:0; 
 	z-index:1;
 }
 
 canvas#monorail-cat {
+    left: 50%;
+    margin-left: -277px;
 	position: absolute; 
 	top: 0; 
 	z-index: 2;
