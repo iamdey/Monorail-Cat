@@ -159,6 +159,7 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	var parent = new Entity(startingTile);
 	var playerId = _playerId;
 	var direction = startingDirection;
+	var ai = undefined;
 	self.desiredDirection = NONE;
 	var stackedItems = new Array();
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
@@ -222,6 +223,13 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	this.getStrength = function() {
 		return strength;
 	}
+	
+	/**
+	 * WUT? I AM CONTROLLED?
+	 */
+	this.registerAi = function(ai) {
+		this.ai = ai;
+	}
 
 	/**
 	 *	Moves the entity by dx ; dy (in pixels)
@@ -237,24 +245,36 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 			var dirChanged = false;
 			var oppositeDirection = getOppositeDirection(direction);
 
-			if(DEBUG && self.desiredDirection != NONE)
-				console.log("Desired direction: "+self.desiredDirection);
-
-			// Trying to turn
-			if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
-				self.changeDirection(self.desiredDirection);
-				dirChanged = true;
+			var canGoStraight = map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction);
+			var canGoLeft = map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, getLeftDirection(direction));
+			var canGoRight = map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, getRightDirection(direction));
+			
+			var ctPossibleDirections = (canGoStraight ? 1 : 0) + (canGoLeft ? 1 : 0) + (canGoRight ? 1 : 0);
+			
+			if (ctPossibleDirections > 1) {
+				// Ai callback
+				if (self.ai) {
+					self.ai.pathIntersection(self.getTile(), direction);
+				}
 				
-				// Reset desired direction
-				self.desiredDirection = NONE;
+				if(DEBUG && self.desiredDirection != NONE)
+					console.log("Desired direction: "+self.desiredDirection);
+				
+				// Trying to turn
+				if (self.desiredDirection != NONE && map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, self.desiredDirection)) {
+					self.changeDirection(self.desiredDirection);
+					dirChanged = true;
+					
+					// Reset desired direction
+					self.desiredDirection = NONE;
+				}
 			}
-
+			
 			// Auto-direction: Can't go straigth
-			if (!dirChanged && !map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, direction)) {
+			if (!dirChanged && !canGoStraight) {
 				// Try to go left
-				var autoDirection = getLeftDirection(direction);
-				if(map.isValidDirection(parent.tile[0], parent.tile[1], oppositeDirection, autoDirection)) {
-					self.changeDirection(autoDirection);
+				if(canGoLeft) {
+					self.changeDirection(getLeftDirection(direction));
 					dirChanged = true;
 				}
 				// Go right
@@ -288,6 +308,10 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 	 */
 	this.setDesiredDirection = function(direction) {
 		self.desiredDirection = direction;
+	}
+	
+	this.playItem = function() {
+		this.doAction("action1");
 	}
 
 	/**
@@ -384,6 +408,10 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 			if (item != NO_ITEM) {
 				stackedItems.push(item);
 				UI.setPlayerBonus(playerId, item);
+				
+				if (this.ai) {
+					this.ai.itemPicked(item);
+				}
 				
 				return true;
 			}

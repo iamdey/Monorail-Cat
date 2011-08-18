@@ -2,6 +2,7 @@ var FRAMERATE 	= 30;
 var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
+var AI			= true;
 var DOMAIN		= "boarf.net";
 //var DOMAIN		= "localhost";
 var MONORAIL_ONLINE_URI = "http://vps.boarf.net/mc/monorail-cat.html";
@@ -190,7 +191,7 @@ _Game.prototype = {
 
 		this.players = [
 			new Player(this.player1_cfg, this.cats[0]),
-			new Player(this.player2_cfg, this.cats[1])
+			((AI) ? new Ai(this.map, this.cats[1]) : new Player(this.player2_cfg, this.cats[1]))
 		];
         //--------------------------------
         

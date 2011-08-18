@@ -45,6 +45,57 @@
 		return tilemap.isValidOutDirection(x, y, to);
 	}
 	
+	this.countPossibleDirections = function(x, y, from) {
+		var canGoStraight = isValidDirection(parent.tile[0], parent.tile[1], from, getOppositeDirection(from));
+		var canGoLeft = isValidDirection(parent.tile[0], parent.tile[1], from, getLeftDirection(from));
+		var canGoRight = isValidDirection(parent.tile[0], parent.tile[1], from, getRightDirection(from));
+		
+		return (canGoStraight ? 1 : 0) + (canGoLeft ? 1 : 0) + (canGoRight ? 1 : 0);
+	}
+	
+	this.getFirstValidDirection = function(x, y, from) {
+		if (isValidDirection(parent.tile[0], parent.tile[1], from, getOppositeDirection(from))) {
+			return getOppositeDirection(from);
+		} else if (isValidDirection(parent.tile[0], parent.tile[1], from, getLeftDirection(from))) {
+			return getLeftDirection(from);
+		} else {
+			return getRightDirection(from);
+		}
+	}
+	/*
+	this.getPathsFrom = function(x, y, to) {
+		var directions = { SOUTH, NORTH, WEST, EAST };
+		var possibleDirections = new Array();
+		
+		var oppositeDirection = getOppositeDirection(to);
+		
+		for (var dir in directions) {
+			if (isValidDirection(x, y, oppositeDirection, dir)) {
+				console.log("adding "+dir+" to possible directions");
+				possibleDirections[dir] = new Array();
+				
+				var nx = x;
+				var ny = y;
+				var ndir = dir;
+				
+				do {
+					// Move in your head
+					switch (ndir) {
+						case NORTH:	nx--;	break;
+						case SOUTH:	nx++;	break;
+						case WEST:	ny--;	break;
+						case EAST:	ny++;	break;
+					}
+					
+					// Count dirs
+					var nbPossibleDirections = countPossibleDirections(nx, ny, getOppositeDirection(ndir));
+				} while (nbPossibleDirections == 1);
+			}
+		}
+		
+		return possibleDirections;
+	}*/
+	
 	/**
 	 *	Detect the collisions with an entity.
 	 */
@@ -95,6 +146,7 @@
             setTimeout(function(){ Game.over(); }, ((DEADCAT_LIFE_TIME / FRAMERATE ) * 1000)-10);
 		}
 	}
+
 	
 	/**
 	 *	Endz teh game.

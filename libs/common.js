@@ -70,6 +70,10 @@ Array.prototype.shuffle = function() {
 	return this;
 }
 
+function randint(a, b) {
+	return a + Math.floor(Math.random() * (b - a));
+}
+
 /**
  *	Returns the opposite direction.
  */
