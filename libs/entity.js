@@ -155,6 +155,8 @@ function Entity(startingTile) {
  * @author didjor
  */
 function Cat(map, _playerId, color, startingTile, startingDirection) {
+    //FIXME : it could be a gud idea to remove map from this class or register it when gameboard is loaded
+    
 	var self = this;
 	var parent = new Entity(startingTile);
 	var playerId = _playerId;
