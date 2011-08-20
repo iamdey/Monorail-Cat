@@ -318,6 +318,42 @@ var UI = new function(){
 		} else { 
 			e("audio_button").src = 'arts/sound_off.png' 
 		};
-	}
+	};
+    
+    /**
+     * On game intro screen, player 2 can be played instead of weak ai
+     * TODO: refactor
+     */
+    this.togglePlayer2CPU = function(){
+        if(AI){
+            html = '';
+            html += '<img src="arts/cat2-down-1.png" alt="player model" />';
+			html += '<input type="text" id="name_player2" name="name[player2]" value="Player 2" />';
+			html += '<table class="bindings">';
+			html += '	<tr>';
+			html += '		<td>&nbsp;</td>';
+			html += '		<td class="up">&uarr;</td>';
+			html += '		<td>&nbsp;</td>';
+			html += '	</tr>';
+			html += '	<tr>';
+			html += '		<td class="left">&larr;</td>';
+			html += '		<td class="down">&darr;</td>';                                            
+			html += '		<td class="right">&rarr;</td>';
+			html += '	</tr>';
+			html += '	<tr>';
+			html += '		<td colspan="3" class="action">Enter</td>';
+			html += '	</tr>';
+			html += '</table>';
+            AI = false;
+        }else{
+            html = 'nothing';
+            AI = true;
+        }
+        
+        el = e("player2bindings");
+        el.innerHTML = html;
+        
+        console.log(AI, el);
+    };
 };
 

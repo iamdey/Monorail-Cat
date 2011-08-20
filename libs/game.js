@@ -110,6 +110,10 @@ _Game.prototype = {
 		e("name_player2").addEventListener("blur", function(){
 			Game.player2_cfg.name = this.value;	
 		}, false);
+        
+        e("btn_player_2cpu").addEventListener("click", function(){
+            UI.togglePlayer2CPU();
+        }, false);
 		//--------------
         //--------------
         //preload map pictures
@@ -189,6 +193,7 @@ _Game.prototype = {
 			new Cat(this.map, 2, BLUE, [departChat2.x, departChat2.y], this.tilemap.getAValidDirection(departChat2.x,departChat2.y, NORTH))
 		];
 
+        //TODO: mkay refactor meh some day
 		this.players = [
 			new Player(this.player1_cfg, this.cats[0]),
 			((AI) ? new Ai(this.map, this.cats[1]) : new Player(this.player2_cfg, this.cats[1]))
