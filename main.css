@@ -183,6 +183,9 @@ p {
 	cursor: pointer;
 }
 
+.addthis_toolbox{
+    text-align: center;
+}
 
 /*----------------------------------*/
 /* 	Intro screen					*/
@@ -241,6 +244,14 @@ p {
 
 #gameBoard #startGameButton {
 	font-size: 1.5em;
+}
+
+#gameBoard .acknowledgments {
+    color: #CCCCCC;
+    margin: 0 auto;
+    padding: 10px;
+    text-align: center;
+    width: 550px;
 }
 
 /*----------------------------------*/
