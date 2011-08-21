@@ -59,9 +59,6 @@ var UI = new function(){
 		GameSound.stopAll();
 		GameSound.playLoop("game_over");
 	    
-		// Display end message
-	    //UI.printMsg('GAME IZ OVER NAAOO', UI.HUGE);
-	    
 		this.resetGameBoard();
 		
 		//---------------
@@ -289,7 +286,7 @@ var UI = new function(){
 		html += "</select></p>";
 		
 		if(Game.date_game_start){
-			html += "<p><button id=\"startGameButton\">Restart Game</button></p>";
+			html += "<p><button id=\"RestartGameButton\">Restart Game</button></p>";
 		}
 		
 		html += "<p>Hey, You can save your own map online with <br/><a href=\"mapEditor.html\">The Map Editor</a></p>";
@@ -297,15 +294,23 @@ var UI = new function(){
 		
 		this.openWindow(html, id);
 		
-		e("startGameButton").addEventListener("click", function(){
-			Game.map_name = e("mapSelection").value;
-			
-			if(Game.date_game_start){
-				Game.stop();
-			}
-			Game.start();
-			e('msg').style.display = "none";
-		}, false);
+        //--------------------
+        // Event listeners
+        if(Game.date_game_start){
+            e("RestartGameButton").addEventListener("click", function(){
+                Game.map_name = e("mapSelection").value;
+                
+                if(Game.date_game_start){
+                    Game.stop();
+                }
+                Game.start();
+            }, false);
+        }
+        
+        e("mapSelection").addEventListener("change", function(){
+            Game.map_name = this.value;
+        }, false);
+        //--------------------
 	};
 	
 	/**

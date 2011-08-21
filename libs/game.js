@@ -107,7 +107,6 @@ _Game.prototype = {
             UI.togglePlayer2CPU();
         }, false);
         e("startGameButton").addEventListener("click", function(){
-            console.log("click");
             Game.player1_cfg.name = e("name_player1").value;
             Game.player2_cfg.name = e("name_player2").value;
             Game.start();
