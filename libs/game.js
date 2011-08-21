@@ -103,16 +103,14 @@ _Game.prototype = {
 		//--------------
 		//--------------
 		//Events listener
-		e("name_player1").addEventListener("blur", function(){
-			Game.player1_cfg.name = this.value;	
-		}, false);
-		
-		e("name_player2").addEventListener("blur", function(){
-			Game.player2_cfg.name = this.value;	
-		}, false);
-        
         e("btn_player_2cpu").addEventListener("click", function(){
             UI.togglePlayer2CPU();
+        }, false);
+        e("startGameButton").addEventListener("click", function(){
+            console.log("click");
+            Game.player1_cfg.name = e("name_player1").value;
+            Game.player2_cfg.name = e("name_player2").value;
+            Game.start();
         }, false);
 		//--------------
         //--------------
