@@ -3,9 +3,9 @@ var GAME_ID		= "gameBoard";
 var MUSIC 		= true;
 var DEBUG 		= false;
 var AI			= true;
-var DOMAIN		= "boarf.net";
+var DOMAIN		= "monorail-cat.esion99.info";
 //var DOMAIN		= "localhost";
-var MONORAIL_ONLINE_URI = "http://vps.boarf.net/mc/monorail-cat.html";
+var MONORAIL_ONLINE_URI = "http://monorail-cat.esion99.info/monorail-cat.html";
 
 
 /**
