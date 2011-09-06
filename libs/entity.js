@@ -352,7 +352,8 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 				}
 				// SHOO!
 				else if (item == WOOLBALL) {
-					map.addEntity(new Woolball(map, [parent.tile[0], parent.tile[1]], direction), true);
+					map.addEntity(new Woolball(map, this, [parent.tile[0], parent.tile[1]],
+						[parent.pos[0], parent.pos[1]], direction), true);
 				}
 				
 				// Display next item
@@ -447,6 +448,10 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
 		speed = 1;
 		strength = CAT_STRENGTH;
 		
+		// Lose items
+		stackedItems = [];
+		UI.setPlayerBonus(playerId, "");
+		
 		// Lose a life
 		UI.setPlayerLives(playerId, --this.nbLives);
 		
@@ -483,14 +488,14 @@ function Cat(map, _playerId, color, startingTile, startingDirection) {
             this.move(sx * DELTA_SPEED * speed, sy * DELTA_SPEED * speed);
 
             if(rainbowTimer > 0) {
-                    rainbowTimer--;
-                    rainbowSprite.update();
+				rainbowTimer--;
+				rainbowSprite.update();
 
-                    if(rainbowTimer == 0) {
-                            speed = 1;
-                            strength = CAT_STRENGTH;
-                            rainbowSprite ;
-                    }
+				if(rainbowTimer == 0) {
+					speed = 1;
+					strength = CAT_STRENGTH;
+					rainbowSprite ;
+				}
             }
         }
 

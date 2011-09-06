@@ -111,9 +111,9 @@
 			// Collision detected
 			if (otherTile[0] == tile[0] && otherTile[1] == tile[1] && otherEntity.getId() != entity.getId()) {
                 
-                //Doz nossing bicose datiz respawning kat or deadcat or somethong else
+                // Doz nossing bicose datiz respawning kat or deadcat or somethong else
                 if(!otherEntity.isKillable()){
-                    return;
+                    break;
                 }
                                 
 				var strength = entity.getStrength();
@@ -129,14 +129,17 @@
 					// Killz collider
 					else {
 						gameOver |= otherEntity.die(true);
-                    }
+					}
 				} else if(strength < otherStrength) {
-					// Cat diez 
+					// Cat diez
 					gameOver |= entity.die(displayDyingItem);
 				} else {
 					// Both diez
-					gameOver |= entity.die(displayDyingItem);
-					gameOver |= otherEntity.die(displayDyingItem);
+					if(!(entity.getType() == WOOLBALL && entity.doezRespect(otherEntity)
+					|| (otherEntity.getType() == WOOLBALL && otherEntity.doezRespect(entity)))) {
+						gameOver |= entity.die(displayDyingItem);
+						gameOver |= otherEntity.die(displayDyingItem);
+					}
 				}
 			}
 		}

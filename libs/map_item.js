@@ -10,6 +10,11 @@ var INVISIBLE_FRAMES = FRAMERATE * 1;
 // Time of dying items (displays deaditem) in seconds
 var DYINGITEM_FRAMES = FRAMERATE * 1;
 
+// Time during which the woolball cannot kill its launcher
+var WOOLBALL_RESPECT_FRAMES = FRAMERATE * 1;
+
+var WOOLBALL_OFFSET = Math.round(TILE_SIZE / 3);
+
 // Probability of each item to come (They are cumulated so the formula is simpler)
 var PROBA_WOOLBALL = 5
 var PROBA_WATER = PROBA_WOOLBALL + 5
@@ -209,17 +214,19 @@ function Water(map, startingTile) {
  * 
  * @author didjor
  */
-function Woolball(map, startingTile, _direction) {
+function Woolball(map, cat, startingTile, startingPos, _direction) {
 	var self = this;
 	var parent = new Entity(startingTile);
+	var launcher = cat;
 	var direction = _direction;
 	var sx = 0;			// X speed (-1 = North ; 1 = South)
 	var sy = 0;			// Y speed (-1 = West ; 1 = East)
 	var lifetime = WOOLBALL_LIFE_TIME;
+	var respectCt = WOOLBALL_RESPECT_FRAMES;
 	var directions = [SOUTH, NORTH, WEST, EAST];
 	//if < 0 item is alive; > 0 item is dying; when = 0 item is removed
     var dying_in = 0;
-    
+	
 	// Woolball sprite
 	var sprite = new Sprite(["center", "center"], {
 		roooolllinnn: [["arts/wool_ball1.png", 6], ["arts/wool_ball2.png", 6]],
@@ -324,11 +331,27 @@ function Woolball(map, startingTile, _direction) {
 		}
 	}
 	
+	this.doezRespect = function(cat) {
+		return (respectCt > 0 && cat == launcher);
+	};
+    
+    /**
+     * this can be killed
+     */
+    this.isKillable = function(){
+        if(dying_in > 0){
+            return false;
+        }
+        
+        return true;
+    };
+	
 	/**
 	 *	Updates the woolball.
 	 */
 	this.update = function() {
         dying_in--;
+		respectCt--;
 		if (lifetime-- == 0) {
 			self.die();
 		} else {
@@ -362,39 +385,16 @@ function Woolball(map, startingTile, _direction) {
 	 */
 	// Set initial direction
 	this.changeDirection(direction);
-	
-	// Move two squares ahead
-	for (var i = 0; i < 2; i++) {
-		if (!map.isValidOutDirection(parent.tile[0], parent.tile[1], direction)) {
-			// Head to random direction from this new square
-			this.goRandomlySomewhere();
-		}
-		
-		// Move ahead
-		switch(direction) {
-			case SOUTH:	parent.tile[0]++;	break;
-			case NORTH:	parent.tile[0]--;	break;
-			case EAST:	parent.tile[1]++;	break;
-			case WEST:	parent.tile[1]--;	break;
-		}
+	if (!map.isValidOutDirection(parent.tile[0], parent.tile[1], direction)) {
+		// Head to random direction from this new square
+		this.goRandomlySomewhere();
 	}
 	
-	// Set ball on first pixel on this square
+	// Set ball on last pixel on this square
 	switch(direction) {
-		case SOUTH:	parent.pos[0] = 0;				break;
-		case NORTH:	parent.pos[0] = TILE_SIZE - 1;	break;
-		case EAST:	parent.pos[1] = 0;				break;
-		case WEST:	parent.pos[1] = TILE_SIZE - 1;	break;
+		case SOUTH:	parent.pos[0] = Math.min(startingPos[0] + WOOLBALL_OFFSET, TILE_SIZE - 1);	break;
+		case NORTH:	parent.pos[0] = Math.max(startingPos[0] - WOOLBALL_OFFSET, 0);				break;
+		case EAST:	parent.pos[1] = Math.min(startingPos[1] + WOOLBALL_OFFSET, TILE_SIZE - 1);	break;
+		case WEST:	parent.pos[1] = Math.max(startingPos[1] - WOOLBALL_OFFSET, 0);				break;
 	}
-    
-    /**
-     * this can be killed
-     */
-    this.isKillable = function(){
-        if(dying_in > 0){
-            return false;
-        }
-        
-        return true;
-    };
 }

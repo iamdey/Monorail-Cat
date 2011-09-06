@@ -138,7 +138,7 @@ TileMap.prototype = {
     
     // Validité de la direction demandée en fonction de la tuile
 	isValidDirection : function(x, y, from, to) {
-		return (from != to &&((this.level[x][y] & (1 << this.bits[from][to])) != 0));
+		return (from != to && ((this.level[x][y] & (1 << this.bits[from][to])) != 0));
 	},
 	
 	isValidOutDirection : function(x, y, to) {
