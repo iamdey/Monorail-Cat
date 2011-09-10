@@ -128,11 +128,11 @@ p {
 	z-index: 0;
 }
 #gameBoard .player.red {
-	float:left;
+	float:right;
+    text-align: right;
 }
 #gameBoard .player.blue {
-	float:right;
-	text-align: right;
+	float: left;
 }
 #gameBoard .player {
     color: #fff;
@@ -202,11 +202,11 @@ p {
 }
 
 #gameBoard .config .player1 {
-    float: left;
+    float: right;
     width: 270px;
 }
 #gameBoard .config .player2 {
-    float: right;
+    float: left;
     width: 270px;
 }
 

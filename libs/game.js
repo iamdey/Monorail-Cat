@@ -51,22 +51,22 @@ function _Game() {
 	this.player1_cfg = {
 		name : "Player 1",
 		keymap : {
-			up: 69,		// e
-			down: 68,	// d
-			left: 83, 	// s
-			right: 70, 	// f
-			action1: 32	// space
+			up: 38,		// up
+			down: 40,	// down
+			left: 37, 	// left
+			right: 39, 	// right
+			action1: 13	// enter
 		}
 	};
 
 	this.player2_cfg = {
 		name : "Player 2",
 		keymap : {
-			up: 38,		// up
-			down: 40,	// down
-			left: 37, 	// left
-			right: 39, 	// right
-			action1: 13	// enter
+            up: 69,		// e
+			down: 68,	// d
+			left: 83, 	// s
+			right: 70, 	// f
+			action1: 32	// space
 		}
 	};
 	
